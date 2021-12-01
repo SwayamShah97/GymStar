@@ -6,11 +6,11 @@ const userData = require("../data").userData;
 
 router.get('/', async (req, res) => {
     
-    if (req.session.user) {
-        res.redirect('/private')
-    } else {
+    // if (req.session.user) {
+    //     res.redirect('/private')
+    // } else {
         res.render('landing', {title: "GymStar"})
-    }
+    // }
 
 });
 
@@ -76,11 +76,20 @@ router.post('/login', async (req, res) => {
         
         if(info.authenticated == true){
             req.session.user = {
-                email:email,
+                role:info.role,
+                firstName:info.firstName,
+                lastName:info.lastName,
+                email:info.email,
+                city:info.city,
+                state:info.state,
+                mobile:info.mobile,
+                gender:info.gender,
+                dob:info.dob
                 //By Malay on Dec 01, 2021
                 //role: owner or user
             }
             res.redirect('/private')
+            console.log(req.session.user)
             }
         else {
             res.status(500).render('login', {title: "Error", error: 'Internal Server Error'})
@@ -94,7 +103,12 @@ router.post('/login', async (req, res) => {
 
 router.get('/private', async (req,res) => {
 
-    res.render('private', {title: "Private Page", email:req.session.user.email})
+    if(req.session.user){
+        res.render('private', {title: "Private Page", email:req.session.user.email})
+    }
+    else{
+        res.redirect('/login')
+    }
 });
 
 router.get('/signup', async (req,res) => {

@@ -112,7 +112,16 @@ async function checkUser(email, password){
     
     if(compareToMatch){
         let obj ={
-            authenticated:true
+            authenticated:true,
+            role:findUser.role,
+            firstName:findUser.firstName,
+            lastName:findUser.lastName,
+            email:findUser.email,
+            city:findUser.city,
+            state:findUser.state,
+            mobile:findUser.mobile,
+            gender:findUser.gender,
+            dob:findUser.dob
         }
         return obj
     }
