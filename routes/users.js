@@ -77,6 +77,8 @@ router.post('/login', async (req, res) => {
         if(info.authenticated == true){
             req.session.user = {
                 email:email,
+                //By Malay on Dec 01, 2021
+                //role: owner or user
             }
             res.redirect('/private')
             }
