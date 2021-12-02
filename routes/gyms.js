@@ -2,6 +2,19 @@ const express = require('express');
 const router = express.Router();
 const gymData = require('../data').gymData;
 
+router.get('/:id',async(req,res) => {
+  try {
+    const gym = await gymData.getGym(req.params.id)
+    const reviews = await gymData.getReviews(req.params.id);
+    const rating = await gymData.calcRating(req.params.id)
+    res.render('gymbars/gymprofile',{gym:gym,reviews:reviews,rate:rating})
+    
+  }
+  catch(e){
+    res.sendStatus(500);
+  }
+
+}); 
 
 router.get('/', async (req, res) => {
     try {
@@ -23,18 +36,7 @@ router.get('/', async (req, res) => {
     }
   });
 
-  router.get('/:id',async(req,res) => {
-    try {
-      const gym = await gymData.getGym(req.params.id)
-      const reviews = await gymData.getReviews(req.params.id);
-      const rating = await gymData.calcRating(req.params.id)
-      res.render('gymbars/gymprofile',{gym:gym,reviews:reviews,rating:rating})
-    }
-    catch(e){
-      res.sendStatus(500);
-    }
   
-  }); 
 
 
 router.post('/gymcreate',async(req,res) => {

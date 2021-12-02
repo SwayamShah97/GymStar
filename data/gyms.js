@@ -42,7 +42,7 @@ async create(userName,gymName, location, phoneNumber, priceRange) {
     id = ObjectId(id);
     const gymsCollection = await gyms();
     const res= await gymsCollection.findOne({ _id: id });
-    if (res === null) throw 'No restaurant with that id';
+    if (res === null) throw 'No gym with that id';
     //res._id = res._id.toString().replace(/ObjectId\("(.*)"\)/, "$1");
     return res;
   },
@@ -81,13 +81,16 @@ async create(userName,gymName, location, phoneNumber, priceRange) {
     const reviewCollection = await reviews();
     id = ObjectId(id);
     const ret = await reviewCollection.find({gymId:id}).toArray();
-    let arr = []
-    for (i in ret){
-      arr.push(ret[i].rating)
+    if(ret.length < 1 || ret == undefined) return 'No reviews for this gym yet'
+    else{
+      let arr = []
+      for (i in ret){
+        arr.push(ret[i].rating)
+      }
+      let sum = arr.reduce((a,b)=>a+b)
+      overallRating = sum/arr.length; 
+      return overallRating
     }
-    let sum = arr.reduce((a,b)=>a+b)
-    overallRating = sum/arr.length; 
-    return overallRating
   },
 
   async search(searchTerm){
