@@ -21,6 +21,15 @@ app.use('/public', static);
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
+//swayam adding below
+
+var hbs = exphbs.create({});
+hbs.handlebars.registerHelper('times', function(n, block) {
+  var accum = '';
+  for(var i = 0; i < n; ++i)
+      accum += block.fn(i);
+  return accum;
+});
 
 app.engine('handlebars', handlebarsInstance.engine);
 app.set('view engine', 'handlebars');
@@ -37,7 +46,7 @@ app.use(
 );
 
 const logger = function (request, response, next) {
-  console.log(`[${new Date().toUTCString()}]: ${request.method}${request.originalUrl}${session.user ? '(Authenticated User)' : '(Non-Authenticated User)'}`);
+  console.log(`[${new Date().toUTCString()}]: ${request.method}${request.originalUrl}${request.session.user ? '(Authenticated User)' : '(Non-Authenticated User)'}`);
   next()
 };
 app.use(logger);

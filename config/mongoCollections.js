@@ -18,7 +18,8 @@ module.exports = {
     trainers: getCollectionFn('trainers'),
     reviews: getCollectionFn('reviews'),
 //   You all can add your respective collections here
-    users: getCollectionFn('users')
+    users: getCollectionFn('users'),
+    gyms: getCollectionFn('gyms'),
 
  
 };

@@ -183,4 +183,16 @@ router.get('/logout', async (req,res) => {
     res.render('logout',{title:'Logged Out'})
     
 });
+
+
+router.get('/gymcreate',async(req,res) => {
+
+    try{
+      res.render('gymbars/creategym')
+    }
+    catch(e){
+      res.sendStatus(500);
+    }
+  });
+
   module.exports = router;

@@ -1,0 +1,29 @@
+<div class='search'>
+    <h2>Gyms</h2>
+
+  <form class="search-container">
+    <input type="text" id="search-bar" placeholder="Search Gyms Here">
+    <a href="#"><img class="search-icon" src="http://www.endlessicons.com/wp-content/uploads/2012/12/search-icon.png"></a>
+  </form>
+
+</div>
+{{#each gyms}} 
+<div class="container">
+  
+  <div onclick="location.href='/gyms/{{_id}}';" class="card" style="width:400px">
+    
+    <div class="card-body">
+      <h4 class="card-title">{{gymName}}</h4>
+      <h6 class="card-title">{{location}}</h5>
+      <h6 class="card-title">{{priceRange}}</h5>
+      <h6 class="card-title">{{overallRating}}</h5>
+      <p class="card-text">Some example text some example text. John Doe is an architect and engineer</p>
+    <a href="/gyms/{{_id}}" class="btn btn-primary">See Reviews</a> 
+      
+    
+    </div>
+  </div>
+</div>
+    {{/each}} 
+
+</div>

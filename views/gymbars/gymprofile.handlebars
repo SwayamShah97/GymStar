@@ -1,0 +1,49 @@
+
+<div>
+
+<div class="container">
+  
+  <div class="card" style="width:400px">
+    
+    <div class="card-body">
+      <h4 class="card-title">{{gym.gymName}}</h4>
+      <h6 class="card-title">{{gym.location}}</h5>
+      <h6 class="card-title">{{gym.priceRange}}</h5>
+      <h6 class="card-title">{{gym.overallRating}}</h5>
+      <p class="card-text">Some example text some example text. John Doe is an architect and engineer</p>
+      <a href="#" class="btn btn-primary">Book session</a>
+      <a href="#" class="btn btn-primary">View Trainers</a>
+       
+    
+    </div>
+  </div>
+</div>    
+
+<h5>Reviews</h5>
+
+
+
+{{#each reviews}} 
+
+  <div class="container">
+      <!-- Card-->
+      <div class="card rounded shadow-sm border-0">
+        <div class="card-body p-4">
+          <h6> <a href="#" class="text-dark">{{reviewText}}</a></h5>
+          <p class="small text-muted font-italic">{{date}}</p>
+          <ul class="list-inline small">
+            {{#times rating}}
+                <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
+            {{/times}}
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+    <br>
+
+   
+  {{/each}}
+
+
+</div>
