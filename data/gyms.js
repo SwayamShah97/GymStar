@@ -97,7 +97,11 @@ async create(userName,gymName, location, phoneNumber, priceRange) {
     if(!searchTerm) throw 'Search cannot be empty';
     const gymsCollection = await gyms();
     await gymsCollection.createIndex( { gymName: "text", location: "text" } )
-    const ret = await gymsCollection.find( { $text: { $search: searchTerm } } ).toArray()
+    // const ret = await gymsCollection.find( { $text: { $search: searchTerm } } ).toArray()
+    // Added by Malay on 2 Dec 2021 to search gyms from it's partial name
+    let search_str = `/${searchTerm}/i`
+    const ret = await gymsCollection.find( { "gymName" :{ $regex : new RegExp(searchTerm, "i") } } ).toArray()
+    // End of changes by Malay on 2D ec 2021
     return ret
 
   }
