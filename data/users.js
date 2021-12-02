@@ -109,10 +109,13 @@ async function checkUser(email, password){
     let compareToMatch = false
     compareToMatch = await bcrypt.compare(password, passHash);
     
+     
+    findUser['_id'] = findUser['_id'].toString()
     
     if(compareToMatch){
         let obj ={
             authenticated:true,
+            id:findUser._id,
             role:findUser.role,
             firstName:findUser.firstName,
             lastName:findUser.lastName,
