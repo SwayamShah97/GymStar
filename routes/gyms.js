@@ -40,10 +40,10 @@ router.get('/', async (req, res) => {
 router.post('/gymcreate',async(req,res) => {
   
    let userName = req.session.user.email;
-   let gymName = req.body.gymName;
-   let location = req.body.location;
-   let phoneNumber = req.body.phoneNumber;
-   let priceRange = req.body.priceRange;
+   let gymName = req.body.firstname;
+   let location = req.body.city;
+   let phoneNumber = req.body.mobile;
+   let priceRange = req.body.price;
   
    try{
      const creategym = await gymData.create(userName,gymName,location,phoneNumber,priceRange);
