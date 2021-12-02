@@ -6,7 +6,7 @@ const gymData = require('../data').gymData;
 
 const main = async () => {
     
-    const blueGym = await gymData.create("fa","scarlet Gym", "JFK, Jersey City", "917-336-7834", '$$$');
+    const blueGym = await gymData.search("Hoboken");
     console.log(blueGym);    
      
     /* const abc = await gyms.getAllGyms();

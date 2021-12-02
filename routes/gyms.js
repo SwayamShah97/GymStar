@@ -27,7 +27,8 @@ router.get('/', async (req, res) => {
     try {
       const gym = await gymData.getGym(req.params.id)
       const reviews = await gymData.getReviews(req.params.id);
-      res.render('gymbars/gymprofile',{gym:gym,reviews:reviews})
+      const rating = await gymData.calcRating(req.params.id)
+      res.render('gymbars/gymprofile',{gym:gym,reviews:reviews,rating:rating})
     }
     catch(e){
       res.sendStatus(500);
@@ -62,5 +63,19 @@ router.post('/gymcreate',async(req,res) => {
  
   });
 
+  router.post('/search', async (req, res) => {
+  
+    try {
+      if (!req.body.searchTerm) res.status(400).render('gymbars/emptysearch')
+      else{
+        const marv = await gymData.search(req.body.searchTerm);
+        if(marv.length < 1 || marv == undefined) res.render('gymbars/nosearch',{s:req.body.searchTerm});
+        else
+         res.render('gymbars/search',{marved:marv}); }
+    } catch (e) {
+      res.status(404).json({ message: e.message });
+    }
+  
+  });
 
 module.exports = router;

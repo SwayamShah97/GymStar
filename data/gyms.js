@@ -4,6 +4,7 @@ const reviews = mongoCollections.reviews;
 let { ObjectId } = require('mongodb');
 
 
+
 module.exports = {
 async create(userName,gymName, location, phoneNumber, priceRange) {
 
@@ -74,6 +75,28 @@ async create(userName,gymName, location, phoneNumber, priceRange) {
     const gymsCollection = await gyms();
     const res = await gymsCollection.find().sort( { overallRating: -1 } ).limit(5).toArray();
     return res
+  },
+
+  async calcRating(id){
+    const reviewCollection = await reviews();
+    id = ObjectId(id);
+    const ret = await reviewCollection.find({gymId:id}).toArray();
+    let arr = []
+    for (i in ret){
+      arr.push(ret[i].rating)
+    }
+    let sum = arr.reduce((a,b)=>a+b)
+    overallRating = sum/arr.length; 
+    return overallRating
+  },
+
+  async search(searchTerm){
+    if(!searchTerm) throw 'Search cannot be empty';
+    const gymsCollection = await gyms();
+    await gymsCollection.createIndex( { gymName: "text", location: "text" } )
+    const ret = await gymsCollection.find( { $text: { $search: searchTerm } } ).toArray()
+    return ret
+
   }
 
   
