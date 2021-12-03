@@ -20,6 +20,8 @@ module.exports = {
 //   You all can add your respective collections here
     users: getCollectionFn('users'),
     gyms: getCollectionFn('gyms'),
+    Booking: getCollectionFn('Booking')
+    
 
  
 };

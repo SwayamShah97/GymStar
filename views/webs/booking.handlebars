@@ -1,0 +1,52 @@
+<h1>Want other people know what you think?
+    Leave a comment here!
+</h1>
+<main>
+    <form action = "/order/booking" method="POST" id="make_an_order">
+
+        <label for="new_order_date" id="dateInfo">Chose a date (Your date must be mm/dd/yyyy):</label><br>
+        <input type="text" id="new_order_date" name="date"><br>
+
+        <label for="new_order_time" id="timeInfo">Chose a time (Your time must be like 09:00, 11:35 or 20:05):</label><br>
+        <input type="text" id="new_order_time" name="time"><br>
+
+        <input type="submit" name="submit" value="submit">
+    </form>
+
+    {{#if dateNotProvide}}
+    <p class = "error">You can not leave your order date empty</p>
+    {{/if}}
+
+    {{#if timeNotProvide}}
+    <p class = "error">You can not leave your order date empty</p>
+    {{/if}}
+
+    {{#if dateTypeWrong}}
+    <p class = "error">Your date must be a string</p>
+    {{/if}}
+
+    {{#if dateAllWhiteSpace}}
+    <p class = "error">Your date can not be all space</p>
+    {{/if}}
+
+    {{#if timeAllWhiteSpace}}
+    <p class = "error">Your time can not be all space</p>
+    {{/if}}
+
+    {{#if notValidDate}}
+    <p class = "error">Your date is not a vaild date</p>
+    {{/if}}
+
+    {{#if dateIncudeWhiteSpace}}
+    <p class = "error">Your date can not incude space</p>
+    {{/if}}
+
+    {{#if canNotBookingToday}}
+    <p class = "error">You can not book today's gym</p>
+    {{/if}}
+
+    {{#if bookFailed}}
+    <p class = "error">Sorry, the order failed, please try later</p>
+    {{/if}}
+
+

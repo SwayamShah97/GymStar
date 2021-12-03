@@ -1,0 +1,46 @@
+<h1>Want other people know what you think?
+    Leave a comment here!
+</h1>
+<main>
+    <form action = "/review/addReviewToGym" method="POST" id="add_reivew">
+
+        <label for="your_reivew" id="reviewInfo">Leave your review here:</label><br>
+        <input type="text" id="your_reivew" name="review"><br>
+
+        <label for="your_rating" id="ratingNum">Give a score(1~5, 5 is the highest)</label><br>
+        <input type="text" id="your_rating" name="rating"><br>
+
+        <input type="submit" name="submit" value="submit">
+    </form>
+
+    {{#if ReviewNotProvide}}
+    <p class = "error">You can not leave your review empty</p>
+    {{/if}}
+
+    {{#if reviewTypeWrong}}
+    <p class = "error">Please enter the correct type review</p>
+    {{/if}}
+
+    {{#if reviewSapce}}
+    <p class = "error">Your review can not be all white space </p>
+    {{/if}}
+
+    {{#if ratingNotProvide}}
+    <p class = "error">You need to provide a rating</p>
+    {{/if}}
+
+    {{#if ratingTypeWrong}}
+    <p class = "error">You need to give a rgiht type rating </p>
+    {{/if}}
+
+    {{#if ratingWrong}}
+    <p class = "error">You need to give a valid number</p>
+    {{/if}}
+
+
+
+
+
+
+
+</main>
