@@ -1,0 +1,40 @@
+<div>
+<div class='search'>
+    <h2>Gyms</h2>
+
+  <form method="POST" action="/gyms/search" class="search-container">
+    <input type="text" id="search-bar" name="searchTerm" placeholder="Search Gyms Here">
+    <input type="image" name="submit" class="search-icon" src="http://www.endlessicons.com/wp-content/uploads/2012/12/search-icon.png">
+  </form>
+
+</div>
+
+<div class="main">
+<div class="container">
+  {{#each gyms}} 
+  <div onclick="location.href='/gyms/{{_id}}';" class="card" style="width:400px">
+    
+    <div class="card-body bg-dark text-white">
+      <h4 class="card-title">{{gymName}}</h4>
+      <h6 class="card-title">{{location}}</h5>
+      <h6 class="card-title">{{priceRange}}</h5>
+      {{!--By Malay: Add gym overall rating as well --}}
+      
+      <p class="card-text">Some example text some example text. John Doe is an architect and engineer</p>
+    
+      
+    
+    </div>
+  </div>
+  {{/each}} 
+ <button class="btn btn-primary" onclick="location.href='/gyms/allgyms';">View All Gyms</button> 
+  
+</div>
+</div> 
+
+
+
+</div>
+
+
+
