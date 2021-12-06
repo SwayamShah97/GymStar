@@ -1,0 +1,7 @@
+   Date: (!/^\d{2}\/\d{2}\/\d{4}$/.test(dateOfReview))
+   phoneNumberRegex = /^\d{3}-\d{3}-\d{4}$/;
+   spaceregex = /\s/g  for  space
+   spregex = /[^\w]/g  for special symbols
+   numberRegex = /[0-9]/g
+   emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+   Date: (!/^\d{2}\/\d{2}\/\d{4}$/.test())

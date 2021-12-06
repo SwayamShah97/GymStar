@@ -2,8 +2,34 @@ const mongoCollections = require('../config/mongoCollections');
 const gyms = mongoCollections.gyms;
 const reviews = mongoCollections.reviews;
 let { ObjectId } = require('mongodb');
+const xss = require('xss');
 
+  // Added by Malay for gym filter
+  function validateFilter(filter) {
+    if(filter.rating){
+      filter.rating = xss(filter.rating)
+      filter.rating = filter.rating.trim()
+    }
+    if(filter.priceRange){
+      filter.priceRange = xss(filter.priceRange)
+      filter.priceRange = filter.priceRange.trim()
+    }
+    
 
+    // if(! /^[1-5]{1}$/.test(filter.rating)) throw {status:400,message:'Invalid Rating'}
+    if( filter.rating && !( /^[1-5]{1}$/.test(filter.rating))) //4 because there will be 0-4 in select option
+    {
+      throw {status:400,message:'Invalid Rating'}
+    }
+    filter.rating = parseInt(filter.rating)
+    let priceRangeRegex = /^[$]{1,4}$/;
+    if(filter.priceRange && (! priceRangeRegex.test(filter.priceRange))) throw {
+      status:400,
+      message:'Invalid price Range'
+    }
+    return filter
+
+  }
 
 module.exports = {
 async create(userName,gymName, location, phoneNumber, priceRange) {
@@ -100,9 +126,37 @@ async create(userName,gymName, location, phoneNumber, priceRange) {
     // const ret = await gymsCollection.find( { $text: { $search: searchTerm } } ).toArray()
     // Added by Malay on 2 Dec 2021 to search gyms from it's partial name
     let search_str = `/${searchTerm}/i`
-    const ret = await gymsCollection.find( { "gymName" :{ $regex : new RegExp(searchTerm, "i") } } ).toArray()
+    // const ret = await gymsCollection.find( { "gymName" :{ $regex : new RegExp(searchTerm, "i") } } ).toArray()
+    const ret = await gymsCollection.find( {$or : [ 
+      { "gymName" :{ $regex : new RegExp(searchTerm, "i") } },
+      { "location" :{ $regex : new RegExp(searchTerm, "i") } }
+
+     ]} ).toArray()
     // End of changes by Malay on 2D ec 2021
     return ret
+
+  },
+
+  async getFilterData(filter){
+    // filter = validateFilter(filter)
+
+    const gymsCollection = await gyms();
+    const gymList = await gymsCollection.find(
+      {
+        $or : [
+          { "overallRating" :  3 }, //{ $gte : filter.rating } },
+          { "priceRange" :  '$$$' }//filter.priceRange}
+
+        ]
+
+      }
+
+    ).toArray()
+    if(gymList){
+      return gymList
+    }else{
+      return 0
+    }
 
   }
 

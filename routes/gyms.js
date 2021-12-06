@@ -1,20 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const gymData = require('../data').gymData;
+const xss = require('xss');
 
-router.get('/:id',async(req,res) => {
-  try {
-    const gym = await gymData.getGym(req.params.id)
-    const reviews = await gymData.getReviews(req.params.id);
-    const rating = await gymData.calcRating(req.params.id)
-    res.render('gymbars/gymprofile',{gym:gym,reviews:reviews,rate:rating})
-    
-  }
-  catch(e){
-    res.sendStatus(500);
-  }
 
-}); 
 
 router.get('/', async (req, res) => {
     try {
@@ -79,5 +68,65 @@ router.post('/gymcreate',async(req,res) => {
     }
   
   });
+
+  // // Added by Malay for gym filter
+  // function validateFilter(filter) {
+  //   filter.rating = xss(filter.rating)
+  //   filter.priceRange = xss(filter.priceRange)
+
+  //   filter.rating = filter.rating.trim()
+  //   filter.priceRange = filter.priceRange.trim()
+
+  //   let tempRating = filter.rating
+  //   if(! /^[1-5]{1}$/.test(filter.rating)) throw {status:400,message:'Invalid Rating'}
+
+  //   if( filter.rating && !( /^[1-5]{1}$/.test(filter.rating))) //4 because there will be 0-4 in select option
+  //   {
+  //     throw {status:400,message:'Invalid Rating'}
+  //   }
+  //   let priceRangeRegex = /^[$]{1,4}$/;
+  //   if(filter.priceRange && (! priceRangeRegex.test(filter.priceRange))) throw {
+  //     status:400,
+  //     message:'Invalid price Range'
+  //   }
+  //   return filter
+
+  // }
+  
+
+
+  router.get('/gfilter',async(req,res) => {
+    console.log('Inside filter')
+    try{
+      // let filter = validateFilter(req.body)
+      
+      let gymList = await gymData.getFilterData()
+      if(gymList){
+        
+        res.render('gymbars/gymlist',{gyms:gymList})
+      }else{
+        
+        res.render('noseearch',{})
+      }
+
+    }catch(e){
+      res.status(e.status || 500).json(e.message)
+    }
+    
+  })
+
+  router.get('/:id',async(req,res) => { //Keep this as the last route function
+    try {
+      const gym = await gymData.getGym(req.params.id)
+      const reviews = await gymData.getReviews(req.params.id);
+      const rating = await gymData.calcRating(req.params.id)
+      res.render('gymbars/gymprofile',{gym:gym,reviews:reviews,rate:rating})
+      
+    }
+    catch(e){
+      res.sendStatus(500);
+    }
+  
+  }); 
 
 module.exports = router;
