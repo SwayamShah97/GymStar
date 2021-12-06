@@ -68,10 +68,7 @@ router.get('/', async (req, res) => {
   }); 
 
   
-  router.post('/gymupdate',async(req,res) => {
-
-  
-  }); 
+ 
 
   
   router.post('/gymupdate',async(req,res) => {
