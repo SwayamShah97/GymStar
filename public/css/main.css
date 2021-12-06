@@ -647,3 +647,9 @@ input#search-bar:focus:-ms-placeholder {
 h5{
 text-align: center;
 }
+
+.card {
+  margin: 0 auto; /* Added */
+  float: none; /* Added */
+  margin-bottom: 20px; /* Added */
+}

@@ -8,7 +8,7 @@ const xss = require('xss');
 router.get('/', async (req, res) => {
     try {
       let gymList = await gymData.getTopFive();
-      res.render('gymbars/gymlist',{gyms:gymList})
+      res.render('gymbars/gymlist',{gyms:gymList});
 
     } catch (e) {
       res.sendStatus(500);
@@ -25,8 +25,76 @@ router.get('/', async (req, res) => {
     }
   });
 
+  router.get('/gymupdate',async(req,res) => {
+    
+    
+      const user = req.session.user.email;
+    
+      const values = await gymData.getGymWithUser(user);
+      
+    try{
+      res.render('gymbars/updategym',{values:values})
+      //res.render('gymbars/updategym')
+    }
+    catch(e){
+      res.sendStatus(500);
+    }
+  });
+
+  router.get('/allgyms',async(req,res) => {
+
+    try{
+      let gymList = await gymData.getAllGyms();
+      res.render('gymbars/allgyms',{gyms:gymList});
+    }
+    catch(e){
+      res.sendStatus(500);
+    }
+  });
   
 
+  router.get('/:id',async(req,res) => {
+    try {
+      const gym = await gymData.getGym(req.params.id);
+      const reviews = await gymData.getReviews(req.params.id);
+      const rating = await gymData.calcRating(req.params.id)
+      res.render('gymbars/gymprofile',{gym:gym,reviews:reviews,rate:rating})
+      
+    }
+    catch(e){
+      res.sendStatus(500);
+    }
+  
+  }); 
+
+  
+  router.post('/gymupdate',async(req,res) => {
+
+  
+  }); 
+
+  
+  router.post('/gymupdate',async(req,res) => {
+
+    
+      let gymName = req.body.firstname;
+      let location = req.body.city;
+      let phoneNumber = req.body.mobile;
+      let priceRange = req.body.price;
+      let id = await gymData.getId(gymName)
+      console.log(id)
+      const updategym = await gymData.update(id,gymName,location,phoneNumber,priceRange)
+     try{
+      if(updategym)
+        res.status(200).redirect('/gyms')
+      else {
+          res.status(500).render('gymbars/updategym', {title: "Error", error: 'Internal Server Error'})
+      }
+    }
+    catch(e){
+      res.sendStatus(500);
+    }
+  });
 
 router.post('/gymcreate',async(req,res) => {
   

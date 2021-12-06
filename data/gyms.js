@@ -39,7 +39,8 @@ async create(userName,gymName, location, phoneNumber, priceRange) {
    
     
 
-
+    gymName = gymName[0].toUpperCase()
+    console.log(gymName)
     const gymsCollection = await gyms();
    
     let newGym = {
@@ -73,6 +74,18 @@ async create(userName,gymName, location, phoneNumber, priceRange) {
     return res;
   },
   
+  async getGymWithUser(user) {
+    //if (!id) throw 'You must provide an id to search for';
+    //var checkForHexRegExp = new RegExp("^[0-9a-fA-F]{24}$");
+    //if(checkForHexRegExp.test(id)===false) throw 'Not a valid objectid';
+    
+    const gymsCollection = await gyms();
+    const res= await gymsCollection.findOne({ userName: user });
+    if (res === null) throw 'No gym with that username';
+    //res._id = res._id.toString().replace(/ObjectId\("(.*)"\)/, "$1");
+    return res;
+  },
+
   async getAllGyms() {
     const gymsCollection = await gyms();
 
@@ -80,8 +93,8 @@ async create(userName,gymName, location, phoneNumber, priceRange) {
    /*  for(i=0;i<res.length;i++){
       res[i]._id = res[i]._id.toString().replace(/ObjectId\("(.*)"\)/, "$1");
     } */
-    hpCharacters = await res;
-    return hpCharacters;
+    
+    return res;
   },
 
   async getReviews(id) {
@@ -158,7 +171,39 @@ async create(userName,gymName, location, phoneNumber, priceRange) {
       return 0
     }
 
-  }
+  },
+  async getId(gymName){
+    const gymsCollection = await gyms();
+    const ret = await gymsCollection.findOne({gymName:gymName});
+
+    const res = await gymsCollection.findOne({ _id: ret._id });
+    return res._id
+  },
+
+  async update (id,gymName, location, phoneNumber, priceRange)  {
+    
+    /* check(name, location, phoneNumber, website, priceRange, cuisines, serviceOptions)
+    var checkForHexRegExp = new RegExp("^[0-9a-fA-F]{24}$");
+    if(checkForHexRegExp.test(id)===false) throw 'Not a valid objectid';
+    id = ObjectId(id); */
+  
+    
+    const gymsCollection = await gyms();
+    //if(!b) throw 'There is no record with that id';
+    //if (b.website === newWebsite) throw 'newWebsite is the same as the current value stored in the database';
+    var query = { _id : id };
+    var data = { $set : {gymName : gymName, location: location, phoneNumber: phoneNumber, priceRange : priceRange} } ;
+    const updatedInfo = await gymsCollection.updateOne(
+      query,data
+    );
+    if (updatedInfo.modifiedCount === 0) {
+      
+      throw 'could not update restaurant successfully';
+    } 
+    //id = ObjectId(id).toString();
+    //return await this.get(id);
+  } 
+
 
   
 };

@@ -1,4 +1,4 @@
-
+<div>
 <div class='search'>
     <h2>Gyms</h2>
 
@@ -8,13 +8,13 @@
   </form>
 
 </div>
-{{#each gyms}} 
+
 <div class="main">
 <div class="container">
-  
+  {{#each gyms}} 
   <div onclick="location.href='/gyms/{{_id}}';" class="card" style="width:400px">
     
-    <div class="card-body">
+    <div class="card-body bg-dark text-white">
       <h4 class="card-title">{{gymName}}</h4>
       <h6 class="card-title">{{location}}</h5>
       <h6 class="card-title">{{priceRange}}</h5>
@@ -26,9 +26,15 @@
     
     </div>
   </div>
+  {{/each}} 
+ <button class="btn btn-primary" onclick="location.href='/gyms/allgyms';">View All Gyms</button> 
+  
 </div>
-    {{/each}} 
+</div> 
+
+
 
 </div>
-</div>
+
+
 
