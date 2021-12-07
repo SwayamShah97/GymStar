@@ -653,3 +653,9 @@ text-align: center;
   float: none; /* Added */
   margin-bottom: 20px; /* Added */
 }
+
+.cent{
+  position: relative;
+  
+  left: 630px;
+}

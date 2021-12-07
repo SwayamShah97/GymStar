@@ -1,4 +1,4 @@
-const { trainersData } = require('.');
+//const { trainersData } = require('.');
 const mongoCollections = require('../config/mongoCollections');
 const trainers = mongoCollections.trainers;
 const reviews = mongoCollections.reviews

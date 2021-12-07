@@ -12,7 +12,7 @@ const main = async () => {
     /* const abc = await gyms.getAllGyms();
     console.log(abc)   */
 
-    const redHotel = await gymData.update('bruh','fitness', 'new o', '34343434343', '$$');
+    const redHotel = await gymData.getGym('61a6d05e1ca93bab2f39ca40');
     console.log(redHotel);    
 
        /* a = await reviews.create("617a05e8e59ceebb693b452e", "tkl", "sm", 1, "10/29/2021", " ruh");
