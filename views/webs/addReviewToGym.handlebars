@@ -1,18 +1,55 @@
-<h1>Want other people know what you think?
-    Leave a comment here!
-</h1>
+
 <main>
-    <form action = "/review/addReviewToGym/{{gymId.id}}" method="POST" id="add_reivew">
+   
 
-        <label for="your_reivew" id="reviewInfo">Leave your review here:</label><br>
-        <input type="text" id="your_reivew" name="review"><br>
 
-        <label for="your_rating" id="ratingNum">Give a score(1~5, 5 is the highest)</label><br>
-        <input type="text" id="your_rating" name="rating"><br>
+ <div class="main">
 
-        <input type="submit" name="submit" value="submit">
-    </form>
+        <section class="signup">
+            
+            <div class="container">
+                <div class="signup-content">
+                    <form action = "/review/addReviewToGym/{{gymId.id}}" class="signup-form" method="POST" id="add_reivew"></form>
+                        <h2 class="form-title">Want other people know what you think?
+    Leave a comment here!</h2>
+                        
 
+                        <div class="form-row">
+                        <div class="form-group col-md-12 mb-4">
+                            <label for="your_reivew" id="reviewInfo">Leave your review here:</label><br>
+                            <input class ="form-input" type="text" id="your_reivew" name="review"><br>
+                        </div>
+                        </div>
+
+                        <div class="form-row">
+                        <div class="form-group col-md-6 mb-3">
+                          
+                          <select class="form-control" id="your_rating" name="city" placeholder="Giva a Score (1-5)">
+                              <option value="1" class="gray">Giva a Score (1-5)</option>
+                              <option value="2">2</option>
+                              <option value="3">3</option>
+                              <option value="4">4</option>
+                              <option value="5">5</option>
+                            </select>
+                        </div>
+                        </div>
+
+                        
+                        
+                             
+                        
+                    <div class="form-group">
+                <input class="form-submit" type="submit" name="submit" value="submit">
+        </div>
+        
+        </form>
+                   
+                </div>
+            </div>
+        </section>
+
+    </div>
+    
     {{#if ReviewNotProvide}}
     <p class = "error">You can not leave your review empty</p>
     {{/if}}
@@ -36,11 +73,4 @@
     {{#if ratingWrong}}
     <p class = "error">You need to give a valid number</p>
     {{/if}}
-
-
-
-
-
-
-
 </main>

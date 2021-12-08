@@ -11,7 +11,7 @@ async function addReviewToGym(gymId, reviewerId, review, rating, reviewer){
     if(!reviewer) throw "[Gym review data Error]: You need to provide the reviewer name"
 
 
-    if(typeof(gymId) !== 'string') throw "[Gym review data Error]:Wrong type of gym ID"
+    // if(typeof(gymId) !== 'string') throw "[Gym review data Error]:Wrong type of gym ID"
     if(typeof(reviewerId) !== 'string') throw "[Gym review data Error]:Wrong type of reviewer ID"
     if(typeof(review) !== 'string') throw "[Gym review data Error]:Wrong type of review"
     if(typeof(rating) !== 'number') throw "[Gym review data Error]:Wrong type of rating"
