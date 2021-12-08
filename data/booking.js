@@ -69,11 +69,52 @@ async function createBookingOrder(gymId, userId, date, time){
     return {addNewOrder: true};
 
 
-    
+}
 
+async function getAllOrderByGymID(gymId){
+    if (!gymId) throw '[Booking findByGymId Error]: Id parameter must be supplied';
+
+    if (typeof gymId !== 'string') throw "[Booking findByGymId Error]: Id must be a string";
+
+    if (gymId.trim().length === 0) throw "[Booking findByGymId Error]: the Gym id include all space"
+
+    if (!ObjectId.isValid(gymId)) throw "[Booking findByGymId Error]: the invalid ObjectId"
+
+    const OrderList = await createOrder();
+
+    const search = await OrderList.findOne({ gymId: ObjectId(gymId) });
+
+    if (search === null) throw "[Booking findByGymId Error]: no restaurant fit with this id";
+
+
+    return search;
 
 }
+
+async function getAllOrderByUserID(userId){
+    if (!userId) throw '[Booking findByUserId Error]: Id parameter must be supplied';
+
+    if (typeof userId !== 'string') throw "[Booking findByUserId Error]: Id must be a string";
+
+    if (userId.trim().length === 0) throw "[Booking findByUserId Error]: the Gym id include all space"
+
+    if (!ObjectId.isValid(userId)) throw "[Booking findByUserId Error]: the invalid ObjectId"
+
+    const OrderList = await createOrder();
+
+    const search = await OrderList.findOne({userId: ObjectId(userId)});
+
+    if (search === null) throw "[Booking findByUserId Error]: no restaurant fit with this id";
+
+
+    return search;
+    
+}
+
 
 module.exports = {
-    createBookingOrder
+    createBookingOrder,
+    getAllOrderByGymID,
+    getAllOrderByUserID
 }
+
