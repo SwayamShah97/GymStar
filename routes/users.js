@@ -81,13 +81,7 @@ router.post('/login', async (req, res) => {
                 id:info.id,
                 role:info.role,
                 firstName:info.firstName,
-                lastName:info.lastName,
-                email:info.email,
-                city:info.city,
-                state:info.state,
-                mobile:info.mobile,
-                gender:info.gender,
-                dob:info.dob
+                email:info.email
                 
             }
             res.redirect('/gyms')
@@ -103,19 +97,19 @@ router.post('/login', async (req, res) => {
 
 });
 
-router.get('/private', async (req,res) => {
+// router.get('/private', async (req,res) => {
 
-    if(req.session.user){
-        res.render('private', {title: "Private Page", email:req.session.user.email})
-    }
-    else{
-        res.redirect('/login')
-    }
-});
+//     if(req.session.user){
+//         res.render('private', {title: "Private Page", email:req.session.user.email})
+//     }
+//     else{
+//         res.redirect('/login')
+//     }
+// });
 
 router.get('/signup', async (req,res) => {
     if (req.session.user) {
-        res.redirect('/private')
+        res.redirect('/gyms')
         return
     }
     else{
@@ -129,7 +123,7 @@ router.get('/signup', async (req,res) => {
 router.post('/signup', async (req,res) => {
 
     if (req.session.user) {
-        res.redirect('/private')
+        res.redirect('/gyms')
         return
     }
 
@@ -259,21 +253,21 @@ router.get('/userprofile', async (req, res) => {
     if (!req.session.user) {
         res.redirect('/login')
     } else {
+        let id = req.session.user.id
+        userDetails = await userData.getUserById(id)
+        
         userProfile = {
-                id:req.session.user.id,
-                role:req.session.user.role,
-                firstName:req.session.user.firstName,
-                lastName:req.session.user.lastName,
-                email:req.session.user.email,
-                city:req.session.user.city,
-                state:req.session.user.state,
-                mobile:req.session.user.mobile,
-                gender:req.session.user.gender,
-                dob:req.session.user.dob
-
+                id:userDetails.id,
+                role:userDetails.role,
+                firstName:userDetails.firstName,
+                lastName:userDetails.lastName,
+                email:userDetails.email,
+                city:userDetails.city,
+                state:userDetails.state,
+                mobile:userDetails.mobile,
+                gender:userDetails.gender,
+                dob:userDetails.dob
         }
-                
-
         res.render('userProfile', {title: "Profile", userProfile})
     }
 
@@ -289,26 +283,27 @@ router.post('/updateProfile', async (req,res) => {
     let role = req.session.user.role
     let firstName = req.body.firstname
     let lastName = req.body.lastname
-    let email = req.body.email
+    let email = req.session.user.email
     let city = req.body.city
     let state = req.body.state
     let mobile = req.body.mobile
     let gender = req.body.gender
     let dob = req.body.dob
     let password = req.body.password
-    console.log( id)
-    console.log( role)
-    console.log( firstName)
-    console.log( lastName)
-    console.log( email)
-    console.log( city)
-    console.log( state)
-    console.log( mobile)
-    console.log( gender)
-    console.log( dob)
-    console.log( password)
+    
+    // console.log( id)
+    // console.log( role)
+    // console.log( firstName)
+    // console.log( lastName)
+    // console.log( email)
+    // console.log( city)
+    // console.log( state)
+    // console.log( mobile)
+    // console.log( gender)
+    // console.log( dob)
+    // console.log( password)
 
-    if( !role ||!email || !password || !firstName || !lastName || !gender || !city || !state || !mobile || !dob) {
+    if( !role || !email || !password || !firstName || !lastName || !gender || !city || !state || !mobile || !dob) {
         res.status(400).render('userProfile', {title: "Error", error: 'You must provide all details 1'})
         return
     } 
@@ -317,14 +312,14 @@ router.post('/updateProfile', async (req,res) => {
     // if(!mongodb.ObjectId.isValid(id)) throw 'Not a valid ObjectID'
         
     
-    if (typeof role != 'string' || typeof email != 'string' || typeof password != 'string' || typeof firstName != 'string' || typeof lastName != 'string' ||
+    if (typeof role != 'string' || typeof email != 'string' ||  typeof password != 'string' || typeof firstName != 'string' || typeof lastName != 'string' ||
     typeof city != 'string' || typeof state != 'string' || typeof gender != 'string' || typeof mobile != 'string' || 
     typeof dob != 'string') {
         res.status(400).render('userProfile', {title: "Error", error: 'Input should be string'})
         return
     } 
 
-    if (!role.replace(/\s/g, '').length || !email.replace(/\s/g, '').length || !password.replace(/\s/g, '').length 
+    if (!email.replace(/\s/g, '').length  || !role.replace(/\s/g, '').length  || !password.replace(/\s/g, '').length 
     || !firstName.replace(/\s/g, '').length || !lastName.replace(/\s/g, '').length
     || !city.replace(/\s/g, '').length
     || !state.replace(/\s/g, '').length || !mobile.replace(/\s/g, '').length
@@ -392,15 +387,17 @@ router.post('/updateProfile', async (req,res) => {
     //     return
     // } 
     
-    email = email.toLowerCase()
+     email = email.toLowerCase()
+
+     
 
     try{
     
     const info = await userData.checkUser(email,password)
     if(info.authenticated == true){
-    const updateInfo = await userData.updateUser(id,role,firstName,lastName,email,city,state,mobile,gender,dob, password)
+    const updateInfo = await userData.updateUser(id,role,firstName,lastName,city,state,mobile,gender,dob, password)
     if(updateInfo.userUpdated == true){
-        res.status(200).redirect('userProfile', {title: "Error", error: 'User Updated Successfully'})
+        res.status(200).redirect('/userprofile')
         }
     else {
         res.status(500).render('userProfile', {title: "Error", error: 'Internal Server Error'})
@@ -412,7 +409,21 @@ router.post('/updateProfile', async (req,res) => {
     
     }
     catch(e){
-        res.status(400).render('userProfile', {title: "Error", error: e})
+        userDetails = await userData.getUserById(id)
+        userProfile = {
+            id:userDetails.id,
+            role:userDetails.role,
+            firstName:userDetails.firstName,
+            lastName:userDetails.lastName,
+            email:userDetails.email,
+            city:userDetails.city,
+            state:userDetails.state,
+            mobile:userDetails.mobile,
+            gender:userDetails.gender,
+            dob:userDetails.dob
+        }
+        res.status(400).render('userProfile', {title: "Error", error: e, userProfile})
+        // res.status(200).redirect('/userprofile')
     }
     
     
