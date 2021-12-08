@@ -1,6 +1,7 @@
 const mongoCollections = require("../config/mongoCollections");
 const createOrder = mongoCollections.Booking;
 let { ObjectId } = require('mongodb');
+const { compareSync } = require("bcryptjs");
 
 async function createBookingOrder(gymId, userId, date, time){
     if(!gymId) throw "[Booking data Error]:You need to provide the gym ID"
@@ -58,8 +59,8 @@ async function createBookingOrder(gymId, userId, date, time){
     today = mm + '/' + dd + '/' + yyyy; 
     if(Date.parse(date) < Date.parse(today)) throw "[Booking data Error]: The date of review must after current date"
     let newOrder = {
-        gymId: gymId,
-        userId: userId,
+        gymId: ObjectId(gymId),
+        userId: ObjectId(userId),
         date: date,
         time:time
     }
@@ -99,15 +100,16 @@ async function getAllOrderByUserID(userId){
     if (userId.trim().length === 0) throw "[Booking findByUserId Error]: the Gym id include all space"
 
     if (!ObjectId.isValid(userId)) throw "[Booking findByUserId Error]: the invalid ObjectId"
-
+    
     const OrderList = await createOrder();
+    
+    const search = await OrderList.find({userId: ObjectId(userId)}).toArray();
+    
+    // if (search === null) throw "why null "
+    return search
 
-    const search = await OrderList.findOne({userId: ObjectId(userId)});
 
-    if (search === null) throw "[Booking findByUserId Error]: no restaurant fit with this id";
-
-
-    return search;
+    
     
 }
 

@@ -93,6 +93,14 @@
         <div class="signup-content">
             {{#if user}}
             <h2>Your Bookings:</h2>
+
+            {{#if bookDetails}}
+            {{#each bookDetails}}
+            <h2>{{date}}</h2>
+            <h2>{{time}}</h2>
+            {{/each}}
+            {{/if}}
+
             {{/if}}
             {{#if owner}}
             <h2>Your Gyms:</h2>

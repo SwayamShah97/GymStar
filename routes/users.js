@@ -281,7 +281,17 @@ router.get('/userprofile', async (req, res) => {
                 user:true,
                 owner:false
         }
-        res.render('userProfile', {title: "Profile", userProfile, user:true ,owner:false})
+
+        bookDetails = await bookDataInfo.getAllOrderByUserID(req.session.user.id)
+        
+        if(bookDetails !== null){
+            res.render('userProfile', {title: "Profile", userProfile, user:true ,owner:false, bookDetails})
+        }
+        else{
+            res.render('userProfile', {title: "Profile", userProfile, user:true ,owner:false})
+        }
+
+        
 
         }
         else if (role == "owner"){
