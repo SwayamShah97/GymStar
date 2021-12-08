@@ -76,7 +76,7 @@
                             <label for="agree-term" class="label-agree-term"><span><span></span></span>I agree all statements in  <a href="#" class="term-service">Terms of service</a></label>
                         </div>
                         <div class="form-group">
-                            <input type="submit" name="submit" id="submit" class="form-submit" value="Submit"/>
+                            <input type="submit" name="submit" id="submit" class="form-submit" value="Update"/>
                         </div>
                         </div>
                     </form>
@@ -88,7 +88,21 @@
             </div>
         </section>
     <br>
+
+    <div class="container">
+        <div class="signup-content">
+            {{#if user}}
+            <h2>Your Bookings:</h2>
+            {{/if}}
+            {{#if owner}}
+            <h2>Your Gyms:</h2>
+            {{/if}}
+            
+        </div>
     </div>
+    </div>
+
+   
     
 
 </main>

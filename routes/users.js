@@ -3,6 +3,12 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 
 const userData = require("../data").userData;
+// const data = require('../data');
+
+const bookDataInfo = require('../data').addBooking;
+
+const reviewDataInfo = require('../data').addReview;
+
 
 router.get('/', async (req, res) => {
     
@@ -254,7 +260,12 @@ router.get('/userprofile', async (req, res) => {
         res.redirect('/login')
     } else {
         let id = req.session.user.id
-        userDetails = await userData.getUserById(id)
+        //Get booking details if user
+
+        let role = req.session.user.role
+        if (role == "user"){
+
+            userDetails = await userData.getUserById(id)
         
         userProfile = {
                 id:userDetails.id,
@@ -266,9 +277,39 @@ router.get('/userprofile', async (req, res) => {
                 state:userDetails.state,
                 mobile:userDetails.mobile,
                 gender:userDetails.gender,
-                dob:userDetails.dob
+                dob:userDetails.dob,
+                user:true,
+                owner:false
         }
-        res.render('userProfile', {title: "Profile", userProfile})
+        res.render('userProfile', {title: "Profile", userProfile, user:true ,owner:false})
+
+        }
+        else if (role == "owner"){
+
+
+            userDetails = await userData.getUserById(id)
+        
+            userProfile = {
+                    id:userDetails.id,
+                    role:userDetails.role,
+                    firstName:userDetails.firstName,
+                    lastName:userDetails.lastName,
+                    email:userDetails.email,
+                    city:userDetails.city,
+                    state:userDetails.state,
+                    mobile:userDetails.mobile,
+                    gender:userDetails.gender,
+                    dob:userDetails.dob,
+                    user:false,
+                    owner:true
+            }
+            res.render('userProfile', {title: "Profile", userProfile, user:false ,owner:true})
+
+        }
+
+
+
+        
     }
 
 });
