@@ -1,6 +1,8 @@
 const mongoCollections = require('../config/mongoCollections');
 const gyms = mongoCollections.gyms;
 const reviews = mongoCollections.reviews;
+const trainers = mongoCollections.trainers;
+const booking = mongoCollections.Booking;
 let { ObjectId } = require('mongodb');
 const xss = require('xss');
 
@@ -267,9 +269,7 @@ async create(userName,gymName, location, phoneNumber, priceRange) {
     else{
       return 'Updated Successfully'
     }
-  } 
-
-
+  },
   
 };
 

@@ -60,7 +60,7 @@ router.get('/', async (req, res) => {
   router.get('/gymcreate',async(req,res) => {
 
     try{
-      if (req.session.user){
+      if (req.session.user && req.session.user.role === 'owner'){
         res.render('gymbars/creategym')
       }
       else{
@@ -81,7 +81,7 @@ router.get('/', async (req, res) => {
       
     try{
       if (req.session.user && req.session.user.role === 'owner'){
-        res.render('gymbars/updategym',{values:values})
+        res.render('gymbars/updategym',{id:id,values:values})
       }
       else if(req.session.user && req.session.user!=='owner')
         res.redirect('/login')
@@ -133,7 +133,9 @@ router.get('/', async (req, res) => {
       }
     }
     catch(e){
-      res.status(400).render('gymbars/updategym', {title: "Error", error: e})
+    
+      const values = await gymData.getGym(id);
+      res.status(400).render('gymbars/updategym', {id:id,values:values,title: "Error", error: e})
     }
   });
 
@@ -260,12 +262,11 @@ router.post('/gymcreate',async(req,res) => {
 
   router.get('/:id',async(req,res) => {
     try {
-      if(req.session.user){
+      if(req.session.user && req.session.user.role === 'owner'){
         
       let userEmail = req.session.user.email;
       const gym = await gymData.getGymByOwner(req.params.id,userEmail);
       owner = gym[1];
-      console.log(owner)
       const reviews = await gymData.getReviews(req.params.id);
       const rating = await gymData.calcRating(req.params.id)
       res.render('gymbars/gymprofile',{gym:gym[0],reviews:reviews,rate:rating,owner:owner})
