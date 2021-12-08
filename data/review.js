@@ -147,9 +147,9 @@ async function getAllReviewByUserID(userId){
 
     if (!ObjectId.isValid(userId)) throw "[Review findByUserId Error]: the invalid ObjectId"
 
-    const OrderList = await createOrder();
+    const ReviewList = await createReview();
 
-    const search = await OrderList.find({ userId: ObjectId(userId)});
+    const search = await ReviewList.find({ userId: ObjectId(userId)});
 
     if (search === null) throw "[Review findByUserId Error]: no restaurant fit with this id";
 
