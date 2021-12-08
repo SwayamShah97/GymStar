@@ -118,6 +118,45 @@ async function update(reviewId, gymId, userId,review, rating){
 }
 
 
+async function getAllReviewByGymID(gymId){
+    if (!gymId) throw '[Review findByGymId Error]: Id parameter must be supplied';
+
+    if (typeof gymId !== 'string') throw "[Review findByGymId Error]: Id must be a string";
+
+    if (gymId.trim().length === 0) throw "[Review findByGymId Error]: the Gym id include all space"
+
+    if (!ObjectId.isValid(gymId)) throw "[Review findByGymId Error]: the invalid ObjectId"
+
+    const ReviewList = await createReview();
+
+    const search = await ReviewList.find({ gymId: ObjectId(gymId) });
+
+    if (search === null) throw "[Review findByGymId Error]: no restaurant fit with this id";
+
+
+    return search;
+
+}
+
+async function getAllReviewByUserID(userId){
+    if (!userId) throw '[Review findByUserId Error]: Id parameter must be supplied';
+
+    if (typeof userId !== 'string') throw "[Review findByUserId Error]: Id must be a string";
+
+    if (userId.trim().length === 0) throw "[Review findByUserId Error]: the User id include all space"
+
+    if (!ObjectId.isValid(userId)) throw "[Review findByUserId Error]: the invalid ObjectId"
+
+    const OrderList = await createOrder();
+
+    const search = await OrderList.find({ userId: ObjectId(userId)});
+
+    if (search === null) throw "[Review findByUserId Error]: no restaurant fit with this id";
+
+
+    return search;
+
+}
 
 
 

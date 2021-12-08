@@ -7,7 +7,7 @@ const reviewDataInfo = data.addReview;
 
 
 router.get('/addReviewToGym/:id', async(req,res) =>{
-    let id = req.params.id;
+    let id = req.params;
     res.render('webs/addReviewToGym',{name: "Add review to Gym" , gymId:id})
 });
 
