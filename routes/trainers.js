@@ -6,33 +6,36 @@ const gymData = require('../data').gymData;
 const xss = require('xss');
 // const { validateTrainerReview } = require('../data/trainers');
 function validateTrainerReview(review){
-    if( ! review.rating ||
+    if( 
+        // ! review.rating ||
+        ! review.starTR ||
         ! review.trainerId ||
-        ! review.reviewText) throw {status:400,message:'Kindly provide all valid inputs'}
+        ! review.reviewTextTR) throw {status:400,message:'Kindly provide all valid inputs'}
 
-    if( typeof(review.rating) !== 'string'  ||
+    if( typeof(review.starTR) !== 'string'  ||
     typeof(review.trainerId ) !== 'string' ||
-    typeof(review.reviewText) !== 'string' ) throw {status:400,message:'Kindly provide all string inputs'}
+    typeof(review.reviewTextTR) !== 'string' ) throw {status:400,message:'Kindly provide all string inputs'}
 
-    review.rating = xss(review.rating)
+    review.starTR = xss(review.starTR)
     review.trainerId = xss(review.trainerId)
-    review.reviewText = xss(review.reviewText)
+    review.reviewTextTR = xss(review.reviewTextTR)
 
-    review.rating = review.rating.trim()
+    review.starTR = review.starTR.trim()
     review.trainerId = review.trainerId.trim()
-    review.reviewText = review.reviewText.trim()
+    review.reviewTextTR = review.reviewTextTR.trim()
 
-    if( ! parseInt(review.rating) ||
-        parseInt(review.rating) < 0 ||
-        parseInt(review.rating) > 5 ||
-        review.rating.isNaN()
+    console.log(parseInt(review.starTR))
+    if( ! parseInt(review.starTR) ||
+        parseInt(review.starTR) < 0 ||
+        parseInt(review.starTR) > 5 
+        // || parseInt(review.starTR).isNaN()
          ) throw {status:400,message:'Invalid rating'}
 
     let objectIdRegex = /^[a-f\d]{24}$/i;
     if (!objectIdRegex.test(review.trainerId) || !ObjectId.isValid(review.trainerId))
     throw {status:400, message:"Invalid objectId for trainerId"};
 
-    if(review.reviewText.length === 0) throw {status:400,message:'Kindly provide proper review.'}
+    if(review.reviewTextTR.length === 0) throw {status:400,message:'Kindly provide proper review.'}
 
     return review
 }
@@ -168,45 +171,81 @@ router.post('/createTrainer', async (req,res) => {
   
 })
 
-router.get('/reviewTrainer', async (req,res) => { //this is just for demo. Actually it will be a post route
-  //Validate user. User Should be logged in.
-    if(req.session.user) {
-        //Get selected trainer's details from DB
-        res.render('createTrainerReview',{gymId:'gymid123',trainerFirstname:'myfname',trainerLastname:'mylastname'})
-    }else{
-        req.session.gotoroute = 'trainers/createTrainerReview'
-        res.redirect('/login')
-    }
+router.get('/reviewTrainer/:id', async (req,res) => { //this is just for demo. Actually it will be a post route
+  
+   try{
+        //Validate user. User Should be logged in.
+        console.log(req.params.id) //Trainer's ID
+        if(!req.params.id) throw {status:400,message:'Trainer ID is missing. Please provide it.'}
+        let objectIdRegex = /^[a-f\d]{24}$/i;
+        if(! objectIdRegex.test(req.params.id) ) throw{status:400,message:'Invalid Trainer Object ID'}
+        if(req.session.user) {
+            //Get selected trainer's details from DB
+            const trainerDetails = await trainerData.getTrainersByTrainerId(req.params.id)
+            if(! trainerDetails) throw{status:404,message:'Trainer Not found'}
+            trainerDetails._id = trainerDetails._id.toString()
+            res.render('createTrainerReview',{gymId:trainerDetails.gymId,
+                                              trainerFirstname:trainerDetails.trainerFirstName,
+                                              trainerLastname:trainerDetails.trainerLastName,
+                                              trainerId:trainerDetails._id})
+        }else{
+            req.session.gotoroute = 'trainers/createTrainerReview'
+            res.redirect('/login')
+        }
+   }catch(e){
+    res.status(e.status).render('somethingWentWrong', {message:e.message})
+   }
     
 })
 router.post('/createReviewTrainer', async(req,res) => {
-    try{
-    console.log(req.body)
-    //validate 
-    let trainerReview = validateTrainerReview(req.body)
-
-    //Prepare trainer data 
-    let newTrainerReview = {
-    "userId" : req.session.user.emailId,
-    "date": trainerData.getTodaysDate(), //System Date can be open
-    "reviewText": trainerReview.reviewText,
-    "trainerId": trainerReview.trainerId,
-    "rating": trainerReview.rating,
-    "reviewer": req.session.user.firstName
-  }
-
-    let res = await trainerData.createTrainerReview(newTrainerReview)
-  }catch(e){
-    console.log(e.message)
-  }
+    if(req.session.user){
+        let trainerReview = ''
+        try{
+            console.log(req.body)
+            //validate 
+            trainerReview = validateTrainerReview(req.body)
+        
+            //Prepare trainer data 
+            let newTrainerReview = {
+            "userId" : req.session.user.email,
+            "date": trainerData.getTodaysDate(), //System Date can be open
+            "reviewText": trainerReview.reviewTextTR,
+            "trainerId": trainerReview.trainerId,
+            "rating": trainerReview.starTR,
+            "reviewer": req.session.user.firstName
+          }
+        
+            let resp = await trainerData.createTrainerReview(newTrainerReview)
+            if(resp){
+                res.render('createTrainerReview',{success:'Review submitted successfully',
+                                                  trainerFirstname:trainerReview.trainerFirstname,
+                                                trainerLastname:trainerReview.trainerLastname,
+                                                starTR:trainerReview.starTR,
+                                                reviewTextTR:trainerReview.reviewTextTR,
+                                                trainerId: trainerReview.trainerId})
+            }
+          }catch(e){
+            console.log(e.message)
+          }
+    }else{
+        res.redirect('login')
+    }
+    
 })
 
 router.get('/gym/:id',async(req,res) => { //View trainers pertaining to given gym id
     try {
         console.log('Trainer List for gym ID: '+ req.params.id)
         const trainerList = await trainerData.getTrainersByGymId(req.params.id)
+
         if(trainerList){
+            for(let t of trainerList){
+                t._id = t._id.toString()
+            }
             //render trainer list here
+            res.render('trainerList',{
+                trainers:trainerList
+            })  
         }
       
       
