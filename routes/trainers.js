@@ -10,6 +10,10 @@ function validateTrainerReview(review){
         ! review.trainerId ||
         ! review.reviewText) throw {status:400,message:'Kindly provide all valid inputs'}
 
+    if( typeof(review.rating) !== 'string'  ||
+    typeof(review.trainerId ) !== 'string' ||
+    typeof(review.reviewText) !== 'string' ) throw {status:400,message:'Kindly provide all string inputs'}
+
     review.rating = xss(review.rating)
     review.trainerId = xss(review.trainerId)
     review.reviewText = xss(review.reviewText)
@@ -41,6 +45,14 @@ function validateTrainerDetails(trainer){
         !trainer.phoneNo || 
         !trainer.experience || 
         !trainer.emailId) throw {status:400, message:'Kindly provide all the fields'}
+
+    if( typeof(trainer.trainerFirstName ) !== 'string' || 
+    typeof(trainer.trainerLastName) !== 'string'  || 
+    typeof(trainer.gymId) !== 'string'  ||
+    typeof(trainer.gender) !== 'string'  ||
+    typeof(trainer.phoneNo ) !== 'string' || 
+    typeof(trainer.experience) !== 'string'  || 
+    typeof(trainer.emailId) !== 'string' ) throw {status:400, message:'Kindly provide all string fields'}
 
     //XSS
     trainer.trainerFirstName  = xss(trainer.trainerFirstName )
@@ -188,6 +200,22 @@ router.post('/createReviewTrainer', async(req,res) => {
     console.log(e.message)
   }
 })
+
+router.get('/gym/:id',async(req,res) => { //View trainers pertaining to given gym id
+    try {
+        console.log('Trainer List for gym ID: '+ req.params.id)
+        const trainerList = await trainerData.getTrainersByGymId(req.params.id)
+        if(trainerList){
+            //render trainer list here
+        }
+      
+      
+    }
+    catch(e){
+      res.status(e.status || 500)//.render();
+    }
+  
+  }); 
 
 
 module.exports = router 

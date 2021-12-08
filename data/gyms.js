@@ -59,7 +59,7 @@ function check2(gymName,location,phoneNumber,priceRange){
     
 
     // if(! /^[1-5]{1}$/.test(filter.rating)) throw {status:400,message:'Invalid Rating'}
-    if( filter.rating && !( /^[1-5]{1}$/.test(filter.rating))) //4 because there will be 0-4 in select option
+    if( filter.rating && !( /^[0-4]{1}$/.test(filter.rating))) //4 because there will be 0-4 in select option
     {
       throw {status:400,message:'Invalid Rating'}
     }
@@ -85,6 +85,9 @@ async create(userName,gymName, location, phoneNumber, priceRange) {
     phoneNumber = xss(phoneNumber);
     priceRange = xss(priceRange);
     
+
+    gymName = gymName[0].toUpperCase()
+    console.log(gymName)
     const gymsCollection = await gyms();
    
     let newGym = {
@@ -211,14 +214,14 @@ async create(userName,gymName, location, phoneNumber, priceRange) {
   },
 
   async getFilterData(filter){
-    // filter = validateFilter(filter)
+    filter = validateFilter(filter)
 
     const gymsCollection = await gyms();
     const gymList = await gymsCollection.find(
       {
         $or : [
-          { "overallRating" :  3 }, //{ $gte : filter.rating } },
-          { "priceRange" :  '$$$' }//filter.priceRange}
+          { "overallRating" : { $gte : filter.rating } },
+          { "priceRange" :  filter.priceRange}
 
         ]
 

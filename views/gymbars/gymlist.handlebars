@@ -11,9 +11,52 @@
             <h3 class="cent">{{error}}</h3>
     {{/if}}
 </div>
+<div class="filter" >
+  <form method="POST" action="/gyms/gfilter" id="filterForm" class="search-container">
+  <div style="float:left; width:30%;">
+    <div class="form-group col-md-6 mb-3">
+                          
+      <select class="form-control" id="rating" name="rating" placeholder="Select Rating" >
+          <option value="" class="gray" selected disabled hidden>Select Rating</option>
+          <option value="0">Please Select Rating</option>
+          <option value="1">1.0 or More</option>
+          <option value="2">2.0 or More</option>
+          <option value="3">3.0 or More</option>
+          <option value="4">4.0 or More</option>
+      </select>
+    </div>
+  </div>
+  <div style="float:left; width:30%;">
+    <div class="form-group col-md-6 mb-3">
+                          
+      <select class="form-control" id="priceRange" name="priceRange" placeholder="Select Cost" >
+          <option value="" class="gray" selected disabled hidden>Select Cost</option>
+          <option value="0">Please select price Range</option>
+          <option value="$">$</option>
+          <option value="$$">$$</option>
+          <option value="$$$">$$$</option>
+          <option value="$$$$">$$$$</option>
+      </select>
+    </div>
+</div>
+
+<div style="float:left; width:5%;">
+  <button type="button" id="filterBtn">Check</button>
+</div>
+<div class="form-group col-md-6 mb-3">
+   <div class='errorGymStar' id="errorFilter" >
+
+   </div>
+ </div>
+  </form>
+  
+</div> 
+
+ 
 
 <div class="main">
 <div class="container">
+  <h3>{{error}}</h3>
   {{#each gyms}} 
   <div onclick="location.href='/gyms/{{_id}}';" class="card" style="width:400px">
     

@@ -5,6 +5,14 @@
   transition: background-color 200ms linear;
 }
 
+/* Added by malay for errors */
+.errorGymStar{
+  color: #D8000C;
+    background-color: #FFD2D2;
+    
+  
+}
+
 body{
   margin: 0;
   padding: 0;

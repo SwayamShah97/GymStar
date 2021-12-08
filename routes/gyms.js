@@ -99,7 +99,8 @@ router.get('/', async (req, res) => {
 
     try{
       let gymList = await gymData.getAllGyms();
-      res.render('gymbars/allgyms',{gyms:gymList});
+      // res.render('gymbars/allgyms',{gyms:gymList}); // No need of new handlebar
+      res.render('gymbars/gymlist',{gyms:gymList}); //changed by malay
     }
     catch(e){
       res.sendStatus(500);
@@ -169,12 +170,17 @@ router.post('/gymcreate',async(req,res) => {
       checkString(req.body.searchTerm)
       if (!req.body.searchTerm) res.status(400).render('gymbars/emptysearch')
       
+    req.body.searchTerm = xss(req.body.searchTerm)
+    req.body.searchTerm = req.body.searchTerm.trim()
+    // try {
+      if (! req.body.searchTerm) res.status(400).render('gymbars/gymlist',{error:'Kindly provide valid search term'})
       else{
         
         const marv = await gymData.search(req.body.searchTerm);
-        if(marv.length < 1 || marv == undefined) res.render('gymbars/nosearch',{s:req.body.searchTerm});
+        if(marv.length < 1 || marv == undefined) res.render('gymbars/gymlist',{error:`No results found for ${req.body.searchTerm}`});
         else
-         res.render('gymbars/search',{marved:marv}); }
+        //  res.render('gymbars/search',{marved:marv}); }
+         res.render('gymbars/gymlist',{gyms:marv}); }
     } catch (e) {
       let gymList = await gymData.getTopFive();
       res.status(400).render('gymbars/gymlist', {gyms:gymList,title: "Error", error: e})
@@ -182,48 +188,57 @@ router.post('/gymcreate',async(req,res) => {
   
   });
 
-  // // Added by Malay for gym filter
-  // function validateFilter(filter) {
-  //   filter.rating = xss(filter.rating)
-  //   filter.priceRange = xss(filter.priceRange)
+  // Added by Malay for gym filter
+  function validateFilter(filter) {
+    console.log(typeof(filter))
+       if(typeof(filter) !== 'object') throw {status:400,message:'Object type expected'}
+      //  if(typeof(filter.rating) !== 'string' ||
+      //     typeof(filter.priceRange) !== 'string' ||
+      //     typeof(filter.rating) !== 'undefined' ||
+      //     typeof(filter.priceRange) !== 'undefined' 
+      //     ) throw {status:400,message:'String type expected'}
 
-  //   filter.rating = filter.rating.trim()
-  //   filter.priceRange = filter.priceRange.trim()
+    filter.rating = xss(filter.rating)
+    filter.priceRange = xss(filter.priceRange)
 
-  //   let tempRating = filter.rating
-  //   if(! /^[1-5]{1}$/.test(filter.rating)) throw {status:400,message:'Invalid Rating'}
+    filter.rating = filter.rating.trim()
+    filter.priceRange = filter.priceRange.trim()
 
-  //   if( filter.rating && !( /^[1-5]{1}$/.test(filter.rating))) //4 because there will be 0-4 in select option
-  //   {
-  //     throw {status:400,message:'Invalid Rating'}
-  //   }
-  //   let priceRangeRegex = /^[$]{1,4}$/;
-  //   if(filter.priceRange && (! priceRangeRegex.test(filter.priceRange))) throw {
-  //     status:400,
-  //     message:'Invalid price Range'
-  //   }
-  //   return filter
+    // let tempRating = filter.rating
+    // if(! /^[0-4]{1}$/.test(filter.rating)) throw {status:400,message:'Invalid Rating'}
 
-  // }
+    if( filter.rating && !( /^[0-4]{1}$/.test(filter.rating))) //4 because there will be 0-4 in select option
+    {
+      throw {status:400,message:'Invalid Rating'}
+    }
+    // filter.rating = parseInt(filter.rating)
+    let priceRangeRegex = /^[$]{1,4}$/;
+    if(filter.priceRange && (! priceRangeRegex.test(filter.priceRange))) throw {
+      status:400,
+      message:'Invalid price Range'
+    }
+    return filter
+
+  }
   
 
 
-  router.get('/gfilter',async(req,res) => {
+  router.post('/gfilter',async(req,res) => {
     console.log('Inside filter')
     try{
-      // let filter = validateFilter(req.body)
+      let filter = validateFilter(req.body)
       
-      let gymList = await gymData.getFilterData()
+      let gymList = await gymData.getFilterData(filter)
       if(gymList){
         
         res.render('gymbars/gymlist',{gyms:gymList})
       }else{
         
-        res.render('noseearch',{})
+        res.render('gymbars/gymlist',{error:`No Gyms found`})
       }
 
     }catch(e){
-      res.status(e.status || 500).json(e.message)
+      res.status(e.status || 500).render('gymbars/gymlist',{error:e.message})
     }
     
   })
@@ -233,6 +248,7 @@ router.post('/gymcreate',async(req,res) => {
       const gym = await gymData.getGym(req.params.id)
       const reviews = await gymData.getReviews(req.params.id);
       const rating = await gymData.calcRating(req.params.id)
+      gym._id = gym._id.toString()
       res.render('gymbars/gymprofile',{gym:gym,reviews:reviews,rate:rating})
       
     }

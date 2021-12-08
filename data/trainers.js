@@ -194,5 +194,21 @@ module.exports = {
         var yyyy = today.getFullYear();
         today = mm + '/' + dd + '/' + yyyy;
         return today
+    },
+    async getTrainersByGymId(gymId){
+        if(! gymId ) throw{status:400,message:'Kindly provide gymId'}
+        if(typeof(gymId) !== 'string' ) throw{status:400,message:'Kindly provide string gymId'}
+        gymId = ObjectId(gymId)
+        const trainerCollection = await trainers()
+        const trainerList = await trainerCollection.find({'gymId':gymId} ).toArray()
+        if(trainerList){
+            for (let t of trainerList){
+                t.gymId = t.gymId.toString()
+                t._id = t._id.toString()
+            }
+            return trainerList
+        }else{
+            return false
+        }
     }
 }
