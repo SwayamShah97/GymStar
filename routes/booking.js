@@ -5,17 +5,18 @@ const data = require('../data');
 const reviewDataInfo = data.addReview;
 const bookDataInfo = data.addBooking;
 
-router.get('/booking', async(req,res) =>{
-    res.render('webs/booking',{name: "Add review to Gym" })
+router.get('/booking/:id', async(req,res) =>{
+    let id = req.params;
+    res.render('webs/booking',{name: "Make an appointment" , gymId:id})
 });
 
-router.post('/booking', async (req, res) => {
+router.post('/booking/:id', async (req, res) => {
     //userId = req.session.userId;
     //gymId = req.session.gymId;
     date = req.body.date;
     time = req.body.time;
-    console.log(req.body)
-
+    gymId = req.params.id;
+    userId = req.session.user.id;
 
     if(!data){
         res.status(400).render('webs/booking', {dateNotProvide: true, name: "Make an appointment"})
@@ -121,9 +122,7 @@ router.post('/booking', async (req, res) => {
         res.status(400).render('webs/booking', {canNotBookingToday: true, name: "Make an appointment"})
         return; 
     }
-    //TEST CODE
-    gymId = "61a67874028fbaa20828bf7a"
-    userId = "61a67882028fbaa20828bf7b"
+
     try{
         const makeBooking = await bookDataInfo.createBookingOrder(gymId,userId,date,time);
         if(makeBooking.addNewOrder === true){

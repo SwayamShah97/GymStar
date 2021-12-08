@@ -57,11 +57,9 @@ async function createBookingOrder(gymId, userId, date, time){
 
     today = mm + '/' + dd + '/' + yyyy; 
     if(Date.parse(date) < Date.parse(today)) throw "[Booking data Error]: The date of review must after current date"
-    const status = "pending"
     let newOrder = {
         gymId: gymId,
         userId: userId,
-        status: status,
         date: date,
         time:time
     }

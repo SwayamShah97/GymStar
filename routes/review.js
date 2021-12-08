@@ -6,18 +6,17 @@ const reviewDataInfo = data.addReview;
 
 
 
-router.get('/addReviewToGym', async(req,res) =>{
-    console.log(req.params.id)
-    res.render('webs/addReviewToGym',{name: "Add review to Gym" })
+router.get('/addReviewToGym/:id', async(req,res) =>{
+    let id = req.params;
+    res.render('webs/addReviewToGym',{name: "Add review to Gym" , gymId:id})
 });
 
 
 
-router.post('/addReviewToGym', async (req, res) => {
+router.post('/addReviewToGym/:id', async (req, res) => {
     review = req.body.review;
     rating = req.body.rating;
 
-    //add user Id , gym id and  reviewer name later in merge code 
     gymId = req.params;
     userId = req.session.user.id;
     reviewer = req.session.user.firstName;
@@ -57,12 +56,9 @@ router.post('/addReviewToGym', async (req, res) => {
     let newRating = parseInt(rating)
     console.log(typeof(newRating))
     
-    //testcode:
-
 
     try{
-        //TODO: need to know how are they going to pass those userid and gymid
-        const addInfo = await reviewDataInfo.addReviewToGym(userId,gymId, review, newRating, reviewer)
+        const addInfo = await reviewDataInfo.addReviewToGym(gymId,userId,review,newRating,reviewer)
         
         if(addInfo.addReviewtoTheGym === true){
             res.render('webs/reviewAddSuccess', {name: "Successful" })
