@@ -1,19 +1,47 @@
-<h1>Want other people know what you think?
-    Leave a comment here!
-</h1>
+
 <main>
-    <form action = "/order/booking/{{gymId.id}}" method="POST" id="make_an_order">
+   
 
-        <label for="new_order_date" id="dateInfo">Chose a date (Your date must be mm/dd/yyyy):</label><br>
+
+ <div class="main">
+
+        <section class="signup">
+            
+            <div class="container">
+                <div class="signup-content">
+                    <form action = "/order/booking/{{gymId.id}}" method="POST" id="make_an_order">
+                        <h2 class="form-title">Want other people know what you think?
+    Leave a comment here!</h2>
+                        
+
+                        <div class="form-row">
+                        <div class="form-group col-md-12 mb-4">
+                            <label for="new_order_date" id="dateInfo">Choose a date (Your date must be mm/dd/yyyy):</label><br>
         <input type="text" id="new_order_date" name="date"><br>
+                        </div>
+                        </div>
 
-        <label for="new_order_time" id="timeInfo">Chose a time (Your time must be like 09:00, 11:35 or 20:05):</label><br>
-        <input type="text" id="new_order_time" name="time"><br>
+                        <div class="form-row">
+                        <div class="form-group col-md-6 mb-3">
+                          
+                          <label for="new_order_time" id="timeInfo">Choose a time (Your time must be like 09:00, 11:35 or 20:05):</label><br>
+        <input type="time" id="new_order_time" name="time"
+       required>
+        
+                        </div>
+                        </div>
 
-        <input type="submit" name="submit" value="submit">
-    </form>
+                        
+                        
+                             
+                        
+                    <div class="form-group">
+                <input class="form-submit" type="submit" name="submit" value="submit">
+        </div>
+        
+        </form>
 
-    {{#if dateNotProvide}}
+        {{#if dateNotProvide}}
     <p class = "error">You can not leave your order date empty</p>
     {{/if}}
 
@@ -48,5 +76,10 @@
     {{#if bookFailed}}
     <p class = "error">Sorry, the order failed, please try later</p>
     {{/if}}
+                </div>
+            </div>
+        </section>
 
-
+    </div>
+    
+</main>

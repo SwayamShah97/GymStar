@@ -15,7 +15,9 @@ router.get('/addReviewToGym/:id', async(req,res) =>{
 
 
 router.post('/addReviewToGym/:id', async (req, res) => {
+    
     review = req.body.review;
+
     rating = req.body.rating;
 
     gymId = req.params.id;

@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 
 const userData = require("../data").userData;
+
 // const data = require('../data');
 
 const bookDataInfo = require('../data').addBooking;
@@ -266,6 +267,7 @@ router.get('/userprofile', async (req, res) => {
         if (role == "user"){
 
             userDetails = await userData.getUserById(id)
+            
         
         userProfile = {
                 id:userDetails.id,
@@ -283,12 +285,12 @@ router.get('/userprofile', async (req, res) => {
         }
 
         bookDetails = await bookDataInfo.getAllOrderByUserID(req.session.user.id)
-        
+        const reviews = await reviewDataInfo.getAllReviewByUserID(id)
         if(bookDetails !== null){
-            res.render('userProfile', {title: "Profile", userProfile, user:true ,owner:false, bookDetails})
+            res.render('userProfile', {reviews:reviews,title: "Profile", userProfile, user:true ,owner:false, bookDetails})
         }
         else{
-            res.render('userProfile', {title: "Profile", userProfile, user:true ,owner:false})
+            res.render('userProfile', {reviews:reviews,title: "Profile", userProfile, user:true ,owner:false})
         }
 
         
@@ -298,7 +300,7 @@ router.get('/userprofile', async (req, res) => {
 
 
             userDetails = await userData.getUserById(id)
-        
+            
             userProfile = {
                     id:userDetails.id,
                     role:userDetails.role,

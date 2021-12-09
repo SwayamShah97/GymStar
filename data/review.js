@@ -149,7 +149,7 @@ async function getAllReviewByUserID(userId){
 
     const ReviewList = await createReview();
 
-    const search = await ReviewList.find({ userId: ObjectId(userId)});
+    const search = await ReviewList.find({ userId: ObjectId(userId)}).toArray();
 
     if (search === null) throw "[Review findByUserId Error]: no restaurant fit with this id";
 
@@ -165,6 +165,7 @@ async function getAllReviewByUserID(userId){
 module.exports = {
     addReviewToGym,
     remove,
-    update
+    update,
+    getAllReviewByUserID
 }
 

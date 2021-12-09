@@ -108,20 +108,38 @@
             
         </div>
     </div>
+    <br>
     
-    <div class="container">
-        <div class="signup-content">
+    
+      <div>
             {{!-- swayam here --}}
+            <h2>Your Reviews:</h2>
             {{#if user}}
-            
+                {{#each reviews}} 
+
+                    <div class="container">
+                        <!-- Card-->
+                        <div class="card rounded shadow-sm border-0">
+                            <div class="card-body bg-light">
+                            <h4 class="text-dark">{{reviewer}}</h4>
+                            <p class="small text-muted font-italic">{{date}}</p>
+                            <ul class="list-inline small">
+                                {{#times rating}}
+                                    <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
+                                {{/times}}
+                                
+                            </ul>
+                            <h6> <a href="#" class="text-dark">{{reviewText}}</a></h5>
+                            <a href="#" class="btn btn-primary">Edit Review</a>
+                            <a href="#" class="btn btn-primary">Delete Review</a>
+                            </div>
+                        </div>
+                        </div>
+                        <br>
+                {{/each}}
             {{/if}}
-        </div>
-    </div>
-
-    
-    </div>
-
-   
-    
-
+            </div>
+       
+</div> 
+            
 </main>
