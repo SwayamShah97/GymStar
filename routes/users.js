@@ -10,14 +10,17 @@ const bookDataInfo = require('../data').addBooking;
 
 const reviewDataInfo = require('../data').addReview;
 
+let loggedin = false
 
 router.get('/', async (req, res) => {
     
-    // if (req.session.user) {
-    //     res.redirect('/private')
-    // } else {
-        res.render('landing', {title: "GymStar"})
-    // }
+    if (req.session.user) {
+        
+        let name = req.session.user.firstName
+        res.render('landing', {title: "GymStar",loggedin,name,landing:true})
+    } else {
+        res.render('landing', {title: "GymStar",loggedin:false,landing:true})
+    }
 
 });
 
@@ -91,6 +94,7 @@ router.post('/login', async (req, res) => {
                 email:info.email
                 
             }
+            loggedin = true
             res.redirect('/gyms')
             // console.log(req.session.user)
             }
@@ -104,15 +108,6 @@ router.post('/login', async (req, res) => {
 
 });
 
-// router.get('/private', async (req,res) => {
-
-//     if(req.session.user){
-//         res.render('private', {title: "Private Page", email:req.session.user.email})
-//     }
-//     else{
-//         res.redirect('/login')
-//     }
-// });
 
 router.get('/signup', async (req,res) => {
     if (req.session.user) {
@@ -262,7 +257,7 @@ router.get('/userprofile', async (req, res) => {
     } else {
         let id = req.session.user.id
         //Get booking details if user
-
+        let name = req.session.user.firstName
         let role = req.session.user.role
         if (role == "user"){
 
@@ -287,10 +282,10 @@ router.get('/userprofile', async (req, res) => {
         bookDetails = await bookDataInfo.getAllOrderByUserID(req.session.user.id)
         const reviews = await reviewDataInfo.getAllReviewByUserID(id)
         if(bookDetails !== null){
-            res.render('userProfile', {reviews:reviews,title: "Profile", userProfile, user:true ,owner:false, bookDetails})
+            res.render('userProfile', {reviews:reviews,title: "Profile", userProfile, user:true ,owner:false, bookDetails, loggedin, name})
         }
         else{
-            res.render('userProfile', {reviews:reviews,title: "Profile", userProfile, user:true ,owner:false})
+            res.render('userProfile', {reviews:reviews,title: "Profile", userProfile, user:true ,owner:false, loggedin, name})
         }
 
         
@@ -490,7 +485,7 @@ router.get('/logout', async (req,res) => {
         res.redirect('/')
         return
     }
-
+    loggedin = false
     req.session.destroy();
     res.render('logout',{title:'Logged Out'})
     

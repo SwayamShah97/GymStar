@@ -96,7 +96,7 @@ body{
 
 
 
-.front .navbar-brand{
+ .navbar-brand{
   color: #fff  ;
   font-size: 2.5em;
   font-weight: 700;
@@ -104,16 +104,16 @@ body{
 
 }
 
-.front .nav{
+ .nav{
   margin-right: 1%;
 }
 
-.front .nav li a{
+ .nav li a{
   color: #fff;
   font-size: 1.2em;
 }
 
-.front .info{
+ .info{
   margin-top: 20%;
   transform: translateY(-15%);
   align-items: center;
@@ -178,6 +178,7 @@ p{
 
 .featureicon{
 color: #9be3de;
+/* color: black; */
 padding-bottom: 1.5rem;
 
 }
@@ -217,17 +218,9 @@ p{
   color: #8f8f8f;
 }
 
-.featureicon{
-color: #9be3de;
-padding-bottom: 1.5rem;
 
-}
 
-.featureicon:hover{
-  color: #beebe9;
-}
 
-/* How it works */
 
 
 
@@ -432,7 +425,7 @@ background-attachment: fixed;
   margin: 0 auto; }
 
   .user-container {
-  width: 760px;
+  width: 820px;
   /* position: relative; */
   margin: 0 auto; 
 }
@@ -615,13 +608,21 @@ background-attachment: fixed;
 .m-b-10 {margin-bottom: 10px;
 margin-left: 25%;}
 
-
+.search{
+  padding: none;
+}
 .search-container {
   width: 490px;
   display: block;
   margin: 0 auto;
+ padding: none;
 }
-input#search-bar {
+
+.search-input{
+  width: 200px;
+}
+
+/* input#search-bar {
   
   width: 100%;
   height: 45px;
@@ -647,7 +648,7 @@ input#search-bar:focus::-moz-placeholder {
 input#search-bar:focus:-ms-placeholder {
   transition: opacity 0.45s ease;
   opacity: 0;
-}
+} */
 .search-icon {
   position: relative;
   float: right;

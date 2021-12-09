@@ -1,5 +1,5 @@
 <div>
-<div class='search'>
+{{!-- <div class='search'>
     <h2>Gyms</h2>
 
   <form method="POST" action="/gyms/search" class="search-container">
@@ -10,7 +10,16 @@
    {{#if error}}
             <h3 class="cent">{{error}}</h3>
     {{/if}}
-</div>
+</div> --}}
+
+
+ 
+
+<div class="main">
+<div class="container">
+  {{#if error}}
+                  <h3 class="cent">{{error}}</h3>
+                  {{/if}}
 <div class="filter" >
   <form method="POST" action="/gyms/gfilter" id="filterForm" class="search-container">
   <div style="float:left; width:70%;">
@@ -52,10 +61,7 @@
   
 </div> 
 
- 
 
-<div class="main">
-<div class="container">
   {{!-- <h3>{{error}}</h3> --}}
   {{#each gyms}} 
   <div onclick="location.href='/gyms/{{_id}}';" class="card" style="width:600px">

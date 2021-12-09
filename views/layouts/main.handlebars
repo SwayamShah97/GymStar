@@ -34,6 +34,73 @@
     </script>
  
 </head>
+<header>
+  <div class="container-fluid ">
+  <nav class="navbar navbar-expand-lg fixed-top ">
+              <a class="navbar-brand" href="/">
+                GymStar
+              </a>
+
+              {{!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02">
+                <span class="navbar-toggler-icon"></span>
+              </button> --}}
+
+              <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+                 
+                <ul class="navbar-nav nav ml-auto flt">
+                  {{#if landing}}
+                  <li class="nav-item">
+                    <a class="nav-link" href="/">HOME</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#howit">HOW IT WORKS</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#features">FEATURES</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#testimonials">WHY?</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#footer">CONTACTUS</a>
+                  </li>
+                  {{else}}
+                  
+
+                  <form method="POST" action="/gyms/search" class="form-inline my-2 my-lg-0 search-container">
+                  <input class="form-control mr-sm-2 search-input" type="search" id="search-bar" name="searchTerm" placeholder="Search Gyms Here" aria-label="Search">
+                  <button class="btn btn-outline-success my-2 my-sm-0"  name="submit">Search</button>
+                  </form>
+
+
+
+                  {{/if}}
+                  {{#if loggedin}}
+                    <div class="dropdown show">
+                      <a class="btn btn-info text-center dropdown-toggle " href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                       Hey, {{name}}
+                      </a>
+
+                          <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <a class="dropdown-item" href="/userprofile">Your profile</a>
+                        <a class="dropdown-item" href="/logout">Logout</a>
+                            
+                      </div>
+                          </div>
+                  {{else}}
+                    <li class="nav-item">
+                    <a href="/login" class="btn btn-outline-success text-center" >LOGIN</a>
+                    </li>
+
+                    
+                  {{/if}}
+
+                  
+                </ul>
+              </div>
+            </nav>
+            </div>
+</header>
 <body>
 {{{body}}}
    <script src="/public/js/trainerReviewScript.js"></script>
