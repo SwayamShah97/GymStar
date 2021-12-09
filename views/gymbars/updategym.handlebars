@@ -6,13 +6,13 @@
             
             <div class="container">
                 <div class="signup-content">
-                    <form method="POST" action="/gyms/gymcreate" id="signup-form" class="signup-form">
-                        <h2 class="form-title">Create Gym</h2>
+                    <form method="POST" action="/gyms/gymupdate/{{id}}" id="signup-form" class="signup-form">
+                        <h2 class="form-title">Update Gym</h2>
 
 
                         <div class="form-row">
                         <div class="form-group col-md-12 mb-4">
-                            <input type="text" class="form-input" name="firstname" id="firstname" placeholder="Gym name"/>
+                            <input type="text" class="form-input" name="firstname" id="firstname" value="{{values.gymName}}" />
                         </div>
                         </div>
 
@@ -20,7 +20,7 @@
                         <div class="form-group col-md-6 mb-3">
                           
                           <select class="form-control" id="city" name="city" placeholder="Select Location">
-                              <option value="" class="gray">City</option>
+                              <option value="" class="gray">{{values.location}}</option>
                               <option value="Jersey City">Jersey City</option>
                               <option value="Hoboken">Hoboken</option>
                             </select>
@@ -30,21 +30,39 @@
                         
                         <div class="form-group">
                           {{!-- <label for="mobile">Enter Mobile number</label> --}}
-                          <input type="text" class="form-input" id="mobile" name="mobile" placeholder="Gym contact number" required>
+                          <input type="text" class="form-input" id="mobile" name="mobile" value="{{values.phoneNumber}}" required>
                         </div>
 
                        <div class="form-row">
                         <div class="form-group col-md-6 mb-3">
                           
                           <select class="form-control" id="price" name="price" placeholder="Select Price Range">
-                              <option value="$" class="gray">$</option>
+                              <option value="" class="gray">{{values.priceRange}}</option>
                               <option value="$$">$$</option>
                               <option value="$$$">$$$</option>
-                              <option value="$$$$">$$$$</option>
                             </select>
-                             
                         </div>
                         </div>
+                        
+  
+    {{!-- <div>
+        <input type="submit" name="btn_upload_profile_pic" value="Upload" />
+    </div> --}}
+
+
+                        {{!-- <div class="wrapper">
+                            <div class="file-upload">
+                            <input type="file" />
+                            <i class="fa fa-arrow-up" style="font-size:48px"></i>
+                        </div>
+                        </div> --}}
+                        
+
+                      
+                        {{!-- <div class="form-group">
+                            <input type="password" class="form-input" name="password2" id="re_password" placeholder="Repeat your password"/>
+                        </div> --}}
+                        
                         
                     <div class="form-group">
                 <input type="submit" name="submit" id="submit" class="form-submit" value="Submit"/>

@@ -1,6 +1,7 @@
 const mongoCollections = require("../config/mongoCollections");
 const createOrder = mongoCollections.Booking;
 let { ObjectId } = require('mongodb');
+const { compareSync } = require("bcryptjs");
 
 async function createBookingOrder(gymId, userId, date, time){
     if(!gymId) throw "[Booking data Error]:You need to provide the gym ID"
@@ -57,11 +58,9 @@ async function createBookingOrder(gymId, userId, date, time){
 
     today = mm + '/' + dd + '/' + yyyy; 
     if(Date.parse(date) < Date.parse(today)) throw "[Booking data Error]: The date of review must after current date"
-    const status = "pending"
     let newOrder = {
-        gymId: gymId,
-        userId: userId,
-        status: status,
+        gymId: ObjectId(gymId),
+        userId: ObjectId(userId),
         date: date,
         time:time
     }
@@ -71,11 +70,53 @@ async function createBookingOrder(gymId, userId, date, time){
     return {addNewOrder: true};
 
 
-    
+}
 
+async function getAllOrderByGymID(gymId){
+    if (!gymId) throw '[Booking findByGymId Error]: Id parameter must be supplied';
+
+    if (typeof gymId !== 'string') throw "[Booking findByGymId Error]: Id must be a string";
+
+    if (gymId.trim().length === 0) throw "[Booking findByGymId Error]: the Gym id include all space"
+
+    if (!ObjectId.isValid(gymId)) throw "[Booking findByGymId Error]: the invalid ObjectId"
+
+    const OrderList = await createOrder();
+
+    const search = await OrderList.findOne({ gymId: ObjectId(gymId) });
+
+    if (search === null) throw "[Booking findByGymId Error]: no restaurant fit with this id";
+
+
+    return search;
 
 }
+
+async function getAllOrderByUserID(userId){
+    if (!userId) throw '[Booking findByUserId Error]: Id parameter must be supplied';
+
+    if (typeof userId !== 'string') throw "[Booking findByUserId Error]: Id must be a string";
+
+    if (userId.trim().length === 0) throw "[Booking findByUserId Error]: the Gym id include all space"
+
+    if (!ObjectId.isValid(userId)) throw "[Booking findByUserId Error]: the invalid ObjectId"
+    
+    const OrderList = await createOrder();
+    
+    const search = await OrderList.find({userId: ObjectId(userId)}).toArray();
+    
+    // if (search === null) throw "why null "
+    return search
+
+
+    
+    
+}
+
 
 module.exports = {
-    createBookingOrder
+    createBookingOrder,
+    getAllOrderByGymID,
+    getAllOrderByUserID
 }
+

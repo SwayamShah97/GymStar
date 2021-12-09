@@ -16,6 +16,9 @@ const constructorMethod = app => {
   app.use("*", (req, res) => {
     res.status(404).render('notFd',{title:'404- page not found'});
   });
+  app.use("/gyms/*", (req, res) => {
+    res.status(404).render('notFd',{title:'404- page not found'});
+  });
 };
 
 module.exports = constructorMethod;

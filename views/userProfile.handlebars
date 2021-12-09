@@ -6,52 +6,38 @@
             
             <div class="container">
                 <div class="signup-content">
-                    <form method="post" action="/signup" id="signup-form" class="signup-form">
+                    <form method="POST" action="/updateProfile" id="update-form" class="signup-form">
                         <h2 class="form-title">Profile Page</h2>
 
-                        <label for="role">Are you a?</label>
-                        <div class="form-row "> 
-                            {{!-- put box class --}}
-                        <div class="form-group col-md-6 mb-3 ">
-                         <div class="radio greenborder center">
-                         <label class=" tab-label"><input type="radio" class="form-input" value = "user" name="role" checked>User</label>
-                         </div>        
-                          
-                        </div>
-                        <div class="form-group col-md-6 mb-3 ">
-                        <div class="radio  center">
-                         <label class="tab-label"><input type="radio" class="form-input" value = "owner" name="role" >Gym Owner</label>
-                         </div>
-                        </div>
-                        </div>
+                        
                        
                        <div class="grayborder">
 
                         <div class="form-row ">
                         <div class="form-group col-md-6 mb-2">
-                            <input type="text" class="form-input " name="firstname" id="firstname" placeholder="First name"/>
+                            <input type="text" class="form-input " name="firstname" id="firstname"  value="{{userProfile.firstName}}"/>
                         </div>
                         <div class="form-group col-md-6 mb-2">
-                            <input type="text" class="form-input" name="lastname" id="lastname" placeholder="Last name"/>
+                            <input type="text" class="form-input" name="lastname" id="lastname" value="{{userProfile.lastName}}"/>
                         </div>
                         </div>
 
                         <div class="form-group">
-                            <input type="email" class="form-input" name="email" id="email" placeholder="Email"/>
+                            <input type="email" class="form-input" name="email" id="email" value="{{userProfile.email}}" disabled />
                         </div>
 
                         <div class="form-row">
                         <div class="form-group col-md-6 mb-3">
                           
                           <select class="form-control" id="city" name="city" placeholder="Select City">
-                              <option value="none" class="gray" selected disabled hidden>Select City</option>
+                              <option value="{{userProfile.city}}" class="gray" selected  hidden>{{userProfile.city}}</option>
                               <option value="Jersey City">Jersey City</option>
                               <option value="Hoboken">Hoboken</option>
                             </select>
                         </div>
                         <div class="form-group col-md-6 mb-3">
                             <select class="form-control" id="state" name="state" placeholder="Select State">
-                              <option value="none" class="gray" selected disabled hidden>Select State</option>
+                              <option value="{{userProfile.state}}" class="gray" selected  hidden>{{userProfile.state}}</option>
                               <option value="New Jersey">New Jersey</option>
                             </select>
                         </div>
@@ -59,27 +45,27 @@
 
                         <div class="form-group">
                           {{!-- <label for="mobile">Enter Mobile number</label> --}}
-                          <input type="number" class="form-input" id="mobile" name="mobile" placeholder="Enter 10-digit phone number" pattern="[0-9].{10}" maxlength="10" minlength="10" required>
+                          <input type="number" class="form-input" id="mobile" name="mobile" value="{{userProfile.mobile}}" placeholder="Enter 10-digit phone number" pattern="[0-9].{10}" maxlength="10" minlength="10" required>
                         </div>
 
                         <div class="form-row">
                         <div class="form-group col-md-6 mb-3">
                           
                           <select class="form-control" id="gender" name="gender" placeholder="Select Gender">
-                              <option value="none" class="gray" selected disabled hidden>Select Gender</option>
+                              <option value="{{userProfile.gender}}" class="gray" selected  hidden>{{userProfile.gender}}</option>
                               <option value="female">Female</option>
                               <option value="male">Male</option>
                             </select>
                         </div>
                         <div class="form-group col-md-6 mb-3">
-                            <input class="form-control" name= "dob" placeholder="Select DOB" type="text" id="dob" onfocus="(this.type='date')" onblur="(this.type='text')"   >
+                            <input class="form-control" name= "dob" value="{{userProfile.dob}}" placeholder="Select DOB" type="date" id="dob" />
                             
                             {{!-- <i class="fas fa-calendar input-prefix" tabindex=0></i> --}}
                         </div>
                         </div>
 
                         <div class="form-group">
-                            <input type="password" class="form-input" name="password" id="password" placeholder="Password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"/>
+                            <input type="password" class="form-input" name="password" id="password" placeholder="Password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"/ required>
                             {{!-- <span toggle="#password" class="zmdi zmdi-eye field-icon toggle-password"></span> --}}
                         </div>
                         {{!-- <div class="form-group">
@@ -90,21 +76,73 @@
                             <label for="agree-term" class="label-agree-term"><span><span></span></span>I agree all statements in  <a href="#" class="term-service">Terms of service</a></label>
                         </div>
                         <div class="form-group">
-                            <input type="submit" name="submit" id="submit" class="form-submit" value="Submit"/>
+                            <input type="submit" name="submit" id="submit" class="form-submit" value="Update"/>
                         </div>
                         </div>
                     </form>
                     {{#if error}}
                     <h3>{{error}}</h3>
                     {{/if}}
-                    <p class="loginhere">
-                        Have already an account ? <a href="/login" class="loginhere-link" >Login here</a>
-                    </p>
+                    
                 </div>
             </div>
         </section>
     <br>
-    </div>
-    
 
+    <div class="container">
+        <div class="signup-content">
+            {{#if user}}
+            <h2>Your Bookings:</h2>
+
+            {{#if bookDetails}}
+            {{#each bookDetails}}
+            <h2>{{date}}</h2>
+            <h2>{{time}}</h2>
+            {{/each}}
+            {{/if}}
+
+            {{/if}}
+            {{#if owner}}
+            <h2>Your Gyms:</h2>
+            {{/if}}
+            
+        </div>
+    </div>
+    <br>
+    
+    
+     <div class="user-container">
+        <div class="signup-content">
+          
+            {{!-- swayam here --}}
+            <h2>Your Reviews</h2>
+            {{#if user}}
+                {{#each reviews}} 
+
+                    <div class="container">
+                        <!-- Card-->
+                        <div class="card rounded shadow-sm border-0">
+                            <div class="card-body bg-light">
+                            <h4 class="text-dark">{{reviewer}}</h4>
+                            <p class="small text-muted font-italic">{{date}}</p>
+                            <ul class="list-inline small">
+                                {{#times rating}}
+                                    <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
+                                {{/times}}
+                                
+                            </ul>
+                            <h6> <a href="#" class="text-dark">{{reviewText}}</a></h5>
+                            <a href="#" class="btn btn-primary">Edit Review</a>
+                            <a href="#" class="btn btn-primary">Delete Review</a>
+                            </div>
+                        </div>
+                        </div>
+                        <br>
+                {{/each}}
+            {{/if}}
+            </div>
+    </div>
+       
+</div> 
+            
 </main>

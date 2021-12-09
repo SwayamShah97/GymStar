@@ -5,3 +5,4 @@
    numberRegex = /[0-9]/g
    emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
    Date: (!/^\d{2}\/\d{2}\/\d{4}$/.test())
+   let objectIdRegex = /^[a-f\d]{24}$/i;

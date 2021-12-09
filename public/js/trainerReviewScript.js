@@ -77,10 +77,7 @@
         
         else if(! numRegex.test(experience)) {$("#errorTCreate").text('Kindly provide experience in years').show()}
         else if( parseInt(experience) < 0  || parseInt(experience) > 100 ) {$("#errorTCreate").text('Kindly provide experience in years').show()}
-        
 
-        
-        
         else if (!objectIdRegex.test(gymId) )
             {$("#errorTCreate").text('Invalid gym Id').show()}
         
@@ -92,6 +89,47 @@
         }else{
             $("#trainer-form").submit()
         }
+
+    })
+
+
+    //Filter
+    $("#filterBtn").click(function(){
+        console.log('Client side Filter Validation')
+        console.log($("#rating").val() )
+        console.log($("#priceRange").val())
+        // if( ($("#rating").val() && $("#priceRange").val() 
+        // // $("#rating").val() == '0' && $("#priceRange").val() == '0'
+        // ) ){
+        //     $("#errorFilter").text('Kindly provide atleast one filter').show()
+        //     console.log('error in filter')
+        // }
+        // // else if(! ($("#rating").val() == '0' || $("#priceRange").val() == '0')){
+        // //     $("#errorFilter").text('Kindly provide atleast one filter').show()
+        // //     console.log('error in filter1')
+        // // } 
+        // else if(! ( $("#rating").val() === '1' ||
+        //               $("#rating").val() === '2' ||
+        //               $("#rating").val() === '3' ||
+        //               $("#rating").val() === '4'
+
+        // ) ){
+        //     $("#errorFilter").text('Kindly provide valid rating').show()
+        // }
+        // else if( !
+        //     (
+        //         $("#priceRange").val() === '$' ||
+        //         $("#priceRange").val() === '$$' ||
+        //         $("#priceRange").val() === '$$$' ||
+        //         $("#priceRange").val() === '$$$$'
+        //     )
+        // ){
+        //     $("#errorFilter").text('Kindly provide valid price Range').show()
+        // }
+        // else{
+            $("#filterForm").submit()
+        // }
+
 
     })
 

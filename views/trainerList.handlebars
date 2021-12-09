@@ -1,6 +1,6 @@
 <div>
 {{!-- <div class='search'>
-    <h2>Gyms</h2>
+    <h2>Trainers</h2>
 
   <form method="POST" action="/gyms/search" class="search-container">
     <input type="text" id="search-bar" name="searchTerm" placeholder="Search Gyms Here">
@@ -10,19 +10,10 @@
    {{#if error}}
             <h3 class="cent">{{error}}</h3>
     {{/if}}
-</div> --}}
-
-
- 
-
-<div class="main">
-<div class="container">
-  {{#if error}}
-                  <h3 class="cent">{{error}}</h3>
-                  {{/if}}
+</div>
 <div class="filter" >
   <form method="POST" action="/gyms/gfilter" id="filterForm" class="search-container">
-  <div style="float:left; width:70%;">
+  <div style="float:left; width:30%;">
     <div class="form-group col-md-6 mb-3">
                           
       <select class="form-control" id="rating" name="rating" placeholder="Select Rating" >
@@ -35,7 +26,7 @@
       </select>
     </div>
   </div>
-  <div style="float:left; width:70%;">
+  <div style="float:left; width:30%;">
     <div class="form-group col-md-6 mb-3">
                           
       <select class="form-control" id="priceRange" name="priceRange" placeholder="Select Cost" >
@@ -59,20 +50,25 @@
  </div>
   </form>
   
-</div> 
+</div>  --}}
 
+ 
 
+<div class="main">
+<div class="container">
   {{!-- <h3>{{error}}</h3> --}}
-  {{#each gyms}} 
-  <div onclick="location.href='/gyms/{{_id}}';" class="card" style="width:600px">
+  {{#each trainers}} 
+  <div  class="card" style="width:400px"> {{!-- onclick="location.href='/gyms/{{_id}}';" --}}
     
-    <div class="card-body bg-light"> 
-      <h4 class="card-title">{{gymName}}</h4>
-      <h6 class="card-text">{{location}}</h5>
-      <h6 class="card-text">{{priceRange}}</h5>
+    <div class="card-body bg-dark text-white">
+      <h4 class="card-title">{{trainerFirstName}}</h4>
+      <h6 class="card-title">{{trainerLastName}}</h5>
+      <h6 class="card-title">{{overallRating}}</h5>
+      <h6 class="card-title">"Working in this industory since past {{experience}} years"</h5>
+      <a href="/trainers/reviewTrainer/{{this._id}}" class="btn btn-primary">Review Trainers</a>
       {{!--By Malay: Add gym overall rating as well --}}
       
-      <h6 class="card-text">{{phoneNumber}}</h6>
+      {{!-- <p class="card-text">Some example text some example text. John Doe is an architect and engineer</p> --}}
     
       
     

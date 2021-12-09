@@ -53,14 +53,14 @@ app.use(logger);
 
 
 
-app.use('/private', (req, res, next) => {
-  // console.log(req.session.id);
-  if (!req.session.user) {
-    return res.status(403).render('notlogged', {title:'403'});
-  } else {
-    next();
-  }
-});
+// app.use('/private', (req, res, next) => {
+//   // console.log(req.session.id);
+//   if (!req.session.user) {
+//     return res.status(403).render('notlogged', {title:'403'});
+//   } else {
+//     next();
+//   }
+// });
 
 // app.use('/login', (req, res, next) => {
 //   if (req.session.user) {

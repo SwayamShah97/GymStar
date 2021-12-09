@@ -1,4 +1,4 @@
-const { trainersData } = require('.');
+//const { trainersData } = require('.');
 const mongoCollections = require('../config/mongoCollections');
 const trainers = mongoCollections.trainers;
 const reviews = mongoCollections.reviews
@@ -31,8 +31,8 @@ function validateTrainerReview(review){
 
     if( ! parseInt(review.rating) ||
         parseInt(review.rating) < 0 ||
-        parseInt(review.rating) > 5 ||
-        review.rating.isNaN()
+        parseInt(review.rating) > 5 
+        // || parseInt(review.rating).isNaN()
          ) throw {status:400,message:'Invalid rating'}
 
     let objectIdRegex = /^[a-f\d]{24}$/i;
@@ -41,8 +41,9 @@ function validateTrainerReview(review){
 
     if(review.reviewText.length === 0) throw {status:400,message:'Kindly provide proper review.'}
     
-    if (!objectIdRegex.test(review.userId) || !ObjectId.isValid(review.userId))
-    throw {status:400, message:"Invalid objectId for UserId"};
+    // if (!objectIdRegex.test(review.userId) || !ObjectId.isValid(review.userId))
+    // throw {status:400, message:"Invalid objectId for UserId"};
+    if(! /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(review.userId)) throw {status:400, message:"Invalid objectId for UserId"};
 
     let dateRegex = /^\d{2}\/\d{2}\/\d{4}$/
     if(! dateRegex.test(review.date)) throw {status:400,message:'Invalid Date format'}
@@ -62,17 +63,22 @@ module.exports = {
     },
     async updateOverallRating(trainerId,gymId){
         const reviewCollection = await reviews()
-        const trainerReviews = await reviewCollection.find( {"trainerId" : trainerId , "gymId": gymId , "reviewType":'T'}
+        // const trainerReviews = await reviewCollection.find( {"trainerId" : trainerId , "gymId": gymId , "reviewType":'T'}
+        //                                                  , {projection:{"rating": 1, "trainerId":1, "_id":0}}).toArray()
+        trainerId = ObjectId(trainerId)
+        const trainerReviews = await reviewCollection.find( {"trainerId" : trainerId }
                                                          , {projection:{"rating": 1, "trainerId":1, "_id":0}}).toArray()
         let ratLength = trainerReviews.length
         let ratSum = 0
         for (let j of trainerReviews) {
-            ratSum+= j.rating
+
+            ratSum+= parseInt(j.rating)
         }
         if(ratSum){
             const trainerCollection = await trainers()
             let insertedId = await trainerCollection.updateOne(
-                {trainerId:trainerId , gymId: gymId },
+                // {trainerId:trainerId , gymId: gymId },
+                {_id:trainerId },
                 { $set : {overallRating: ratSum/ratLength} })
             if(insertedId.modifiedCount === 0 ) throw {status:500,message:'Unable to modify the overallRating'}
         }
@@ -170,8 +176,9 @@ module.exports = {
         const reviewCollection = await reviews()
         //Do we want to allow multiple reviews from one user for one trainer? Or should we provide an option to modify it?
         //Assuming no restrictions
+        review.trainerId = ObjectId(review.trainerId)
         let newReview = {
-            gymId : review.gymId,
+            reviewer : review.reviewer,
             trainerId : review.trainerId,
             userId : review.userId,
             date: review.date, //System Date can be open
@@ -194,5 +201,33 @@ module.exports = {
         var yyyy = today.getFullYear();
         today = mm + '/' + dd + '/' + yyyy;
         return today
+    },
+    async getTrainersByGymId(gymId){
+        if(! gymId ) throw{status:400,message:'Kindly provide gymId'}
+        if(typeof(gymId) !== 'string' ) throw{status:400,message:'Kindly provide string gymId'}
+        gymId = ObjectId(gymId)
+        const trainerCollection = await trainers()
+        const trainerList = await trainerCollection.find({'gymId':gymId} ).toArray()
+        if(trainerList){
+            for (let t of trainerList){
+                t.gymId = t.gymId.toString()
+                t._id = t._id.toString()
+            }
+            return trainerList
+        }else{
+            return false
+        }
+    },
+    async getTrainersByTrainerId(trainerId){
+        //To post trainer review from trainerList page
+        trainerId = ObjectId(trainerId)
+        const trainerCollection = await trainers()
+        const trainerDetails =await trainerCollection.findOne({"_id":trainerId})
+        if(trainerDetails){
+            return trainerDetails
+        }else{
+            return false
+        }
+
     }
 }

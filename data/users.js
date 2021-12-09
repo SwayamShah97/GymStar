@@ -7,6 +7,88 @@ const bcrypt = require('bcryptjs');
 const saltRounds = 12;
 
 
+
+async function updateUser(id,role,firstName,lastName,city,state,mobile,gender,dob, password){
+
+    if(typeof id !== 'string') throw 'Id should be string'
+    if(!mongodb.ObjectId.isValid(id)) throw 'Not a valid ObjectID'
+    
+    if(!role  || !password || !firstName || !lastName || !gender || !city || !state || !mobile || !dob) throw 'You must provide all details 2'
+
+    if (typeof role != 'string' ||  typeof password != 'string' || typeof firstName != 'string' || typeof lastName != 'string' ||
+    typeof city != 'string' || typeof state != 'string' || typeof gender != 'string' || typeof mobile != 'string' || 
+    typeof dob != 'string') throw 'Input should be string'
+
+
+    if ( !password.replace(/\s/g, '').length 
+        || !firstName.replace(/\s/g, '').length || !lastName.replace(/\s/g, '').length
+        || !role.replace(/\s/g, '').length || !city.replace(/\s/g, '').length
+        || !state.replace(/\s/g, '').length || !mobile.replace(/\s/g, '').length
+        || !gender.replace(/\s/g, '').length || !dob.replace(/\s/g, '').length) throw 'Input cannot be empty spaces'
+
+    // if (password.length != password.replace(/\s/g, '').length) throw'Password should not contain spaces'
+
+        let regMob = mobile.search(/^\d{10}$/);
+
+        if(regMob=== -1) throw 'PhoneNumber not valid'
+
+        // let regEmail = email.search(/^([a-zA-Z0-9_.+-]{1,})(@{1})([a-zA-Z]{1})([a-zA-Z0-9-]{1,})([.]{1})([a-zA-Z]{1,})$/gi);
+
+        // if (regEmail === -1) throw 'Email not valid'
+
+
+    
+    if(password.length <6) throw 'Password should atleast 6 character long'
+
+    if(role != 'user' && role != "owner") throw "Select valid role"
+
+    if(city != "Jersey City" && city != "Hoboken") throw "Select valid city"
+    
+    if(state != "New Jersey" ) throw "Select valid state"
+
+    if(gender != "male" && gender != "female") throw "Select valid Gender"
+    
+    // let regDob = dob.search(/^(19|20)\d\d[-]([1-9]|1[012])[-]([1-9]|[12][0-9]|3[01])$/)
+
+    // if(regDob == -1) throw 'Date of birth formate not valid'
+
+
+    // email = email.toLowerCase()
+
+    let hash = await bcrypt.hash(password,saltRounds)
+
+    const user = await users();
+
+    let newUser = {
+        role:role,
+        firstName:firstName,
+        lastName:lastName,
+        // email:email,
+        city:city,
+        state:state,
+        mobile:mobile,
+        gender:gender,
+        dob:dob,
+        password:hash
+    }
+
+
+    // let insertInfo = await user.insertOne(newUser)
+    // if (insertInfo.insertedCount === 0) throw 'Could not add user'
+
+    const updatedInfo = await user.updateOne({_id: mongodb.ObjectId(id)}, {$set: newUser});
+
+    if (updatedInfo.modifiedCount === 0) {
+        throw 'could not update restaurants website successfully';
+    }
+    else{
+        let obj ={
+            userUpdated:true
+        }
+        return obj
+    }
+}
+
 async function createUser(role,firstName,lastName,email,city,state,mobile,gender,dob, password){
 
     if(!role || !email || !password || !firstName || !lastName || !gender || !city || !state || !mobile || !dob) throw 'You must provide all details'
@@ -133,7 +215,46 @@ async function checkUser(email, password){
     }
 }
 
+
+async function getUserById(id){
+
+    if(!id) throw 'You must provide all details'
+
+    if (typeof id != 'string' ) throw 'Input should be string'
+
+    if (!id.replace(/\s/g, '').length ) throw 'Input cannot be empty spaces'
+    
+    if(!mongodb.ObjectId.isValid(id)) throw 'Not a valid ObjectID'
+
+    const user = await users();
+
+    let findUser = await user.findOne({_id:mongodb.ObjectId(id)})
+    if(findUser === null) throw 'No user with that Email'
+
+     
+    findUser['_id'] = findUser['_id'].toString()
+    
+    // if(compareToMatch){
+        let obj ={
+            // authenticated:true,
+            id:findUser._id,
+            role:findUser.role,
+            firstName:findUser.firstName,
+            lastName:findUser.lastName,
+            email:findUser.email,
+            city:findUser.city,
+            state:findUser.state,
+            mobile:findUser.mobile,
+            gender:findUser.gender,
+            dob:findUser.dob
+        }
+        return obj
+    
+}
+
 module.exports={
     createUser,
-    checkUser
+    checkUser,
+    updateUser,
+    getUserById
 }
