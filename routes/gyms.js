@@ -64,7 +64,7 @@ router.get('/', async (req, res) => {
         res.render('gymbars/creategym')
       }
       else{
-        res.render('login')
+        res.redirect('/login')
       }
     }
     catch(e){

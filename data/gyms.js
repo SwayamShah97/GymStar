@@ -88,8 +88,8 @@ async create(userName,gymName, location, phoneNumber, priceRange) {
     priceRange = xss(priceRange);
     
 
-    gymName = gymName[0].toUpperCase()
-    console.log(gymName)
+    gymName[0] = gymName[0].toUpperCase()
+   
     const gymsCollection = await gyms();
    
     let newGym = {

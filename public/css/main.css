@@ -24,7 +24,7 @@ body{
 .front{
   height: 100vh;
   width: 100%;
-  background-image: url("../images/front.jpg");
+  background-image: url("../images/landing.jpg");
   background-position: center;
   background-attachment: fixed;
   background-size: cover;
@@ -430,6 +430,12 @@ background-attachment: fixed;
   width: 660px;
   position: relative;
   margin: 0 auto; }
+
+  .user-container {
+  width: 760px;
+  /* position: relative; */
+  margin: 0 auto; 
+}
 
 .gray{
   color: #999;
