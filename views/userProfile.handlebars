@@ -91,14 +91,28 @@
 
     
             {{#if user}}
-            <div class="container">
+            <div class="user-container">
             <div class="signup-content">
             <h2>Your Bookings:</h2>
 
             {{#if bookDetails}}
             {{#each bookDetails}}
-            <p>{{date}}</p>
-            <p>{{time}}</p>
+            
+
+            <div class="container">
+                        <!-- Card-->
+                        <div class="card rounded shadow-sm border-0">
+                            <div class="card-body bg-light">
+                            <h4 class="text-dark">{{gymName}}</h4>
+                            <p class="small text-muted font-italic">{{date}}</p>
+                            <p class="small text-muted font-italic">{{time}}</p>
+                            
+                            
+                            </div>
+                        </div>
+                        </div>
+                        <br>
+
             {{/each}}
             {{else}}
             <p>You dont have any bookings</p>
@@ -147,7 +161,7 @@
         <div class="signup-content">
     {{#if user}}
     <h2>Your Reviews</h2>
-                {{#each reviews}}           
+                {{#each reviews}}                  
             
 
                     <div class="container">

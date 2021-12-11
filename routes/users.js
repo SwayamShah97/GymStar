@@ -296,6 +296,17 @@ router.get('/userprofile', async (req, res) => {
         let name = userProfile.firstName
         bookDetails = await bookDataInfo.getAllOrderByUserID(req.session.user.id)
         const reviews = await reviewDataInfo.getAllReviewByUserID(id)
+        
+        for(i of bookDetails){
+            i['gymId'] = i['gymId'].toString()
+            gymId = i.gymId
+            gymDetails = await gymData.getGym(gymId)
+            gymName = gymDetails.gymName
+            i['gymName'] = gymName
+        }
+    
+
+
         if(bookDetails !== null){
             res.render('userProfile', {reviews:reviews,title: "Profile", userProfile, user:true ,owner:false, bookDetails, loggedin, name})
         }
