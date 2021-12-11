@@ -20,7 +20,7 @@
                         <div class="form-group col-md-6 mb-3">
                           
                           <select class="form-control" id="city" name="city" placeholder="Select Location">
-                              <option value="" class="gray">{{values.location}}</option>
+                              <option value="{{values.location}}" class="gray" selected hidden>{{values.location}}</option>
                               <option value="Jersey City">Jersey City</option>
                               <option value="Hoboken">Hoboken</option>
                             </select>
@@ -37,7 +37,7 @@
                         <div class="form-group col-md-6 mb-3">
                           
                           <select class="form-control" id="price" name="price" placeholder="Select Price Range">
-                              <option value="" class="gray">{{values.priceRange}}</option>
+                              <option value="{{values.priceRange}}" class="gray" hidden selected>{{values.priceRange}}</option>
                               <option value="$$">$$</option>
                               <option value="$$$">$$$</option>
                             </select>

@@ -89,20 +89,28 @@
         </section>
     <br>
 
-    <div class="container">
-        <div class="signup-content">
+    
             {{#if user}}
+            <div class="container">
+            <div class="signup-content">
             <h2>Your Bookings:</h2>
 
             {{#if bookDetails}}
             {{#each bookDetails}}
-            <h2>{{date}}</h2>
-            <h2>{{time}}</h2>
+            <p>{{date}}</p>
+            <p>{{time}}</p>
             {{/each}}
+            {{else}}
+            <p>You dont have any bookings</p>
+            {{/if}}
+            </div>
+            </div>
             {{/if}}
 
-            {{/if}}
+
             {{#if owner}}
+            <div class="user-container">
+            <div class="signup-content">
             <h2>Your Gyms:</h2>
                 {{!-- Added by malay --}}
                 {{#if gyms}}
@@ -112,20 +120,35 @@
                     <a href="/gyms/gymcreate">Create your gym</a>
                 {{/if}}
                 {{!-- Added by malay --}}
+
+            {{#if gymDetails}}
+            {{#each gymDetails}}
+            <div onclick="location.href='/gyms/{{_id}}';" class="card" style="width:600px">
+    
+            <div class="card-body bg-light"> 
+            <h4 class="card-title">{{gymName}}</h4>
+            <h6 class="card-text">{{location}}</h6>
+            <h6 class="card-text">{{priceRange}}</h6>
+            <h6 class="card-text">{{phoneNumber}}</h6>
+            </div>
+            </div>
+
+            {{/each}}
+            {{else}}
+            <p>You dont have any gym registered with us.</p>
+            {{/if}}
+            </div>
+            </div>
             {{/if}}
             
-        </div>
-    </div>
+        
     <br>
-    
-    
-     <div class="user-container">
+    <div class="user-container">
         <div class="signup-content">
-          
-            {{!-- swayam here --}}
-            <h2>Your Reviews</h2>  
-            {{#if user}}
-                {{#each reviews}} 
+    {{#if user}}
+    <h2>Your Reviews</h2>
+                {{#each reviews}}           
+            
 
                     <div class="container">
                         <!-- Card-->
@@ -146,11 +169,12 @@
                         </div>
                         </div>
                         <br>
-                {{/each}}
+                
+            
+       {{/each}}
             {{/if}}
             </div>
     </div>
-       
 </div> 
             
 </main>

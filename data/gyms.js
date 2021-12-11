@@ -146,7 +146,7 @@ async create(userName,gymName, location, phoneNumber, priceRange) {
   
   
   async getGymWithUser(user) {
-    if(!userName) throw 'You must provide a username';
+    if(!user) throw 'You must provide a username';
     let regEmail = user.search(/^([a-zA-Z0-9_.+-]{1,})(@{1})([a-zA-Z]{1})([a-zA-Z0-9-]{1,})([.]{1})([a-zA-Z]{1,})$/gi);
     if (regEmail === -1) throw 'Username not valid'
     const gymsCollection = await gyms();
