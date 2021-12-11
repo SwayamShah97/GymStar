@@ -224,10 +224,27 @@ module.exports = {
         const trainerCollection = await trainers()
         const trainerDetails =await trainerCollection.findOne({"_id":trainerId})
         if(trainerDetails){
+            
+            trainerDetails._id = trainerDetails._id.toString()
+           
             return trainerDetails
         }else{
             return false
         }
 
+    },
+    async getTrainerReviewsByTrainerId(trainerId){
+        //To get trainer reviews fro trainerList profile page
+        trainerId = ObjectId(trainerId)
+        const reviewCollection = await reviews()
+        const trainerReviews =await reviewCollection.find({"trainerId":trainerId}).toArray()
+        if(trainerReviews){
+            for(let t of trainerReviews){
+                t.trainerId = t.trainerId.toString()
+            }
+            return trainerReviews
+        }else{
+            return false
+        }
     }
 }

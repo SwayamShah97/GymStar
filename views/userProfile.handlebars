@@ -104,6 +104,14 @@
             {{/if}}
             {{#if owner}}
             <h2>Your Gyms:</h2>
+                {{!-- Added by malay --}}
+                {{#if gyms}}
+
+                {{else}}
+                    <h3> You do not own any gym at the momment</h3>
+                    <a href="/gyms/gymcreate">Create your gym</a>
+                {{/if}}
+                {{!-- Added by malay --}}
             {{/if}}
             
         </div>
@@ -115,7 +123,7 @@
         <div class="signup-content">
           
             {{!-- swayam here --}}
-            <h2>Your Reviews</h2>
+            <h2>Your Reviews</h2>  
             {{#if user}}
                 {{#each reviews}} 
 

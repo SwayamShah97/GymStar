@@ -23,12 +23,24 @@
 
                         <div class="form-row">
                         <div class="form-group col-md-6 mb-3">
-                            <span class="fa fa-star starTR checked" style="color:blue;" data-val="1"></span>
+                            {{!-- For star in rating --}}
+                            {{!-- <span class="fa fa-star starTR checked" style="color:blue;" data-val="1"></span>
                             <span class="fa fa-star starTR checked" style="color:blue;" data-val="2"></span>
                             <span class="fa fa-star starTR checked" style="color:blue;" data-val="3"></span>
                             <span class="fa fa-star starTR" style="color:blue;" data-val="4"></span>
                             <span class="fa fa-star starTR" style="color:blue;" data-val="5"></span>
-                            <input id="starTR" name="starTR" hidden>
+                            <input id="starTR" name="starTR" hidden> --}}
+
+                            <select class="form-control" id="starTR" name="starTR" placeholder="Select Rating" >
+                                <option value="" class="gray" selected disabled hidden>Select Rating</option>
+                                <option value="0">Please Select Rating</option>
+                                <option value="1">1.0 </option>
+                                <option value="2">2.0 </option>
+                                <option value="3">3.0 </option>
+                                <option value="4">4.0 </option>
+                                <option value="4">5.0 </option>
+                            </select>
+
                         </div>
                         </div>
                         <div id="error-star" hidden></div>
