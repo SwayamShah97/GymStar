@@ -4,6 +4,8 @@ const router = express.Router();
 const data = require('../data');
 const reviewDataInfo = data.addReview;
 const bookDataInfo = data.addBooking;
+const xss = require('xss');
+
 
 router.get('/booking/:id', async(req,res) =>{
     if(req.session.user){
@@ -30,11 +32,20 @@ router.post('/booking/:id', async (req, res) => {
 
         if(req.session.user){
             loggedin = true
-            fname = req.session.user.firstName
+            req.session.user.firstName = xss(req.session.user.firstName);
+            fname = req.session.user.firstName;
+
+            req.body.date = xss(req.body.date);
             date = req.body.date;
-    time = req.body.time;
-    gymId = req.params.id;
-    userId = req.session.user.id;
+
+            req.body.time = xss(req.body.time);
+            time = req.body.time;
+
+            req.params.id = xss(req.params.id);
+            gymId = req.params.id;
+
+            req.session.user.id = xss(req.session.user.id);
+            userId = req.session.user.id;
     
     
     
