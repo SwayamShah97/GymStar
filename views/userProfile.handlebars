@@ -126,14 +126,6 @@
             <div class="user-container">
             <div class="signup-content">
             <h2>Your Gyms:</h2>
-                {{!-- Added by malay --}}
-                {{#if gyms}}
-
-                {{else}}
-                    <h3> You do not own any gym at the momment</h3>
-                    <a href="/gyms/gymcreate">Create your gym</a>
-                {{/if}}
-                {{!-- Added by malay --}}
 
             {{#if gymDetails}}
             {{#each gymDetails}}
@@ -150,6 +142,7 @@
             {{/each}}
             {{else}}
             <p>You dont have any gym registered with us.</p>
+            <a href="/gyms/gymcreate">Create your gym</a>
             {{/if}}
             </div>
             </div>
@@ -157,10 +150,12 @@
             
         
     <br>
+    
+    {{#if user}}
     <div class="user-container">
         <div class="signup-content">
-    {{#if user}}
     <h2>Your Reviews</h2>
+     {{#if reviews}}
                 {{#each reviews}}                  
             
 
@@ -186,9 +181,15 @@
                 
             
        {{/each}}
-            {{/if}}
-            </div>
+       {{else}}
+    <p>No reviews</p>
+    <a href="/gyms">Want to review any of the gym ?</a>
+       {{/if}}
+       </div>
     </div>
+    
+            {{/if}}
+            
 </div> 
             
 </main>

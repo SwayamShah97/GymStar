@@ -383,17 +383,6 @@ router.post('/updateProfile', async (req,res) => {
     let dob = req.body.dob
     let password = req.body.password
     
-    // console.log( id)
-    // console.log( role)
-    // console.log( firstName)
-    // console.log( lastName)
-    // console.log( email)
-    // console.log( city)
-    // console.log( state)
-    // console.log( mobile)
-    // console.log( gender)
-    // console.log( dob)
-    // console.log( password)
 
     userProfile = {
         id:userDetails.id,
@@ -408,6 +397,22 @@ router.post('/updateProfile', async (req,res) => {
         dob:userDetails.dob
     }
 
+    bookDetails = await bookDataInfo.getAllOrderByUserID(req.session.user.id)
+        const reviews = await reviewDataInfo.getAllReviewByUserID(id)
+        
+        for(i of bookDetails){
+            i['gymId'] = i['gymId'].toString()
+            gymId = i.gymId
+            gymDetails = await gymData.getGym(gymId)
+            gymName = gymDetails.gymName
+            i['gymName'] = gymName
+        }
+
+        gymDetails = await gymData.getGymWithUser(userDetails.email)
+                
+
+        
+    
     let user
     let owner
 
@@ -421,14 +426,30 @@ router.post('/updateProfile', async (req,res) => {
     }
     else
         {
-            res.status(400).render('userProfile', {title: "Error", error: "Select valid role",userProfile,loggedin,name})
+            res.status(400).render('userProfile', {title: "Error", error: "Select valid role",userProfile,loggedin,name,reviews:reviews,bookDetails})
             return
         } 
     
 
+        // if(bookDetails !== null){
+        //     res.render('userProfile', {reviews:reviews,title: "Profile", userProfile, user:true ,owner:false, bookDetails, loggedin, name})
+            
+        // }
+        // else{
+        //     res.render('userProfile', {reviews:reviews,title: "Profile", userProfile, user:true ,owner:false, loggedin, name})
+            
+        // }
+
+        // if(gymDetails !== null){
+        //     res.render('userProfile', {title: "Profile", userProfile, user:false ,owner:true, gymDetails, loggedin, name})
+        // }
+        // else{
+        //     res.render('userProfile', {title: "Profile", userProfile, user:false ,owner:true, loggedin, name})
+        // }
+
 
     if( !role || !email || !password || !firstName || !lastName || !gender || !city || !state || !mobile || !dob) {
-        res.status(400).render('userProfile', {title: "Error", error: 'You must provide all details',userProfile,loggedin,name})
+        res.status(400).render('userProfile', {title: "Error", error: 'You must provide all details',userProfile,loggedin,name,reviews:reviews,bookDetails,owner,user})
         return
     } 
 
@@ -439,7 +460,7 @@ router.post('/updateProfile', async (req,res) => {
     if (typeof role != 'string' || typeof email != 'string' ||  typeof password != 'string' || typeof firstName != 'string' || typeof lastName != 'string' ||
     typeof city != 'string' || typeof state != 'string' || typeof gender != 'string' || typeof mobile != 'string' || 
     typeof dob != 'string') {
-        res.status(400).render('userProfile', {title: "Error", error: 'Input should be string',userProfile,loggedin,name})
+        res.status(400).render('userProfile', {title: "Error", error: 'Input should be string',userProfile,loggedin,name,reviews:reviews,bookDetails,owner,user})
         return
     } 
 
