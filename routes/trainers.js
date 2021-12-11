@@ -217,6 +217,8 @@ router.post('/createReviewTrainer', async(req,res) => {
         
             let resp = await trainerData.createTrainerReview(newTrainerReview)
             if(resp){
+                // window.alert("Review submitted successfully")
+
                 res.render('createTrainerReview',{success:'Review submitted successfully',
                                                   trainerFirstname:trainerReview.trainerFirstname,
                                                 trainerLastname:trainerReview.trainerLastname,
@@ -255,6 +257,24 @@ router.get('/gym/:id',async(req,res) => { //View trainers pertaining to given gy
     }
   
   }); 
+
+  router.get('/trainer/:id',async(req,res) => {
+      try{
+          const trainer = await trainerData.getTrainersByTrainerId(req.params.id)
+          const trainerReview = await trainerData.getTrainerReviewsByTrainerId(req.params.id)
+          if(trainer){
+              if(trainerReview){
+                res.render('trainerProfile',{trainer:trainer,reviews:trainerReview})    
+              }else{
+                res.render('trainerProfile',{trainer:trainer})
+              }
+              
+          }
+          
+      }catch(e){
+          res.status(e.status || 500).json({error:e.message})
+      }
+  })
 
 
 module.exports = router 

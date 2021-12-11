@@ -474,8 +474,26 @@ background-attachment: fixed;
   border-bottom: none;
   border-top: none;
 }
+
+.gym-container {
+  width: 820px;
+  /* position: relative; */
+  margin-right: 300px; 
+}
+
 .signup-content, .createTrainer-content {
   background: #fff;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -o-border-radius: 10px;
+  -ms-border-radius: 10px;
+  padding: 50px 85px; 
+  
+}
+
+.gymlist-content{
+  background: #F5F1DE;
   border-radius: 10px;
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
@@ -659,8 +677,12 @@ input#search-bar:focus:-ms-placeholder {
   left: 15px;
 }
 
-h5{
-text-align: center;
+h4{
+  font-size: 200%;
+}
+
+.gym-title{
+  margin-left: 250px;
 }
 
 .card {
@@ -675,3 +697,14 @@ text-align: center;
   left: 630px;
 }
 
+.gym-container{
+  margin-left: 350px;
+}
+
+.card a{
+  margin-right: 5px;
+}
+
+.gym-error{
+  margin-left: 175px;
+}

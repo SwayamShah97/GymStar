@@ -10,18 +10,33 @@ const bookDataInfo = require('../data').addBooking;
 
 const reviewDataInfo = require('../data').addReview;
 
+const gymData = require('../data').gymData;
+
 let loggedin = false
 
 router.get('/', async (req, res) => {
-    
+     
+    let user
+    let owner
     if (req.session.user) {
+        if (req.session.user.role == "user"){
+            user = true
+            owner = false
+        }
+        else if(req.session.user.role == "owner"){
+            user = false
+            owner = true
+        }
         
-        let name = req.session.user.firstName
-        res.render('landing', {title: "GymStar",loggedin,name,landing:true})
+        id = req.session.user.id
+        userDetails = await userData.getUserById(id)
+        
+        let name = userDetails.firstName
+        res.render('landing', {title: "GymStar",loggedin:true,name,landing:true})
     } else {
         res.render('landing', {title: "GymStar",loggedin:false,landing:true})
     }
-
+    console.log("2"+user)
 });
 
 router.get('/login', async (req, res) => {
@@ -37,7 +52,7 @@ router.get('/login', async (req, res) => {
 router.post('/login', async (req, res) => {
 
     if (req.session.user) {
-        res.redirect('/private') 
+        res.redirect('/gyms') 
         return
     }
 
@@ -257,7 +272,7 @@ router.get('/userprofile', async (req, res) => {
     } else {
         let id = req.session.user.id
         //Get booking details if user
-        let name = req.session.user.firstName
+        
         let role = req.session.user.role
         if (role == "user"){
 
@@ -278,9 +293,20 @@ router.get('/userprofile', async (req, res) => {
                 user:true,
                 owner:false
         }
-
+        let name = userProfile.firstName
         bookDetails = await bookDataInfo.getAllOrderByUserID(req.session.user.id)
         const reviews = await reviewDataInfo.getAllReviewByUserID(id)
+        
+        for(i of bookDetails){
+            i['gymId'] = i['gymId'].toString()
+            gymId = i.gymId
+            gymDetails = await gymData.getGym(gymId)
+            gymName = gymDetails.gymName
+            i['gymName'] = gymName
+        }
+    
+
+
         if(bookDetails !== null){
             res.render('userProfile', {reviews:reviews,title: "Profile", userProfile, user:true ,owner:false, bookDetails, loggedin, name})
         }
@@ -310,7 +336,15 @@ router.get('/userprofile', async (req, res) => {
                     user:false,
                     owner:true
             }
-            res.render('userProfile', {title: "Profile", userProfile, user:false ,owner:true})
+            gymDetails = await gymData.getGymWithUser(userDetails.email)
+            // const reviews = await reviewDataInfo.getAllReviewByUserID(id)
+            let name = userProfile.firstName
+            if(gymDetails !== null){
+                res.render('userProfile', {title: "Profile", userProfile, user:false ,owner:true, gymDetails, loggedin, name})
+            }
+            else{
+                res.render('userProfile', {title: "Profile", userProfile, user:false ,owner:true, loggedin, name})
+            }
 
         }
 
@@ -323,11 +357,21 @@ router.get('/userprofile', async (req, res) => {
 
 router.post('/updateProfile', async (req,res) => {
 
-    // if (!req.session.user) {
-    //     res.redirect('/login')
-    //     return
-    // }
+    
+    let loggedin
+     
+
+    if (req.session.user) {
+        loggedin = true
+    }
+    else {
+        res.redirect('/login')
+        loggedin = false
+    }
     let id = req.session.user.id
+    userDetails = await userData.getUserById(id)
+        
+    let name = userDetails.firstName
     let role = req.session.user.role
     let firstName = req.body.firstname
     let lastName = req.body.lastname
@@ -339,20 +383,73 @@ router.post('/updateProfile', async (req,res) => {
     let dob = req.body.dob
     let password = req.body.password
     
-    // console.log( id)
-    // console.log( role)
-    // console.log( firstName)
-    // console.log( lastName)
-    // console.log( email)
-    // console.log( city)
-    // console.log( state)
-    // console.log( mobile)
-    // console.log( gender)
-    // console.log( dob)
-    // console.log( password)
+
+    userProfile = {
+        id:userDetails.id,
+        role:userDetails.role,
+        firstName:userDetails.firstName,
+        lastName:userDetails.lastName,
+        email:userDetails.email,
+        city:userDetails.city,
+        state:userDetails.state,
+        mobile:userDetails.mobile,
+        gender:userDetails.gender,
+        dob:userDetails.dob
+    }
+
+    bookDetails = await bookDataInfo.getAllOrderByUserID(req.session.user.id)
+        const reviews = await reviewDataInfo.getAllReviewByUserID(id)
+        
+        for(i of bookDetails){
+            i['gymId'] = i['gymId'].toString()
+            gymId = i.gymId
+            gymDetails = await gymData.getGym(gymId)
+            gymName = gymDetails.gymName
+            i['gymName'] = gymName
+        }
+
+        gymDetails = await gymData.getGymWithUser(userDetails.email)
+                
+
+        
+    
+    let user
+    let owner
+
+    if (role == "user"){
+        user=true
+        owner = false
+    }
+    else if (role == "owner"){
+        user=false
+        owner = true
+    }
+    else
+        {
+            res.status(400).render('userProfile', {title: "Error", error: "Select valid role",userProfile,loggedin,name,reviews:reviews,bookDetails})
+            return
+        } 
+    
+
+        // if(bookDetails !== null){
+        //     res.render('userProfile', {reviews:reviews,title: "Profile", userProfile, user:true ,owner:false, bookDetails, loggedin, name})
+            
+        // }
+        // else{
+        //     res.render('userProfile', {reviews:reviews,title: "Profile", userProfile, user:true ,owner:false, loggedin, name})
+            
+        // }
+
+        // if(gymDetails !== null){
+        //     res.render('userProfile', {title: "Profile", userProfile, user:false ,owner:true, gymDetails, loggedin, name})
+        // }
+        // else{
+        //     res.render('userProfile', {title: "Profile", userProfile, user:false ,owner:true, loggedin, name})
+        // }
+
 
     if( !role || !email || !password || !firstName || !lastName || !gender || !city || !state || !mobile || !dob) {
-        res.status(400).render('userProfile', {title: "Error", error: 'You must provide all details 1'})
+        res.status(400).render('userProfile', {title: "Error", error: 'You must provide all details',userProfile,loggedin,name,reviews:reviews,bookDetails,owner,user})
         return
     } 
 
@@ -363,7 +460,7 @@ router.post('/updateProfile', async (req,res) => {
     if (typeof role != 'string' || typeof email != 'string' ||  typeof password != 'string' || typeof firstName != 'string' || typeof lastName != 'string' ||
     typeof city != 'string' || typeof state != 'string' || typeof gender != 'string' || typeof mobile != 'string' || 
     typeof dob != 'string') {
-        res.status(400).render('userProfile', {title: "Error", error: 'Input should be string'})
+        res.status(400).render('userProfile', {title: "Error", error: 'Input should be string',userProfile,loggedin,name,reviews:reviews,bookDetails,owner,user})
         return
     } 
 
@@ -372,21 +469,21 @@ router.post('/updateProfile', async (req,res) => {
     || !city.replace(/\s/g, '').length
     || !state.replace(/\s/g, '').length || !mobile.replace(/\s/g, '').length
     || !gender.replace(/\s/g, '').length || !dob.replace(/\s/g, '').length) {
-        res.status(400).render('userProfile', {title: "Error", error: 'Input cannot be empty spaces'})
+        res.status(400).render('userProfile', {title: "Error", error: 'Input cannot be empty spaces',userProfile,loggedin,name})
         return
     } 
 
     let regMob = mobile.search(/^\d{10}$/);
 
     if(regMob=== -1){
-        res.status(400).render('userProfile', {title: "Error", error:  'PhoneNumber not valid'})
+        res.status(400).render('userProfile', {title: "Error", error:  'PhoneNumber not valid',userProfile,loggedin,name})
         return 
     } 
 
     let regEmail = email.search(/^([a-zA-Z0-9_.+-]{1,})(@{1})([a-zA-Z]{1})([a-zA-Z0-9-]{1,})([.]{1})([a-zA-Z]{1,})$/gi);
 
     if (regEmail === -1) {
-        res.status(400).render('userProfile', {title: "Error", error:  'Email format not valid'})
+        res.status(400).render('userProfile', {title: "Error", error:  'Email format not valid',userProfile,loggedin,name})
         return
     }
     
@@ -399,31 +496,31 @@ router.post('/updateProfile', async (req,res) => {
     
     if(password.length <6) 
     {
-        res.status(400).render('userProfile', {title: "Error", error: 'Password should atleast 6 character long'})
+        res.status(400).render('userProfile', {title: "Error", error: 'Password should atleast 6 character long',userProfile,loggedin,name})
         return
     }
 
     if(role != 'user' && role != "owner") 
     {
-        res.status(400).render('signup', {title: "Error", error: "Select valid role"})
+        res.status(400).render('userProfile', {title: "Error", error: "Select valid role",userProfile,loggedin,name})
         return
     } 
 
     if(city != "Jersey City" && city != "Hoboken") 
     {
-        res.status(400).render('userProfile', {title: "Error", error: "Select valid city"})
+        res.status(400).render('userProfile', {title: "Error", error: "Select valid city",userProfile,loggedin,name})
         return
     } 
     
     if(state != "New Jersey" ) 
     {
-        res.status(400).render('userProfile', {title: "Error", error: "Select valid state"})
+        res.status(400).render('userProfile', {title: "Error", error: "Select valid state",userProfile,loggedin,name})
         return
     } 
 
     if(gender != "male" && gender != "female") 
     {
-        res.status(400).render('userProfile', {title: "Error", error: "Select valid Gender"})
+        res.status(400).render('userProfile', {title: "Error", error: "Select valid Gender",userProfile,loggedin,name})
         return
     } 
     
@@ -448,6 +545,9 @@ router.post('/updateProfile', async (req,res) => {
         res.status(200).redirect('/userprofile')
         }
     else {
+
+        //nirav- should i pass user object too ?
+
         res.status(500).render('userProfile', {title: "Error", error: 'Internal Server Error'})
         }
     }  
@@ -470,7 +570,7 @@ router.post('/updateProfile', async (req,res) => {
             gender:userDetails.gender,
             dob:userDetails.dob
         }
-        res.status(400).render('userProfile', {title: "Error", error: e, userProfile})
+        res.status(400).render('userProfile', {title: "Error", error: e, userProfile,loggedin,name})
         // res.status(200).redirect('/userprofile')
     }
     

@@ -17,9 +17,7 @@
 
 <div class="main">
 <div class="container">
-  {{#if error}}
-                  <h3 class="cent">{{error}}</h3>
-                  {{/if}}
+
 <div class="filter" >
   <form method="POST" action="/gyms/gfilter" id="filterForm" class="search-container">
   <div style="float:left; width:70%;">
@@ -27,7 +25,7 @@
                           
       <select class="form-control" id="rating" name="rating" placeholder="Select Rating" >
           <option value="" class="gray" selected disabled hidden>Select Rating</option>
-          <option value="0">Please Select Rating</option>
+          <option value=null>Please Select Rating</option>
           <option value="1">1.0 or More</option>
           <option value="2">2.0 or More</option>
           <option value="3">3.0 or More</option>
@@ -40,7 +38,7 @@
                           
       <select class="form-control" id="priceRange" name="priceRange" placeholder="Select Cost" >
           <option value="" class="gray" selected disabled hidden>Select Cost</option>
-          <option value="0">Please select price Range</option>
+          <option value=null>Please select price Range</option>
           <option value="$">$</option>
           <option value="$$">$$</option>
           <option value="$$$">$$$</option>
@@ -50,7 +48,7 @@
 </div>
 
 <div style="float:left; width:5%;">
-  <button type="button" id="filterBtn">Check</button>
+  <button type="button" id="filterBtn">Filter</button>
 </div>
 <div class="form-group col-md-6 mb-3">
    <div class='errorGymStar' id="errorFilter" >
@@ -58,31 +56,44 @@
    </div>
  </div>
   </form>
-  
+  </div>
 </div> 
 
-
+<div class="gym-container">
+  <div class="gymlist-content">
   {{!-- <h3>{{error}}</h3> --}}
+  <h1 class="gym-title">Gyms</h1>
+  <br>
+   {{#if error}}
+      <h3 class="gym-error">{{error}}</h3>
+   {{/if}}
+  <br>
+  {{#if gyms}}
   {{#each gyms}} 
+  
   <div onclick="location.href='/gyms/{{_id}}';" class="card" style="width:600px">
     
-    <div class="card-body bg-light"> 
+    <div class="card-body text-white bg-dark"> 
       <h4 class="card-title">{{gymName}}</h4>
-      <h6 class="card-text">{{location}}</h5>
-      <h6 class="card-text">{{priceRange}}</h5>
+      <h5 class="card-text">{{location}}</h5>
+      <h5 class="card-text">{{priceRange}}</h5>
+      <h5 class="card-text">{{overallRating}}</h5>
       {{!--By Malay: Add gym overall rating as well --}}
       
-      <h6 class="card-text">{{phoneNumber}}</h6>
-    
-      
-    
+      <h5 class="card-text">{{phoneNumber}}</h5>
     </div>
   </div>
   {{/each}} 
+  {{else}}
+    <h3>No gyms to display</h3>
+  {{/if}}
 
-  
+  {{!-- {{/each}}  --}}
+</div>
+  </div>
 </div>
 </div> 
+
 
 
 

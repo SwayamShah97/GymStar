@@ -3,24 +3,53 @@ const express = require('express');
 const router = express.Router();
 const data = require('../data');
 const reviewDataInfo = data.addReview;
+const xss = require('xss');
+
 
 
 
 router.get('/addReviewToGym/:id', async(req,res) =>{
-    let id = req.params;
-    res.render('webs/addReviewToGym',{name: "Add review to Gym" , gymId:id})
+    if(req.session.user){
+        loggedin = true
+        fname = req.session.user.firstName
+        let id = req.params;
+        res.render('webs/addReviewToGym',{name: "Add review to Gym" , gymId:id})
+      }
+      else{
+        loggedin = false
+        res.redirect('/login')
+      }
+    //     let id = req.params;
+    // res.render('webs/booking',{message: "Make an appointment" , gymId:id,loggedin})
+      
+
+
+    //let id = req.params;
+    //res.render('webs/addReviewToGym',{name: "Add review to Gym" , gymId:id})
 });
 
 
 
 router.post('/addReviewToGym/:id', async (req, res) => {
-    
+
+    // if(req.session.user){
+    //     loggedin != true
+    //     res.redirect('/login')
+
+    // }
+    req.body.review = xss(req.body.review);
     review = req.body.review;
 
+    req.body.rating = xss(req.body.rating)
     rating = req.body.rating;
 
+    req.params.id = xss(req.params.id);
     gymId = req.params.id;
+    
+    req.session.user.id = xss(req.session.user.id);
     userId = req.session.user.id;
+
+    req.session.user.firstName = xss(req.session.user.firstName);
     reviewer = req.session.user.firstName;
 
     
@@ -61,8 +90,10 @@ router.post('/addReviewToGym/:id', async (req, res) => {
 
     try{
         const addInfo = await reviewDataInfo.addReviewToGym(gymId,userId,review,newRating,reviewer)
+        console.log(addInfo.addReviewtoTheGym)
         
         if(addInfo.addReviewtoTheGym === true){
+            console.log(1)
             res.render('webs/reviewAddSuccess', {name: "Successful" })
 
         }else{
@@ -82,7 +113,7 @@ router.post('/delete', async(req,res) =>{
     //reviewId = req.session;
     //When it merges, need those information from others.
     //This function need to render to another page.
-    let reviewId = '61a67874028fbaa20828bf7a'
+    let reviewId
     let gymId
     let userId
 

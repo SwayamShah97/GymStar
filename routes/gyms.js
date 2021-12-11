@@ -206,6 +206,7 @@ router.post('/gymcreate',async(req,res) => {
      const creategym = await gymData.create(userName,gymName,location,phoneNumber,priceRange);
     
      if(creategym){
+       
        res.status(200).redirect('/gyms')
        }
    else {
@@ -405,7 +406,7 @@ router.post('/gymcreate',async(req,res) => {
   router.get('/:id',async(req,res) => {
     try {
       if(req.session.user && req.session.user.role === 'owner'){
-      console.log(1)
+      
       loggedin = true
       fname = req.session.user.firstName
       let userEmail = req.session.user.email;

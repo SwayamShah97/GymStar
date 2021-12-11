@@ -23,13 +23,14 @@
 
                         <div class="form-row">
                         <div class="form-group col-md-6 mb-3">
-                          
                           <select class="form-control" id="your_rating" name="rating" placeholder="Giva a Score (1-5)">
-                              <option value="1" class="gray">Giva a Score (1-5)</option>
-                              <option value="2">2</option>
-                              <option value="3">3</option>
-                              <option value="4">4</option>
-                              <option value="5">5</option>
+                            <label for="your_rating" id="ratingnfo">Select a score (1 is lowest, 5 is highest</label><br>
+
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
                             </select>
                         </div>
                         </div>
@@ -39,7 +40,13 @@
                              
                         
                     <div class="form-group">
-                <input class="form-submit" type="submit" name="submit" value="submit">
+                <input class="form-submit" type="submit" name="submitForm" value="submitForm">
+
+                <div class="form-group hidden" id="error-container">
+                <div class="alert alert-danger text-goes-here">
+                 </div>
+    </div>
+
         </div>
         
         </form>
@@ -73,4 +80,12 @@
     {{#if ratingWrong}}
     <p class = "error">You need to give a valid number</p>
     {{/if}}
+
+
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+        crossorigin="anonymous"></script>
+    <script src="/public/js/checkReview.js"></script>
+
+    
+
 </main>

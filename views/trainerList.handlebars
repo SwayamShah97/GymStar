@@ -58,10 +58,13 @@
 <div class="container">
   {{!-- <h3>{{error}}</h3> --}}
   {{#each trainers}} 
-  <div  class="card" style="width:400px"> {{!-- onclick="location.href='/gyms/{{_id}}';" --}}
-    
+  
+<div onclick="location.href='/trainers/trainer/{{this._id}}';" class="card" style="width:600px"></div>
     <div class="card-body bg-dark text-white">
-      <h4 class="card-title">{{trainerFirstName}}</h4>
+        <a href='/trainers/trainer/{{this._id}}'>
+            <h4 class="card-title">{{trainerFirstName}}</h4>
+        </a>
+      
       <h6 class="card-title">{{trainerLastName}}</h5>
       <h6 class="card-title">{{overallRating}}</h5>
       <h6 class="card-title">"Working in this industory since past {{experience}} years"</h5>
@@ -69,11 +72,11 @@
       {{!--By Malay: Add gym overall rating as well --}}
       
       {{!-- <p class="card-text">Some example text some example text. John Doe is an architect and engineer</p> --}}
-    
-      
-    
     </div>
   </div>
+
+
+
   {{/each}} 
 
   

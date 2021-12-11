@@ -1,12 +1,16 @@
 (function($) {
-    $(".starTR").click(function(){
-        // e.preventDefault()
-        const val = $(this).data('val');
+    // Below code is to show star on trainer review page
+    // $(".starTR").click(function(){
+    //     // e.preventDefault()
+    //     const val = $(this).data('val');
         
-        $("#starTR").val(val)
-        console.log( $("#starTR").val())
-    })
-    $("#submitTRB").click(function(){
+    //     $("#starTR").val(val)
+    //     console.log( $("#starTR").val())
+    // })
+    //End of trainer review star thing
+
+
+    $("#submitTRB").click(function(){ //Trainer Review Submit Button
         // e.preventDefault()
         console.log('Clicked on submit trainer review')
         console.log('review' + $("#reviewTextTR").val())
@@ -18,7 +22,7 @@
         
     })
 
-    $("#submitTCreate").click(function(){
+    $("#submitTCreate").click(function(){  //Trainer creation form's submit button
         // e.preventDefault()
         console.log('Inside form submit')
         var gymId = $("#gymId").val(),
@@ -127,10 +131,36 @@
         //     $("#errorFilter").text('Kindly provide valid price Range').show()
         // }
         // else{
-            $("#filterForm").submit()
+            if($("#rating").val() == null && $("#priceRange").val() == null){
+                $("#errorFilter").text('Kindly select atleast one filter option').show()
+            }else{
+                $("#filterForm").submit()
+            }
+           
         // }
 
 
     })
+
+    $('#rating').on('change', function() {
+        if(!(this.value == 1 ||
+            this.value == 2 ||
+            this.value == 3 ||
+            this.value == 4)
+            ){
+                this.value = null
+            }
+      });
+
+      $('#priceRange').on('change', function() {
+        if(!(this.value == '$' ||
+            this.value == '$$' ||
+            this.value == '$$$' ||
+            this.value == '$$$$')
+            ){
+                this.value = null
+            }
+      });
+    
 
 })(window.jQuery)
