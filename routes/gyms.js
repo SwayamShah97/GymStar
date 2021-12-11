@@ -206,6 +206,7 @@ router.post('/gymcreate',async(req,res) => {
      const creategym = await gymData.create(userName,gymName,location,phoneNumber,priceRange);
     
      if(creategym){
+       
        res.status(200).redirect('/gyms')
        }
    else {

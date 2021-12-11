@@ -58,35 +58,41 @@
    </div>
  </div>
   </form>
-  
+  </div>
 </div> 
 
-
+<div class="gym-container">
+  <div class="gymlist-content">
   {{!-- <h3>{{error}}</h3> --}}
+  <h1 class="gym-title">Gyms</h1>
+  <br>
   {{#each gyms}} 
+  
   <div onclick="location.href='/gyms/{{_id}}';" class="card" style="width:600px">
     
-    <div class="card-body bg-light"> 
+    <div class="card-body text-white bg-dark"> 
       <h4 class="card-title">{{gymName}}</h4>
-      <h6 class="card-text">{{location}}</h5>
-      <h6 class="card-text">{{priceRange}}</h5>
+      <h5 class="card-text">{{location}}</h5>
+      <h5 class="card-text">{{priceRange}}</h5>
+      <h5 class="card-text">{{overallRating}}</h5>
       {{!--By Malay: Add gym overall rating as well --}}
       
-      <h6 class="card-text">{{phoneNumber}}</h6>
+      <h5 class="card-text">{{phoneNumber}}</h5>
     
       
-    
+  
     </div>
   </div>
-  {{/each}} 
 
-  
+  {{/each}} 
+</div>
+  </div>
 </div>
 </div> 
 
 
 
-</div>
+
 
 
 
