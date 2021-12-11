@@ -700,3 +700,11 @@ h4{
 .gym-container{
   margin-left: 350px;
 }
+
+.card a{
+  margin-right: 5px;
+}
+
+.gym-error{
+  margin-left: 175px;
+}
