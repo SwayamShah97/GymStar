@@ -724,3 +724,7 @@ h4{
   /* margin-left: 175px; */
   color: #fff;
 }
+
+.btn-primary {
+  background-color: #3a10e5 !important;
+}
