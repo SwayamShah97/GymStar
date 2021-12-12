@@ -46,7 +46,7 @@ async function updateUser(id,role,firstName,lastName,city,state,mobile,gender,do
     
     if(state != "New Jersey" ) throw "Select valid state"
 
-    if(gender != "male" && gender != "female") throw "Select valid Gender"
+    if(gender != "male" && gender != "female" && gender != "other") throw "Select valid Gender"
     
     // let regDob = dob.search(/^(19|20)\d\d[-]([1-9]|1[012])[-]([1-9]|[12][0-9]|3[01])$/)
 
@@ -124,7 +124,7 @@ async function createUser(role,firstName,lastName,email,city,state,mobile,gender
     
     if(state != "New Jersey" ) throw "Select valid state"
 
-    if(gender != "male" && gender != "female") throw "Select valid Gender"
+    if(gender != "male" && gender != "female" && gender != "other") throw "Select valid Gender"
     
     // let regDob = dob.search(/^(19|20)\d\d[-]([1-9]|1[012])[-]([1-9]|[12][0-9]|3[01])$/)
 

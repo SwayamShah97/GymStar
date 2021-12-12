@@ -19,7 +19,7 @@ router.get('/booking/:id', async(req,res) =>{
         res.redirect('/login')
     //     let id = req.params;
     // res.render('webs/booking',{message: "Make an appointment" , gymId:id,loggedin})
-      }
+    }
     
 });
 

@@ -1,62 +1,9 @@
 <div>
-{{!-- <div class='search'>
-    <h2>Trainers</h2>
-
-  <form method="POST" action="/gyms/search" class="search-container">
-    <input type="text" id="search-bar" name="searchTerm" placeholder="Search Gyms Here">
-    <input type="image" name="submit" class="search-icon" src="http://www.endlessicons.com/wp-content/uploads/2012/12/search-icon.png">
-   
-  </form>
-   {{#if error}}
-            <h3 class="cent">{{error}}</h3>
-    {{/if}}
-</div>
-<div class="filter" >
-  <form method="POST" action="/gyms/gfilter" id="filterForm" class="search-container">
-  <div style="float:left; width:30%;">
-    <div class="form-group col-md-6 mb-3">
-                          
-      <select class="form-control" id="rating" name="rating" placeholder="Select Rating" >
-          <option value="" class="gray" selected disabled hidden>Select Rating</option>
-          <option value="0">Please Select Rating</option>
-          <option value="1">1.0 or More</option>
-          <option value="2">2.0 or More</option>
-          <option value="3">3.0 or More</option>
-          <option value="4">4.0 or More</option>
-      </select>
-    </div>
-  </div>
-  <div style="float:left; width:30%;">
-    <div class="form-group col-md-6 mb-3">
-                          
-      <select class="form-control" id="priceRange" name="priceRange" placeholder="Select Cost" >
-          <option value="" class="gray" selected disabled hidden>Select Cost</option>
-          <option value="0">Please select price Range</option>
-          <option value="$">$</option>
-          <option value="$$">$$</option>
-          <option value="$$$">$$$</option>
-          <option value="$$$$">$$$$</option>
-      </select>
-    </div>
-</div>
-
-<div style="float:left; width:5%;">
-  <button type="button" id="filterBtn">Check</button>
-</div>
-<div class="form-group col-md-6 mb-3">
-   <div class='errorGymStar' id="errorFilter" >
-
-   </div>
- </div>
-  </form>
-  
-</div>  --}}
-
- 
 
 <div class="main">
 <div class="container">
   {{!-- <h3>{{error}}</h3> --}}
+  {{#if trainers}}
   {{#each trainers}} 
   
 <div onclick="location.href='/trainers/trainer/{{this._id}}';" class="card" style="width:600px"></div>
@@ -65,9 +12,9 @@
             <h4 class="card-title">{{trainerFirstName}}</h4>
         </a>
       
-      <h6 class="card-title">{{trainerLastName}}</h5>
-      <h6 class="card-title">{{overallRating}}</h5>
-      <h6 class="card-title">"Working in this industory since past {{experience}} years"</h5>
+      <h5 class="card-title">{{trainerLastName}}</h5>
+      <h5 class="card-title">{{overallRating}}</h5>
+      <h5 class="card-title">"Working in this industory since past {{experience}} years"</h5>
       <a href="/trainers/reviewTrainer/{{this._id}}" class="btn btn-primary">Review Trainers</a>
       {{!--By Malay: Add gym overall rating as well --}}
       
@@ -78,6 +25,9 @@
 
 
   {{/each}} 
+  {{else}}
+  <h4>Currently, no Trainer information is available </h4>
+  {{/if}}
 
   
 </div>
@@ -85,7 +35,7 @@
 
 
 
-</div>
+{{!-- </div> --}}
 
 
 

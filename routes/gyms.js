@@ -1,11 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const gymData = require('../data').gymData;
+const userData = require("../data").userData;
 const xss = require('xss');
 
 function checkString(string){
-  if(typeof(string) !== 'string') throw 'Input provided is not a string';
-  if(string.trim().length === 0) throw 'Empty string on input';
+  if(typeof(string) !== 'string') throw {status:400,message:'Input provided is not a string'};
+  if(string.trim().length === 0) throw {status:400,message:'Empty string on input'};
+  return true
 }
 
 function check(userName,gymName,location,phoneNumber,priceRange){
@@ -61,14 +63,16 @@ router.get('/', async (req, res) => {
     try {
       if(req.session.user){
         loggedin = true
-        fname = req.session.user.firstName
+        let id = req.session.user.id
+        userDetails = await userData.getUserById(id)
+        fname = userDetails.firstName
         let gymList = await gymData.getTopFive();
-      res.render('gymbars/gymlist',{gyms:gymList,loggedin,name:fname});
+      res.render('gymbars/gymlist',{title:"Gyms",gyms:gymList,loggedin,name:fname});
       }
       else{
         loggedin = false
         let gymList = await gymData.getTopFive();
-      res.render('gymbars/gymlist',{gyms:gymList,loggedin});
+      res.render('gymbars/gymlist',{title:"Gyms",gyms:gymList,loggedin});
       }
       
 
@@ -82,7 +86,9 @@ router.get('/', async (req, res) => {
     try{
       if (req.session.user && req.session.user.role === 'owner'){
         loggedin = true
-        fname = req.session.user.firstName
+        let id = req.session.user.id
+        userDetails = await userData.getUserById(id)
+        fname = userDetails.firstName
         res.render('gymbars/creategym',{loggedin,name:fname})
       }
       else{
@@ -105,7 +111,9 @@ router.get('/', async (req, res) => {
     try{
       if (req.session.user && req.session.user.role === 'owner'){
         loggedin = true
-        fname = req.session.user.firstName
+        let id = req.session.user.id
+        userDetails = await userData.getUserById(id)
+        fname = userDetails.firstName
         res.render('gymbars/updategym',{id:id,values:values,loggedin,name:fname})
       }
       else if(req.session.user && req.session.user!=='owner')
@@ -125,7 +133,9 @@ router.get('/', async (req, res) => {
     try{
       if(req.session.user){
         loggedin = true
-        fname = req.session.user.firstName
+        let id = req.session.user.id
+        userDetails = await userData.getUserById(id)
+        fname = userDetails.firstName
         let gymList = await gymData.getAllGyms();
       // res.render('gymbars/allgyms',{gyms:gymList}); // No need of new handlebar
       res.render('gymbars/gymlist',{gyms:gymList,loggedin,name:fname}); 
@@ -167,7 +177,9 @@ router.get('/', async (req, res) => {
       else {
         if(req.session.user){
           loggedin = true
-          fname = req.session.user.firstName
+          let id = req.session.user.id
+        userDetails = await userData.getUserById(id)
+        fname = userDetails.firstName
           res.status(500).render('gymbars/updategym', {title: "Error", error: 'Internal Server Error',loggedin,name:fname})
         }
         else{
@@ -180,7 +192,9 @@ router.get('/', async (req, res) => {
     catch(e){
       if(req.session.user){
         loggedin = true
-        fname = req.session.user.firstName
+        let id = req.session.user.id
+        userDetails = await userData.getUserById(id)
+        fname = userDetails.firstName
         const values = await gymData.getGym(id);
       res.status(400).render('gymbars/updategym', {id:id,values:values,title: "Error", error: e,loggedin,name:fname})
       }
@@ -212,7 +226,9 @@ router.post('/gymcreate',async(req,res) => {
    else {
     if(req.session.user){
       loggedin = true
-      fname = req.session.user.firstName
+      let id = req.session.user.id
+        userDetails = await userData.getUserById(id)
+        fname = userDetails.firstName
       res.status(500).render('gymbars/creategym', {title: "Error", error: 'Internal Server Error',loggedin,name:fname})
     }
     else{
@@ -225,7 +241,9 @@ router.post('/gymcreate',async(req,res) => {
    catch(e){
     if(req.session.user){
       loggedin = true
-      fname = req.session.user.firstName
+      let id = req.session.user.id
+        userDetails = await userData.getUserById(id)
+        fname = userDetails.firstName
       res.status(400).render('gymbars/creategym', {title: "Error", error: e,loggedin,name:fname})
     }
     else{
@@ -247,22 +265,35 @@ router.post('/gymcreate',async(req,res) => {
 
       if(req.session.user){
         loggedin = true
-        fname = req.session.user.firstName
+        let id = req.session.user.id
+        userDetails = await userData.getUserById(id)
+        fname = userDetails.firstName
 
         checkString(req.body.searchTerm)
-      if (!req.body.searchTerm) res.status(400).render('gymbars/emptysearch',{loggedin,name:fname})
+      //if (!req.body.searchTerm) res.status(400).render('gymbars/emptysearch',{loggedin,name:fname})
       
     req.body.searchTerm = xss(req.body.searchTerm)
     req.body.searchTerm = req.body.searchTerm.trim()
     
-      if (! req.body.searchTerm) res.status(400).render('gymbars/gymlist',{error:'Kindly provide valid search term',loggedin,name:fname})
+      if (! req.body.searchTerm) 
+      {
+        res.json({error:'Kindly provide valid search term',status:400})
+      }
+      // res.status(400).render('gymbars/gymlist',{error:'Kindly provide valid search term',
+      //                                           loggedin,name:fname})
       else{
         
         const marv = await gymData.search(req.body.searchTerm);
-        if(marv.length < 1 || marv == undefined) res.render('gymbars/gymlist',{error:`No results found for ${req.body.searchTerm}`,loggedin,name:fname});
+        if(marv.length < 1 || marv == undefined) 
+        {
+          res.json({error:`No results found for ${req.body.searchTerm}`,status:404})
+        }
+        // res.render('gymbars/gymlist',{error:`No results found for ${req.body.searchTerm}`,
+        //                               loggedin,name:fname});
         else
-        //  res.render('gymbars/search',{marved:marv}); }
-         res.render('gymbars/gymlist',{gyms:marv,loggedin,name:fname}); 
+        //Commenting below to use ajax instead
+        //  res.render('gymbars/gymlist',{gyms:marv,loggedin,name:fname}); 
+            {res.json({searchResult:marv})}
         }
         
       }
@@ -270,19 +301,26 @@ router.post('/gymcreate',async(req,res) => {
         loggedin = false
 
         checkString(req.body.searchTerm)
-      if (!req.body.searchTerm) res.status(400).render('gymbars/emptysearch',{loggedin})
+      //if (!req.body.searchTerm) res.status(400).render('gymbars/emptysearch',{loggedin})
       
     req.body.searchTerm = xss(req.body.searchTerm)
     req.body.searchTerm = req.body.searchTerm.trim()
     
-      if (! req.body.searchTerm) res.status(400).render('gymbars/gymlist',{error:'Kindly provide valid search term',loggedin})
+      if (! req.body.searchTerm) {
+        res.json({error:'Kindly provide valid search term',status:400})
+      }
+      //res.status(400).render('gymbars/gymlist',{error:'Kindly provide valid search term',loggedin})
       else{
         
         const marv = await gymData.search(req.body.searchTerm);
-        if(marv.length < 1 || marv == undefined) res.render('gymbars/gymlist',{error:`No results found for ${req.body.searchTerm}`,loggedin});
+        if(marv.length < 1 || marv == undefined) {
+          res.json({error:`No results found for ${req.body.searchTerm}`,status:404})
+        }
+        //res.render('gymbars/gymlist',{error:`No results found for ${req.body.searchTerm}`,loggedin});
         else
-        //  res.render('gymbars/search',{marved:marv}); }
-         res.render('gymbars/gymlist',{gyms:marv,loggedin}); 
+        //Commenting below to use ajax instead
+        //  res.render('gymbars/gymlist',{gyms:marv,loggedin,name:fname}); 
+        {res.json({searchResult:marv})}
         }
         
       }
@@ -290,18 +328,20 @@ router.post('/gymcreate',async(req,res) => {
       
 
     } catch (e) {
-
-      if(req.session.user){
-        loggedin = true
-        fname = req.session.user.firstName
-        let gymList = await gymData.getTopFive();
-      res.status(400).render('gymbars/gymlist', {gyms:gymList,title: "Error", error: e,loggedin,name:fname})
-      }
-      else{
-        loggedin = false
-        let gymList = await gymData.getTopFive();
-      res.status(400).render('gymbars/gymlist', {gyms:gymList,title: "Error", error: e,loggedin})
-      }
+      res.json({error:e.message,status:e.status})
+      // if(req.session.user){
+      //   loggedin = true
+      //   let id = req.session.user.id
+        // userDetails = await userData.getUserById(id)
+        // fname = userDetails.firstName
+      //   let gymList = await gymData.getTopFive();
+      // res.status(400).render('gymbars/gymlist', {gyms:gymList,title: "Error", error: e,loggedin,name:fname})
+      // }
+      // else{
+      //   loggedin = false
+      //   let gymList = await gymData.getTopFive();
+      // res.status(400).render('gymbars/gymlist', {gyms:gymList,title: "Error", error: e,loggedin})
+      // }
       
     }
   
@@ -311,11 +351,10 @@ router.post('/gymcreate',async(req,res) => {
   function validateFilter(filter) {
     console.log(typeof(filter))
        if(typeof(filter) !== 'object') throw {status:400,message:'Object type expected'}
-      //  if(typeof(filter.rating) !== 'string' ||
-      //     typeof(filter.priceRange) !== 'string' ||
-      //     typeof(filter.rating) !== 'undefined' ||
-      //     typeof(filter.priceRange) !== 'undefined' 
-      //     ) throw {status:400,message:'String type expected'}
+       if(  (filter.rating && typeof(filter.rating) !== 'string') ||
+          ( filter.priceRange && typeof(filter.priceRange) !== 'string')
+          
+          ) throw {status:400,message:'String type expected'}
 
     filter.rating = xss(filter.rating)
     filter.priceRange = xss(filter.priceRange)
@@ -326,13 +365,13 @@ router.post('/gymcreate',async(req,res) => {
     // let tempRating = filter.rating
     // if(! /^[0-4]{1}$/.test(filter.rating)) throw {status:400,message:'Invalid Rating'}
 
-    if( filter.rating && !( /^[0-4]{1}$/.test(filter.rating))) //4 because there will be 0-4 in select option
+    if( ( filter.rating ) && !( /^[0-4]{1}$/.test(filter.rating))) //4 because there will be 0-4 in select option
     {
       throw {status:400,message:'Invalid Rating'}
     }
     // filter.rating = parseInt(filter.rating)
     let priceRangeRegex = /^[$]{1,4}$/;
-    if(filter.priceRange && (! priceRangeRegex.test(filter.priceRange))) throw {
+    if( ( filter.priceRange) && (! priceRangeRegex.test(filter.priceRange))) throw {
       status:400,
       message:'Invalid price Range'
     }
@@ -351,7 +390,9 @@ router.post('/gymcreate',async(req,res) => {
 
       if(req.session.user){
         loggedin = true
-        fname = req.session.user.firstName
+        let id = req.session.user.id
+        userDetails = await userData.getUserById(id)
+        fname = userDetails.firstName
         if(gymList){
         
           res.render('gymbars/gymlist',{gyms:gymList,loggedin,name:fname})
@@ -375,12 +416,14 @@ router.post('/gymcreate',async(req,res) => {
     }catch(e){
       if(req.session.user){
         loggedin = true
-        fname = req.session.user.firstName
+        let id = req.session.user.id
+        userDetails = await userData.getUserById(id)
+        fname = userDetails.firstName
         res.status(e.status || 500).render('gymbars/gymlist',{error:e.message,loggedin,name:fname})
       }
       else{
         loggedin = false
-        const values = await gymData.getGym(id);
+        // const values = await gymData.getGym(id); Malay: id field is not defined and its not used here
         res.status(e.status || 500).render('gymbars/gymlist',{error:e.message,loggedin})
       }
       
@@ -408,7 +451,9 @@ router.post('/gymcreate',async(req,res) => {
       if(req.session.user && req.session.user.role === 'owner'){
       
       loggedin = true
-      fname = req.session.user.firstName
+      let id = req.session.user.id
+        userDetails = await userData.getUserById(id)
+        fname = userDetails.firstName
       let userEmail = req.session.user.email;
       const gym = await gymData.getGymByOwner(req.params.id,userEmail);
       owner = gym[1];
@@ -418,7 +463,9 @@ router.post('/gymcreate',async(req,res) => {
       }
       else if(req.session.user){
         loggedin = true
-        fname = req.session.user.firstName
+        let id = req.session.user.id
+        userDetails = await userData.getUserById(id)
+        fname = userDetails.firstName
         const gym = await gymData.getGym(req.params.id);
         let owner = false;
         const reviews = await gymData.getReviews(req.params.id);

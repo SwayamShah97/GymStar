@@ -1,17 +1,4 @@
 <div>
-{{!-- <div class='search'>
-    <h2>Gyms</h2>
-
-  <form method="POST" action="/gyms/search" class="search-container">
-    <input type="text" id="search-bar" name="searchTerm" placeholder="Search Gyms Here">
-    <input type="image" name="submit" class="search-icon" src="http://www.endlessicons.com/wp-content/uploads/2012/12/search-icon.png">
-   
-  </form>
-   {{#if error}}
-            <h3 class="cent">{{error}}</h3>
-    {{/if}}
-</div> --}}
-
 
  
 
@@ -23,9 +10,10 @@
   <div style="float:left; width:70%;">
     <div class="form-group col-md-6 mb-3">
                           
-      <select class="form-control" id="rating" name="rating" placeholder="Select Rating" >
+      <select class="form-control" id="rating" name="rating" >
           <option value="" class="gray" selected disabled hidden>Select Rating</option>
-          <option value=null>Please Select Rating</option>
+          <option value="null">Please Select Rating</option>
+          <option value="0">0.0 or More</option>
           <option value="1">1.0 or More</option>
           <option value="2">2.0 or More</option>
           <option value="3">3.0 or More</option>
@@ -36,9 +24,9 @@
   <div style="float:left; width:70%;">
     <div class="form-group col-md-6 mb-3">
                           
-      <select class="form-control" id="priceRange" name="priceRange" placeholder="Select Cost" >
+      <select class="form-control" id="priceRange" name="priceRange" >
           <option value="" class="gray" selected disabled hidden>Select Cost</option>
-          <option value=null>Please select price Range</option>
+          <option value="null">Please select price Range</option>
           <option value="$">$</option>
           <option value="$$">$$</option>
           <option value="$$$">$$$</option>
@@ -51,9 +39,13 @@
   <button type="button" id="filterBtn">Filter</button>
 </div>
 <div class="form-group col-md-6 mb-3">
-   <div class='errorGymStar' id="errorFilter" >
+   {{!-- <div class='errorGymStar' id="errorFilter" >
 
-   </div>
+   </div> --}}
+   {{!-- Malay: Commenting this if to show client side error in the same error field --}}
+   {{!-- {{#if error}}  --}}   
+      <p class="gym-error" id="errorFilter">{{error}}</p>
+   {{!-- {{/if}} --}}
  </div>
   </form>
   </div>
@@ -64,9 +56,8 @@
   {{!-- <h3>{{error}}</h3> --}}
   <h1 class="gym-title">Gyms</h1>
   <br>
-   {{#if error}}
-      <h3 class="gym-error">{{error}}</h3>
-   {{/if}}
+
+  
   <br>
   {{#if gyms}}
   {{#each gyms}} 
@@ -78,7 +69,7 @@
       <h5 class="card-text">{{location}}</h5>
       <h5 class="card-text">{{priceRange}}</h5>
       <h5 class="card-text">{{overallRating}}</h5>
-      {{!--By Malay: Add gym overall rating as well --}}
+     
       
       <h5 class="card-text">{{phoneNumber}}</h5>
     </div>
@@ -88,16 +79,13 @@
     <h3>No gyms to display</h3>
   {{/if}}
 
-  {{!-- {{/each}}  --}}
+
 </div>
   </div>
 </div>
 </div> 
 
 
-
-
-</div>
 
 
 

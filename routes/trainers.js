@@ -109,13 +109,13 @@ function validateTrainerDetails(trainer){
 
     return trainer
 }
-router.get('/', async (req,res) => { //this is just for demo. Actually it will be a post route
+router.get('/', async (req,res) => { 
   //Validate user. User Should be a gym owner
   if (req.session.user && req.session.user.role === 'owner'){
       try{
         //pullout this owners gyms
       let gymList = await trainerData.getGymByUsername(req.session.user.email)
-      res.render('createTrainer',{gymList:gymList}) //This will show trainer creation form and from that it will redirect it to create trainer post route
+      res.render('createTrainer',{gymList:gymList,title:'Create Trainer'}) //This will show trainer creation form and from that it will redirect it to create trainer post route
   
       }catch(e){
           res.status(e.status || 500 ).json(e.message)
@@ -165,7 +165,7 @@ router.post('/createTrainer', async (req,res) => {
     }
     }catch(e){
         console.log(e.message)
-        res.render('createTrainer',{error:e.message,gymList:gymList})
+        res.render('createTrainer',{error:e.message,gymList:gymList,title:'Create Trainer'})
         
         }
   
@@ -187,13 +187,14 @@ router.get('/reviewTrainer/:id', async (req,res) => { //this is just for demo. A
             res.render('createTrainerReview',{gymId:trainerDetails.gymId,
                                               trainerFirstname:trainerDetails.trainerFirstName,
                                               trainerLastname:trainerDetails.trainerLastName,
-                                              trainerId:trainerDetails._id})
+                                              trainerId:trainerDetails._id,
+                                              title:'Trainer Review'})
         }else{
             req.session.gotoroute = 'trainers/createTrainerReview'
             res.redirect('/login')
         }
    }catch(e){
-    res.status(e.status).render('somethingWentWrong', {message:e.message})
+    res.status(e.status).render('somethingWentWrong', {message:e.message,title:"Something's wrong"})
    }
     
 })
@@ -224,7 +225,8 @@ router.post('/createReviewTrainer', async(req,res) => {
                                                 trainerLastname:trainerReview.trainerLastname,
                                                 starTR:trainerReview.starTR,
                                                 reviewTextTR:trainerReview.reviewTextTR,
-                                                trainerId: trainerReview.trainerId})
+                                                trainerId: trainerReview.trainerId,
+                                                title:"Trainer Review"})
             }
           }catch(e){
             console.log(e.message)
@@ -246,7 +248,8 @@ router.get('/gym/:id',async(req,res) => { //View trainers pertaining to given gy
             }
             //render trainer list here
             res.render('trainerList',{
-                trainers:trainerList
+                trainers:trainerList,
+                title:"Trainers"
             })  
         }
       
@@ -264,9 +267,10 @@ router.get('/gym/:id',async(req,res) => { //View trainers pertaining to given gy
           const trainerReview = await trainerData.getTrainerReviewsByTrainerId(req.params.id)
           if(trainer){
               if(trainerReview){
-                res.render('trainerProfile',{trainer:trainer,reviews:trainerReview})    
+                res.render('trainerProfile',{trainer:trainer,reviews:trainerReview,
+                                                title:"Trainer Profile"})    
               }else{
-                res.render('trainerProfile',{trainer:trainer})
+                res.render('trainerProfile',{trainer:trainer,title:"Trainer Profile"})
               }
               
           }
