@@ -1,16 +1,61 @@
-<h1>Change your review
-</h1>
+
 <main>
-    <form action = "/editeReview" method="POST" id="edite_reivew">
 
-        <label for="your_reivewE" id="reviewInfoEdite">Leave your review here:</label><br>
-        <input type="text" id="your_reivewE" name="review"><br>
+ <div class="main">
 
-        <label for="your_ratingE" id="ratingNumEdite">Give a score(1~5, 5 is the highest)</label><br>
-        <input type="text" id="your_ratingE" name="rating"><br>
+        <section class="signup">
+            
+            <div class="container">
+                <div class="signup-content">
+                    <form action = "/review/editeReview/{{reviewId.id}}" class="signup-form" method="POST" id="edite_reivew">
+                        <h2 class="form-title">Change your mind? You can edite your review here:</h2>
+                        
 
-        <input type="submit" name="submit" value="submit">
-    </form>
+                        <div class="form-row">
+                        <div class="form-group col-md-12 mb-4">
+                            <label for="your_reivew" id="edreviewInfo">Leave your newest review here:</label><br>
+                            <input class ="form-input" type="text" id="edite_your_reivew" name="review"><br>
+                        </div>
+                        </div>
+
+                        <div class="form-row">
+                        <div class="form-group col-md-6 mb-3">
+                          <select class="form-control" id="edite_your_rating" name="rating" placeholder="Giva a Score (1-5)">
+                            <label for="your_rating" id="edite_ratingnfo">Select a score (1 is lowest, 5 is highest</label><br>
+
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                        </div>
+
+                        
+                        
+                             
+                        
+                    <div class="form-group">
+                <input class="form-submit" type="submit" name="submitForm" value="submitForm">
+
+                <input class="form-delete" type="submit" name="delete" value="deleteFrom">
+
+
+                <div class="form-group hidden" id="error-container_edite">
+                <div class="alert alert-danger text-goes-here-edite">
+                 </div>
+    </div>
+
+        </div>
+        
+        </form>
+                   
+                </div>
+            </div>
+        </section>
+
+    </div>
 
     {{#if ReviewNotProvide}}
     <p class = "error">You can not leave your review empty</p>
@@ -39,6 +84,7 @@
 
 
 
+    <script src="/public/js/checkEditeReview.js"></script>
 
 
 

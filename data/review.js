@@ -43,28 +43,25 @@ async function addReviewToGym(gymId, reviewerId, review, rating, reviewer){
 
 }
 
-async function remove(reviewId, gymId, userId) {
+async function remove(reviewId, userId) {
 
     if (!reviewId) throw '[Gym delete data Error]: Order Id parameter must be supplied';
-    if (!gymId) throw '[Gym delete data Error]: Gym Id parameter must be supplied';
     if (!userId) throw '[Gym delete data Error]: User Id parameter must be supplied';
 
 
     if (typeof reviewId !== 'string') throw "[Gym delete data Error]: Order Id must be a string";
-    if (typeof gymId !== 'string') throw "[Gym delete data Error]: Gym Id must be a string";
     if (typeof userId !== 'string') throw "[Gym delete data Error]: User Id must be a string";
 
     if (!ObjectId.isValid(reviewId)) throw "[Gym delete data Error]: the invalid review ObjectId"
-    if (!ObjectId.isValid(gymId)) throw "[Gym delete data Error]: the invalid gym ObjectId"
     if (!ObjectId.isValid(userId)) throw "[Gym delete data Error]: the invalid user ObjectId"
 
     const reviewData = await createReview();
 
 
-    const search = await reviewData.findOne({ _id: ObjectId(reviewId), gymId:ObjectId(gymId), userId:ObjectId(userId)});
+    const search = await reviewData.findOne({ _id: ObjectId(reviewId), userId:ObjectId(userId)});
     if(search ===null) throw("[Gym delete data Error]: there is no data fit this ID")
 
-    const deletionInfo = await reviewData.deleteOne({ _id: ObjectId(reviewId), gymId:ObjectId(gymId), userId:ObjectId(userId)});
+    const deletionInfo = await reviewData.deleteOne({ _id: ObjectId(reviewId), userId:ObjectId(userId)});
 
     if (deletionInfo.deletedCount === 0) {
         throw `[Gym delete data Error]: Could not delete restaurant with id of ${reviewId}`;
@@ -77,9 +74,8 @@ async function remove(reviewId, gymId, userId) {
 
 //Work in process
 
-async function update(reviewId, gymId, userId,review, rating){
+async function update(reviewId, userId,review, rating){
     if(!reviewId) throw "[Gym update data Error]:You need to provide the review ID"
-    if (!gymId) throw '[Gym update data Error]: Gym Id parameter must be supplied'
     if (!userId) throw '[Gym update data Error]: User Id parameter must be supplied'
     if(!review) throw "[Gym update data Error]:You must provide the review"
     if(!rating) throw "[Gym update data Error]:You need to provide the rating score"
@@ -88,12 +84,10 @@ async function update(reviewId, gymId, userId,review, rating){
     if(typeof(reviewId) !== 'string') throw "[Gym update data Error]:Wrong type of review ID"
     if(typeof(review) !== 'string') throw "[Gym update data Error]:Wrong type of review"
     if(typeof(rating) !== 'number') throw "[Gym update data Error]:Wrong type of rating"
-    if (typeof (gymId) !== 'string') throw "[Gym update data Error]: Gym Id must be a string"
     if (typeof (userId) !== 'string') throw "[Gym update data Error]: User Id must be a string"
 
     //TODO: make sure that gymId and reviewerId type pass in is string
     if (!ObjectId.isValid(reviewId)) throw "[Gym update data Error]:the invalid gym ObjectId"
-    if (!ObjectId.isValid(gymId)) throw "[Gym update data Error]: the invalid gym ObjectId"
     if (!ObjectId.isValid(userId)) throw "[Gym update data Error]: the invalid user ObjectId"
 
 
@@ -102,7 +96,7 @@ async function update(reviewId, gymId, userId,review, rating){
     if(rating >5 || rating < 1 ) throw "[Gym update data Error]:The rating is not vaild number"
 
     const updateReview = await createReview();
-    const Find = await updateReview.findOne({ _id: ObjectId(reviewId), gymId:ObjectId(gymId), userId:ObjectId(userId)});
+    const Find = await updateReview.findOne({ _id: ObjectId(reviewId), userId:ObjectId(userId)});
     if(Find === null) throw "[Gym update data Error]: Can not find the review";
     const newReview = {
         reviewText: review,
