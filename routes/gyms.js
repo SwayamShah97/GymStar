@@ -63,12 +63,12 @@ router.get('/', async (req, res) => {
         loggedin = true
         fname = req.session.user.firstName
         let gymList = await gymData.getTopFive();
-      res.render('gymbars/gymlist',{gyms:gymList,loggedin,name:fname});
+      res.render('gymbars/gymlist',{title:"Gyms",gyms:gymList,loggedin,name:fname});
       }
       else{
         loggedin = false
         let gymList = await gymData.getTopFive();
-      res.render('gymbars/gymlist',{gyms:gymList,loggedin});
+      res.render('gymbars/gymlist',{title:"Gyms",gyms:gymList,loggedin});
       }
       
 
