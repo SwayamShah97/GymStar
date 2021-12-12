@@ -311,11 +311,10 @@ router.post('/gymcreate',async(req,res) => {
   function validateFilter(filter) {
     console.log(typeof(filter))
        if(typeof(filter) !== 'object') throw {status:400,message:'Object type expected'}
-      //  if(typeof(filter.rating) !== 'string' ||
-      //     typeof(filter.priceRange) !== 'string' ||
-      //     typeof(filter.rating) !== 'undefined' ||
-      //     typeof(filter.priceRange) !== 'undefined' 
-      //     ) throw {status:400,message:'String type expected'}
+       if(  (filter.rating && typeof(filter.rating) !== 'string') ||
+          ( filter.priceRange && typeof(filter.priceRange) !== 'string')
+          
+          ) throw {status:400,message:'String type expected'}
 
     filter.rating = xss(filter.rating)
     filter.priceRange = xss(filter.priceRange)
@@ -326,13 +325,13 @@ router.post('/gymcreate',async(req,res) => {
     // let tempRating = filter.rating
     // if(! /^[0-4]{1}$/.test(filter.rating)) throw {status:400,message:'Invalid Rating'}
 
-    if( filter.rating && !( /^[0-4]{1}$/.test(filter.rating))) //4 because there will be 0-4 in select option
+    if( ( filter.rating ) && !( /^[0-4]{1}$/.test(filter.rating))) //4 because there will be 0-4 in select option
     {
       throw {status:400,message:'Invalid Rating'}
     }
     // filter.rating = parseInt(filter.rating)
     let priceRangeRegex = /^[$]{1,4}$/;
-    if(filter.priceRange && (! priceRangeRegex.test(filter.priceRange))) throw {
+    if( ( filter.priceRange) && (! priceRangeRegex.test(filter.priceRange))) throw {
       status:400,
       message:'Invalid price Range'
     }
@@ -380,7 +379,7 @@ router.post('/gymcreate',async(req,res) => {
       }
       else{
         loggedin = false
-        const values = await gymData.getGym(id);
+        // const values = await gymData.getGym(id); Malay: id field is not defined and its not used here
         res.status(e.status || 500).render('gymbars/gymlist',{error:e.message,loggedin})
       }
       

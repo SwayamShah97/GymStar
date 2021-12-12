@@ -131,8 +131,11 @@
         //     $("#errorFilter").text('Kindly provide valid price Range').show()
         // }
         // else{
+            console.log(typeof($("#rating").val()))
+            console.log(typeof($("#priceRange").val()))
             if($("#rating").val() == null && $("#priceRange").val() == null){
                 $("#errorFilter").text('Kindly select atleast one filter option').show()
+                $(".gymlist-content").hide()
             }else{
                 $("#filterForm").submit()
             }
@@ -143,7 +146,8 @@
     })
 
     $('#rating').on('change', function() {
-        if(!(this.value == 1 ||
+        if(!(this.value == 0 ||
+            this.value == 1 ||
             this.value == 2 ||
             this.value == 3 ||
             this.value == 4)

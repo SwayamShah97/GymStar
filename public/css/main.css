@@ -706,5 +706,6 @@ h4{
 }
 
 .gym-error{
-  margin-left: 175px;
+  /* margin-left: 175px; */
+  color: #fff;
 }

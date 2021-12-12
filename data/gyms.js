@@ -50,6 +50,13 @@ function check2(gymName,location,phoneNumber,priceRange){
 }
   // Added by Malay for gym filter
   function validateFilter(filter) {
+
+    if(typeof(filter) !== 'object') throw {status:400,message:'Object type expected'}
+       if(  (filter.rating && typeof(filter.rating) !== 'string') ||
+          ( filter.priceRange && typeof(filter.priceRange) !== 'string')
+          
+          ) throw {status:400,message:'String type expected'}
+
     if(filter.rating){
       filter.rating = xss(filter.rating)
       filter.rating = filter.rating.trim()
@@ -61,13 +68,13 @@ function check2(gymName,location,phoneNumber,priceRange){
     
 
     // if(! /^[1-5]{1}$/.test(filter.rating)) throw {status:400,message:'Invalid Rating'}
-    if( filter.rating && !( /^[0-4]{1}$/.test(filter.rating))) //4 because there will be 0-4 in select option
+    if( ( filter.rating ) && !( /^[0-4]{1}$/.test(filter.rating))) //4 because there will be 0-4 in select option
     {
       throw {status:400,message:'Invalid Rating'}
     }
     filter.rating = parseInt(filter.rating)
     let priceRangeRegex = /^[$]{1,4}$/;
-    if(filter.priceRange && (! priceRangeRegex.test(filter.priceRange))) throw {
+    if( ( filter.priceRange) && (! priceRangeRegex.test(filter.priceRange))) throw {
       status:400,
       message:'Invalid price Range'
     }
