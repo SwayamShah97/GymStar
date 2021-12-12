@@ -20,7 +20,7 @@ router.get('/addReviewToGym/:id', async(req,res) =>{
       }
       else{
         loggedin = false
-        res.redirect('/login',loggedin)
+        res.redirect('/login')
       }
     //     let id = req.params;
     // res.render('webs/booking',{message: "Make an appointment" , gymId:id,loggedin})
