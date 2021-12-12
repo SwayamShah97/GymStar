@@ -4,8 +4,9 @@ const gymData = require('../data').gymData;
 const xss = require('xss');
 
 function checkString(string){
-  if(typeof(string) !== 'string') throw 'Input provided is not a string';
-  if(string.trim().length === 0) throw 'Empty string on input';
+  if(typeof(string) !== 'string') throw {status:400,message:'Input provided is not a string'};
+  if(string.trim().length === 0) throw {status:400,message:'Empty string on input'};
+  return true
 }
 
 function check(userName,gymName,location,phoneNumber,priceRange){
@@ -250,19 +251,30 @@ router.post('/gymcreate',async(req,res) => {
         fname = req.session.user.firstName
 
         checkString(req.body.searchTerm)
-      if (!req.body.searchTerm) res.status(400).render('gymbars/emptysearch',{loggedin,name:fname})
+      //if (!req.body.searchTerm) res.status(400).render('gymbars/emptysearch',{loggedin,name:fname})
       
     req.body.searchTerm = xss(req.body.searchTerm)
     req.body.searchTerm = req.body.searchTerm.trim()
     
-      if (! req.body.searchTerm) res.status(400).render('gymbars/gymlist',{error:'Kindly provide valid search term',loggedin,name:fname})
+      if (! req.body.searchTerm) 
+      {
+        res.json({error:'Kindly provide valid search term',status:400})
+      }
+      // res.status(400).render('gymbars/gymlist',{error:'Kindly provide valid search term',
+      //                                           loggedin,name:fname})
       else{
         
         const marv = await gymData.search(req.body.searchTerm);
-        if(marv.length < 1 || marv == undefined) res.render('gymbars/gymlist',{error:`No results found for ${req.body.searchTerm}`,loggedin,name:fname});
+        if(marv.length < 1 || marv == undefined) 
+        {
+          res.json({error:`No results found for ${req.body.searchTerm}`,status:404})
+        }
+        // res.render('gymbars/gymlist',{error:`No results found for ${req.body.searchTerm}`,
+        //                               loggedin,name:fname});
         else
-        //  res.render('gymbars/search',{marved:marv}); }
-         res.render('gymbars/gymlist',{gyms:marv,loggedin,name:fname}); 
+        //Commenting below to use ajax instead
+        //  res.render('gymbars/gymlist',{gyms:marv,loggedin,name:fname}); 
+            {res.json({searchResult:marv})}
         }
         
       }
@@ -270,19 +282,26 @@ router.post('/gymcreate',async(req,res) => {
         loggedin = false
 
         checkString(req.body.searchTerm)
-      if (!req.body.searchTerm) res.status(400).render('gymbars/emptysearch',{loggedin})
+      //if (!req.body.searchTerm) res.status(400).render('gymbars/emptysearch',{loggedin})
       
     req.body.searchTerm = xss(req.body.searchTerm)
     req.body.searchTerm = req.body.searchTerm.trim()
     
-      if (! req.body.searchTerm) res.status(400).render('gymbars/gymlist',{error:'Kindly provide valid search term',loggedin})
+      if (! req.body.searchTerm) {
+        res.json({error:'Kindly provide valid search term',status:400})
+      }
+      //res.status(400).render('gymbars/gymlist',{error:'Kindly provide valid search term',loggedin})
       else{
         
         const marv = await gymData.search(req.body.searchTerm);
-        if(marv.length < 1 || marv == undefined) res.render('gymbars/gymlist',{error:`No results found for ${req.body.searchTerm}`,loggedin});
+        if(marv.length < 1 || marv == undefined) {
+          res.json({error:`No results found for ${req.body.searchTerm}`,status:404})
+        }
+        //res.render('gymbars/gymlist',{error:`No results found for ${req.body.searchTerm}`,loggedin});
         else
-        //  res.render('gymbars/search',{marved:marv}); }
-         res.render('gymbars/gymlist',{gyms:marv,loggedin}); 
+        //Commenting below to use ajax instead
+        //  res.render('gymbars/gymlist',{gyms:marv,loggedin,name:fname}); 
+        {res.json({searchResult:marv})}
         }
         
       }
@@ -290,18 +309,18 @@ router.post('/gymcreate',async(req,res) => {
       
 
     } catch (e) {
-
-      if(req.session.user){
-        loggedin = true
-        fname = req.session.user.firstName
-        let gymList = await gymData.getTopFive();
-      res.status(400).render('gymbars/gymlist', {gyms:gymList,title: "Error", error: e,loggedin,name:fname})
-      }
-      else{
-        loggedin = false
-        let gymList = await gymData.getTopFive();
-      res.status(400).render('gymbars/gymlist', {gyms:gymList,title: "Error", error: e,loggedin})
-      }
+      res.json({error:e.message,status:e.status})
+      // if(req.session.user){
+      //   loggedin = true
+      //   fname = req.session.user.firstName
+      //   let gymList = await gymData.getTopFive();
+      // res.status(400).render('gymbars/gymlist', {gyms:gymList,title: "Error", error: e,loggedin,name:fname})
+      // }
+      // else{
+      //   loggedin = false
+      //   let gymList = await gymData.getTopFive();
+      // res.status(400).render('gymbars/gymlist', {gyms:gymList,title: "Error", error: e,loggedin})
+      // }
       
     }
   

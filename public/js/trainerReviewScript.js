@@ -102,47 +102,15 @@
         console.log('Client side Filter Validation')
         console.log($("#rating").val() )
         console.log($("#priceRange").val())
-        // if( ($("#rating").val() && $("#priceRange").val() 
-        // // $("#rating").val() == '0' && $("#priceRange").val() == '0'
-        // ) ){
-        //     $("#errorFilter").text('Kindly provide atleast one filter').show()
-        //     console.log('error in filter')
-        // }
-        // // else if(! ($("#rating").val() == '0' || $("#priceRange").val() == '0')){
-        // //     $("#errorFilter").text('Kindly provide atleast one filter').show()
-        // //     console.log('error in filter1')
-        // // } 
-        // else if(! ( $("#rating").val() === '1' ||
-        //               $("#rating").val() === '2' ||
-        //               $("#rating").val() === '3' ||
-        //               $("#rating").val() === '4'
-
-        // ) ){
-        //     $("#errorFilter").text('Kindly provide valid rating').show()
-        // }
-        // else if( !
-        //     (
-        //         $("#priceRange").val() === '$' ||
-        //         $("#priceRange").val() === '$$' ||
-        //         $("#priceRange").val() === '$$$' ||
-        //         $("#priceRange").val() === '$$$$'
-        //     )
-        // ){
-        //     $("#errorFilter").text('Kindly provide valid price Range').show()
-        // }
-        // else{
-            console.log(typeof($("#rating").val()))
-            console.log(typeof($("#priceRange").val()))
-            if($("#rating").val() == null && $("#priceRange").val() == null){
-                $("#errorFilter").text('Kindly select atleast one filter option').show()
-                $(".gymlist-content").hide()
-            }else{
-                $("#filterForm").submit()
-            }
-           
-        // }
-
-
+    
+        console.log(typeof($("#rating").val()))
+        console.log(typeof($("#priceRange").val()))
+        if($("#rating").val() == null && $("#priceRange").val() == null){
+            $("#errorFilter").text('Kindly select atleast one filter option').show()
+            $(".gymlist-content").hide()
+        }else{
+            $("#filterForm").submit()
+        }
     })
 
     $('#rating').on('change', function() {
@@ -165,6 +133,58 @@
                 this.value = null
             }
       });
+
+      //Search AJAX form
+      $("#searchBTN").click(function(){
+          console.log("Search button clicked")
+          console.log($("#search-bar").val())
+          var requestConfig = {
+            method: 'POST',
+            url: '/gyms/search' ,
+            contentType: 'application/json',
+					data: JSON.stringify({
+						searchTerm: $("#search-bar").val()
+					})
+        };
+        var searchRes = undefined
+        $.ajax(requestConfig).then(function(responseMessage) {
+            
+            
+            console.log(responseMessage)
+            let htmlText = ''
+
+            if (responseMessage.error){
+                htmlText = `
+                
+                    <div class="alert alert-danger text-goes-here">
+                    ${responseMessage.error}
+                    </div>
+                
+                `
+            }else{
+                htmlText = ''
+                htmlText = '<h2>Gyms<h2>'
+            for(let d of responseMessage.searchResult){
+                htmlText += `
+                <div onclick="location.href='/gyms/${d._id}';" class="card" style="width:600px">
+                
+                    <div class="card-body text-white bg-dark"> 
+                        <h4 class="card-title">${d.gymName}</h4>
+                        <h5 class="card-text">${d.location}</h5>
+                        <h5 class="card-text">${d.priceRange}</h5>
+                        <h5 class="card-text">${d.overallRating}</h5>
+                        <h5 class="card-text">${d.phoneNumber}</h5>
+                    </div>
+                </div> `
+            }
+            }
+            
+            console.log(htmlText)
+            $('.gymlist-content').html(htmlText)
+            
+        });
+        
+      })
     
 
 })(window.jQuery)
