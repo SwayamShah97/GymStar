@@ -162,7 +162,11 @@ router.get('/', async (req, res) => {
       let phoneNumber = req.body.mobile;
       let priceRange = req.body.price;
       let id = req.params.id;
-
+    if(!req.session.user){
+        
+        res.redirect('/login')
+        return
+    }
       
      try{
       check2(gymName,location,phoneNumber,priceRange);
@@ -209,11 +213,17 @@ router.get('/', async (req, res) => {
 
 router.post('/gymcreate',async(req,res) => {
   
+  if(!req.session.user){
+        
+    res.redirect('/login')
+    return
+}
    let userName = req.session.user.email;
    let gymName = req.body.firstname;
    let location = req.body.city;
    let phoneNumber = req.body.mobile;
    let priceRange = req.body.price;
+   
    try{
      check(userName,gymName,location,phoneNumber,priceRange);
    
@@ -260,7 +270,8 @@ router.post('/gymcreate',async(req,res) => {
   });
 
   router.post('/search', async (req, res) => {
-  
+    
+    
     try{
 
       if(req.session.user){

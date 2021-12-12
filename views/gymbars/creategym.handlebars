@@ -1,5 +1,5 @@
 <main>
-    <h1 hidden></h1>
+    <h1 hidden>gym</h1>
     <div class="main">
 
         <section class="signup">
@@ -20,8 +20,8 @@
                         <div class="form-row">
                         <div class="form-group col-md-6 mb-3">
                           
-                          <select class="form-control" id="city" name="city" placeholder="Select Location">
-                              <option value="" class="gray" hidden >Select City</option>
+                          <select class="form-control" id="city" name="city">
+                              <option value="" class="gray" >Select City</option>
                               <option value="Jersey City">Jersey City</option>
                               <option value="Hoboken">Hoboken</option>
                             </select>
@@ -38,8 +38,9 @@
                        <div class="form-row">
                         <div class="form-group col-md-6 mb-3">
                           
-                          <select class="form-control" id="price" name="price" placeholder="Select Price Range">
-                              <option value="$" class="gray">$</option>
+                          <select class="form-control" id="price" name="price">
+                              <option value="" class="gray">Select Price Range</option>
+                              <option value="$">$</option>
                               <option value="$$">$$</option>
                               <option value="$$$">$$$</option>
                               <option value="$$$$">$$$$</option>
@@ -67,6 +68,7 @@
                    
                     {{/if}}    
                 
+            </div>
             </div>
         </section>
 

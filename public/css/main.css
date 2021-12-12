@@ -734,3 +734,9 @@ h4{
 textarea {
   resize: none;
 }
+
+#notrainer {
+  color: white;
+  font-weight: bold;
+  font-family: 'Arial Black';
+}
