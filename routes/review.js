@@ -138,8 +138,8 @@ router.get('/deleteReview/:id', async(req,res) =>{
                 res.status(400).render('webs/deleteReview', {title: "Error", message:message,loggedin,name:fname});
             }
         }catch(e){
-            message = "The review is already deleted."
-            res.status(400).render('webs/deleteReview', { title: "Error",message: message });
+            error = "The review is already deleted."
+            res.status(400).render('webs/deleteReview', { title: "Error",error: error,loggedin,name:fname});
             // what should be rendered here/ when no review with that id to delete
         }
         // res.render('webs/deleteReview',{name: "Delete" , gymId:id})  
