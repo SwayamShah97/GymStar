@@ -162,10 +162,13 @@
             </div>
             
             {{/each}}
-            <a href="/gyms/gymcreate">Create your gym</a>
+            {{!-- <a href="/gyms/gymcreate">Create your gym</a> --}}
+            <a class="btn btn-primary" href="/gyms/gymcreate">Create new gym</a>
+            <a class="btn btn-primary" href="/trainers">Add trainer to your Gym</a>
             {{else}}
             <p>You dont have any gym registered with us.</p>
-            <a href="/gyms/gymcreate">Create your gym</a>
+            {{!-- <a href="/gyms/gymcreate">Create your gym</a> --}}
+            <button class="btn btn-primary" href="/gyms/gymcreate">Create your gym</button>
             {{/if}}
             </div>
             </div>

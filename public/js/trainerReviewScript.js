@@ -89,6 +89,7 @@
         console.log($("#errorTCreate").text())
         console.log('error' + error)
         if(error){
+            errorTCreate.removeAttribute('hidden');
             $("#errorTCreate").show()
         }else{
             $("#trainer-form").submit()
