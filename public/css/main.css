@@ -728,3 +728,9 @@ h4{
 .btn-primary {
   background-color: #3a10e5 !important;
 }
+.card-title-trainerList{
+  color: #217eff;
+}
+textarea {
+  resize: none;
+}

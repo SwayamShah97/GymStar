@@ -7,7 +7,10 @@
     
     <div class="card-body">
 
-      <h4 class="card-title">{{trainer.trainerFirstName}}</h4>
+      <h1 class="card-title">{{trainer.trainerFirstName}}</h1>
+      <h2 hidden></h2>
+      <h3 hidden></h3>
+      <h4 hidden></h4>
       <h5 class="card-title">{{trainer.trainerLastName}}</h5>
       <h5 class="card-title">{{trainer.overallRating}}</h5>
       <h5 class="card-title">"Working in this industory since past {{trainer.experience}} years"</h5>
@@ -27,7 +30,7 @@
       <!-- Card-->
       <div class="card rounded shadow-sm border-0">
         <div class="card-body p-4">
-          <h4 class="text-dark">{{reviewer}}</h4>
+          <h1 class="text-dark">{{reviewer}}</h1>
           <p class="small text-muted font-italic">{{date}}</p>
           <ul class="list-inline small">
             {{#times rating}}
@@ -35,6 +38,10 @@
             {{/times}}
             
           </ul>
+          <h2 hidden></h2>
+          <h3 hidden></h3>
+          <h4 hidden></h4>
+          <h5 hidden></h5>
           <h6 class="text-dark">{{reviewText}}</h6>
           
         </div>
