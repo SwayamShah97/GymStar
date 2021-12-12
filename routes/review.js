@@ -335,9 +335,9 @@ router.post('/editeReview/:id', async(req,res) =>{
     try{
         const editeInfo = await reviewDataInfo.update(reviewId,userId,review,newRating);
         if(editeInfo.updateSuccess === true){
-            res.render('webs/editeSuccess', {title: "Successful" ,loggedin,name:fname})
+            res.render('webs/editeSuccess', {name1: "Successful",success:true ,loggedin,name:fname})
         }else{
-            res.status(400).render('webs/editeReview', {editeFail: true, title: "Error",loggedin,name:fname})
+            res.status(400).render('webs/editeReview', {editeFail: true,error:true, message: "edite your review",loggedin,name:fname})
         }
     }catch(e){
         res.status(400).json({ error: e });

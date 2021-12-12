@@ -163,9 +163,10 @@
                 `
             }else{
                 htmlText = ''
-                htmlText = '<h2>Gyms<h2>'
+                htmlText = '<h1 class="gym-title">Gyms</h1>'
             for(let d of responseMessage.searchResult){
                 htmlText += `
+                <br>
                 <div onclick="location.href='/gyms/${d._id}';" class="card" style="width:600px">
                 
                     <div class="card-body text-white bg-dark"> 
