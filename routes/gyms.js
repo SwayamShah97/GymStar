@@ -493,7 +493,8 @@ router.post('/gymcreate',async(req,res) => {
       }
     }
     catch(e){
-      res.status(400).render('gymbars/gymprofile', {title: "Error", error: e})
+      res.status(404).render('notFd',{title:'404- page not found'});
+      // res.status(400).render('gymbars/gymprofile', {title: "Error", error: e})
     }
   
   });
