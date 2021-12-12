@@ -78,6 +78,7 @@
                   {{/if}}
                   <ul>
                   {{#if loggedin}}
+                  <li>
                     <div class="dropdown show">
                       <a class="btn btn-info text-center dropdown-toggle " href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                        Hey, {{name}}
@@ -89,6 +90,7 @@
                             
                       </div>
                           </div>
+                          </li>
                   {{else}}
                     <li class="nav-item">
                     <a href="/login" class="btn btn-outline-success text-center" >LOGIN</a>
@@ -106,5 +108,5 @@
 <body>
 {{{body}}}
    <script src="/public/js/trainerReviewScript.js"></script>
-   
+</body>
 </html>
