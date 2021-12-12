@@ -14,15 +14,24 @@
                         <div class="form-row">
                         <div class="form-group col-md-12 mb-4">
                             <label for="your_reivew" id="edreviewInfo">Leave your newest review here:</label><br>
-                            <input class ="form-input" type="text" id="edite_your_reivew" name="review"><br>
+                            <input class ="form-input" type="text" id="edite_your_reivew" name="review" value="{{reviewText}}"><br>
+                        </div>
+                        </div>
+
+                        <div class="form-row">
+                        <div class="form-group col-md-12 mb-3">
+                            <label for="your_rating" id="edite_ratingnfo">Select a score (1 is lowest, 5 is highest</label><br>
+                    
                         </div>
                         </div>
 
                         <div class="form-row">
                         <div class="form-group col-md-6 mb-3">
+                            
                           <select class="form-control" id="edite_your_rating" name="rating" placeholder="Giva a Score (1-5)">
-                            <label for="your_rating" id="edite_ratingnfo">Select a score (1 is lowest, 5 is highest</label><br>
-
+                            
+                                
+                                <option value="{{rating}}" class="gray" selected  hidden>{{rating}}</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
@@ -42,7 +51,7 @@
                 <input class="form-delete" type="submit" name="delete" value="deleteFrom">
 
 
-                <div class="form-group hidden" id="error-container_edite">
+                <div class="form-group hidden" id="error-container_edite" hidden>
                 <div class="alert alert-danger text-goes-here-edite">
                  </div>
     </div>

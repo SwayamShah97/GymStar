@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <title>{{title}}</title>
@@ -27,13 +27,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script>
-      $(function () {
-      $(document).scroll(function () {
-      var $nav = $(".fixed-top");
-      $nav.toggleClass('scrolled', $(this).scrollTop() > $nav.height());
-      });
       
-      })
       
     </script>
  
@@ -76,7 +70,7 @@
 
                   <form method="POST" action="/gyms/search" class="form-inline my-2 my-lg-0 search-container">
                   <input class="form-control mr-sm-2 search-input" type="search" id="search-bar" name="searchTerm" placeholder="Search Gyms Here" aria-label="Search">
-                  <button class="btn btn-outline-success my-2 my-sm-0" type="button" id="searchBTN" name="submit">Search</button>
+                  <button class="btn btn-dark my-2 my-sm-0" type="button" id="searchBTN" name="submit">Search</button>
                   </form>
 
 
@@ -99,7 +93,7 @@
                           </li>
                   {{else}}
                     <li class="nav-item">
-                    <a href="/login" class="btn btn-outline-success text-center" >LOGIN</a>
+                    <a href="/login" class="btn btn-secondary text-center" >LOGIN</a>
                     </li>
 
                     
@@ -114,5 +108,6 @@
 
 {{{body}}}
    <script src="/public/js/trainerReviewScript.js"></script>
+   <script src="/public/js/main.js"></script>
 </body>
 </html>

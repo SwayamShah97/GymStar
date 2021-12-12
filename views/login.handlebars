@@ -8,24 +8,45 @@
             <div class="container">
                 <div class="signup-content">
                     <form method="POST" id="login-form" class="signup-form" action="/login">
+                    <h1 hidden> Login form</h1>
                         <h2 class="form-title">Login</h2>
-
+                        {{#if success}}
+                            <div class="form-group hidden" id="error-container" >
+                            <div class="alert alert-success text-goes-here">
+                                 {{success}}
+                            </div>
+                            </div>
+                        {{/if}}
                         <div class="form-group">
+                            <label for="email" hidden>email</label>
                             <input type="text" class="form-input" name="email" id="email" placeholder="Your Email"/>
                         </div>
                         <div class="form-group">
+                            <label for="password" hidden>Password</label>
                             <input type="password" class="form-input" name="password" id="password" placeholder="Password"/>
                             {{!-- <span toggle="#password" class="zmdi zmdi-eye field-icon toggle-password"></span> --}}
                         </div>
 
 
                         <div class="form-group">
-                            <input type="submit" name="submit" id="submit" class="form-submit" value="Log in"/>
+                            <input type="submit" name="submitform" id="submitform" class="form-submit" value="Log in"/>
+                        <br>
+                        <br>
+                        <div class="form-group hidden" id="error-container" hidden>
+                            <div class="alert alert-danger text-goes-here">
+                            </div>
+                        </div>
                         </div>
                     </form>
                     {{#if error}}
-                    <h3>{{error}}</h3>
+                    <div class="form-group hidden" id="error-container" >
+                            <div class="alert alert-danger text-goes-here">
+                                 {{error}}
+                            </div>
+                        </div>
+                   
                     {{/if}}
+                    
                     <p class="loginhere">
                         Don't have an account ? <a href="/signup" class="loginhere-link" >Sign up </a>
                     </p>

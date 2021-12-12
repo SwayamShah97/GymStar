@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const gymData = require('../data').gymData;
+const userData = require("../data").userData;
 const xss = require('xss');
 
 function checkString(string){
@@ -62,7 +63,9 @@ router.get('/', async (req, res) => {
     try {
       if(req.session.user){
         loggedin = true
-        fname = req.session.user.firstName
+        let id = req.session.user.id
+        userDetails = await userData.getUserById(id)
+        fname = userDetails.firstName
         let gymList = await gymData.getTopFive();
       res.render('gymbars/gymlist',{title:"Gyms",gyms:gymList,loggedin,name:fname});
       }
@@ -83,7 +86,9 @@ router.get('/', async (req, res) => {
     try{
       if (req.session.user && req.session.user.role === 'owner'){
         loggedin = true
-        fname = req.session.user.firstName
+        let id = req.session.user.id
+        userDetails = await userData.getUserById(id)
+        fname = userDetails.firstName
         res.render('gymbars/creategym',{loggedin,name:fname})
       }
       else{
@@ -106,7 +111,9 @@ router.get('/', async (req, res) => {
     try{
       if (req.session.user && req.session.user.role === 'owner'){
         loggedin = true
-        fname = req.session.user.firstName
+        let id = req.session.user.id
+        userDetails = await userData.getUserById(id)
+        fname = userDetails.firstName
         res.render('gymbars/updategym',{id:id,values:values,loggedin,name:fname})
       }
       else if(req.session.user && req.session.user!=='owner')
@@ -126,7 +133,9 @@ router.get('/', async (req, res) => {
     try{
       if(req.session.user){
         loggedin = true
-        fname = req.session.user.firstName
+        let id = req.session.user.id
+        userDetails = await userData.getUserById(id)
+        fname = userDetails.firstName
         let gymList = await gymData.getAllGyms();
       // res.render('gymbars/allgyms',{gyms:gymList}); // No need of new handlebar
       res.render('gymbars/gymlist',{gyms:gymList,loggedin,name:fname}); 
@@ -168,7 +177,9 @@ router.get('/', async (req, res) => {
       else {
         if(req.session.user){
           loggedin = true
-          fname = req.session.user.firstName
+          let id = req.session.user.id
+        userDetails = await userData.getUserById(id)
+        fname = userDetails.firstName
           res.status(500).render('gymbars/updategym', {title: "Error", error: 'Internal Server Error',loggedin,name:fname})
         }
         else{
@@ -181,7 +192,9 @@ router.get('/', async (req, res) => {
     catch(e){
       if(req.session.user){
         loggedin = true
-        fname = req.session.user.firstName
+        let id = req.session.user.id
+        userDetails = await userData.getUserById(id)
+        fname = userDetails.firstName
         const values = await gymData.getGym(id);
       res.status(400).render('gymbars/updategym', {id:id,values:values,title: "Error", error: e,loggedin,name:fname})
       }
@@ -213,7 +226,9 @@ router.post('/gymcreate',async(req,res) => {
    else {
     if(req.session.user){
       loggedin = true
-      fname = req.session.user.firstName
+      let id = req.session.user.id
+        userDetails = await userData.getUserById(id)
+        fname = userDetails.firstName
       res.status(500).render('gymbars/creategym', {title: "Error", error: 'Internal Server Error',loggedin,name:fname})
     }
     else{
@@ -226,7 +241,9 @@ router.post('/gymcreate',async(req,res) => {
    catch(e){
     if(req.session.user){
       loggedin = true
-      fname = req.session.user.firstName
+      let id = req.session.user.id
+        userDetails = await userData.getUserById(id)
+        fname = userDetails.firstName
       res.status(400).render('gymbars/creategym', {title: "Error", error: e,loggedin,name:fname})
     }
     else{
@@ -248,7 +265,9 @@ router.post('/gymcreate',async(req,res) => {
 
       if(req.session.user){
         loggedin = true
-        fname = req.session.user.firstName
+        let id = req.session.user.id
+        userDetails = await userData.getUserById(id)
+        fname = userDetails.firstName
 
         checkString(req.body.searchTerm)
       //if (!req.body.searchTerm) res.status(400).render('gymbars/emptysearch',{loggedin,name:fname})
@@ -312,7 +331,9 @@ router.post('/gymcreate',async(req,res) => {
       res.json({error:e.message,status:e.status})
       // if(req.session.user){
       //   loggedin = true
-      //   fname = req.session.user.firstName
+      //   let id = req.session.user.id
+        // userDetails = await userData.getUserById(id)
+        // fname = userDetails.firstName
       //   let gymList = await gymData.getTopFive();
       // res.status(400).render('gymbars/gymlist', {gyms:gymList,title: "Error", error: e,loggedin,name:fname})
       // }
@@ -369,7 +390,9 @@ router.post('/gymcreate',async(req,res) => {
 
       if(req.session.user){
         loggedin = true
-        fname = req.session.user.firstName
+        let id = req.session.user.id
+        userDetails = await userData.getUserById(id)
+        fname = userDetails.firstName
         if(gymList){
         
           res.render('gymbars/gymlist',{gyms:gymList,loggedin,name:fname})
@@ -393,7 +416,9 @@ router.post('/gymcreate',async(req,res) => {
     }catch(e){
       if(req.session.user){
         loggedin = true
-        fname = req.session.user.firstName
+        let id = req.session.user.id
+        userDetails = await userData.getUserById(id)
+        fname = userDetails.firstName
         res.status(e.status || 500).render('gymbars/gymlist',{error:e.message,loggedin,name:fname})
       }
       else{
@@ -426,7 +451,9 @@ router.post('/gymcreate',async(req,res) => {
       if(req.session.user && req.session.user.role === 'owner'){
       
       loggedin = true
-      fname = req.session.user.firstName
+      let id = req.session.user.id
+        userDetails = await userData.getUserById(id)
+        fname = userDetails.firstName
       let userEmail = req.session.user.email;
       const gym = await gymData.getGymByOwner(req.params.id,userEmail);
       owner = gym[1];
@@ -436,7 +463,9 @@ router.post('/gymcreate',async(req,res) => {
       }
       else if(req.session.user){
         loggedin = true
-        fname = req.session.user.firstName
+        let id = req.session.user.id
+        userDetails = await userData.getUserById(id)
+        fname = userDetails.firstName
         const gym = await gymData.getGym(req.params.id);
         let owner = false;
         const reviews = await gymData.getReviews(req.params.id);

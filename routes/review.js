@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const data = require('../data');
 const reviewDataInfo = data.addReview;
+const userData = require("../data").userData;
 const xss = require('xss');
 
 
@@ -11,13 +12,15 @@ const xss = require('xss');
 router.get('/addReviewToGym/:id', async(req,res) =>{
     if(req.session.user){
         loggedin = true
-        fname = req.session.user.firstName
+        let userid = req.session.user.id
+        userDetails = await userData.getUserById(userid)
+        fname = userDetails.firstName
         let id = req.params;
-        res.render('webs/addReviewToGym',{name: "Add review to Gym" , gymId:id})
+        res.render('webs/addReviewToGym',{message: "Add review to Gym" , gymId:id,loggedin,name:fname})
       }
       else{
         loggedin = false
-        res.redirect('/login')
+        res.redirect('/login',loggedin)
       }
     //     let id = req.params;
     // res.render('webs/booking',{message: "Make an appointment" , gymId:id,loggedin})
@@ -25,18 +28,26 @@ router.get('/addReviewToGym/:id', async(req,res) =>{
 
 
     //let id = req.params;
-    //res.render('webs/addReviewToGym',{name: "Add review to Gym" , gymId:id})
+    //res.render('webs/addReviewToGym',{message: "Add review to Gym" , gymId:id})
 });
 
 
 
 router.post('/addReviewToGym/:id', async (req, res) => {
 
-    // if(req.session.user){
-    //     loggedin != true
-    //     res.redirect('/login')
-
-    // }
+    let loggedin
+    let fname
+    if(!req.session.user){
+        
+        res.redirect('/login')
+        return
+    }
+    else if(req.session.user){
+        loggedin = true
+        let userid = req.session.user.id
+        userDetails = await userData.getUserById(userid)
+        fname = userDetails.firstName
+    }
     req.body.review = xss(req.body.review);
     review = req.body.review;
 
@@ -55,49 +66,49 @@ router.post('/addReviewToGym/:id', async (req, res) => {
     
 
     if(!review){
-        res.status(400).render('webs/addReviewToGym', {ReviewNotProvide: true, name: "Add Your comment"})
+        res.status(400).render('webs/addReviewToGym', {ReviewNotProvide: true, message: "Add Your comment",loggedin,name:fname})
         return;
     }
     if(typeof(review)!== 'string'){
-        res.status(400).render('webs/addReviewToGym', {reviewTypeWrong: true, name: "Add Your comment"})
+        res.status(400).render('webs/addReviewToGym', {reviewTypeWrong: true, message: "Add Your comment",loggedin,name:fname})
         return;
 
     }
     if(review.trim().length === 0){
-        res.status(400).render('webs/addReviewToGym', {reviewSapce: true, name: "Add Your comment"})
+        res.status(400).render('webs/addReviewToGym', {reviewSapce: true, message: "Add Your comment",loggedin,name:fname})
         return;
     }
     if(!rating){
-        res.status(400).render('webs/addReviewToGym', {ratingNotProvide: true, name: "Add Your comment"})
+        res.status(400).render('webs/addReviewToGym', {ratingNotProvide: true, message: "Add Your comment",loggedin,name:fname})
         return;
     }
     if(typeof(rating)!== 'string' ){
-        res.status(400).render('webs/addReviewToGym', {ratingTypeWrong: true, name: "Add Your comment"})
+        res.status(400).render('webs/addReviewToGym', {ratingTypeWrong: true, message: "Add Your comment",loggedin,name:fname})
         return;
     }
     if(typeof(rating) === 'string' && isNaN(+rating)){
-        res.status(400).render('webs/addReviewToGym', {ratingWrong: true, name: "Add Your comment"})
+        res.status(400).render('webs/addReviewToGym', {ratingWrong: true, message: "Add Your comment",loggedin,name:fname})
         return;
     }
     
     if(parseInt(rating) < 0 || parseInt(rating) > 5){
-        res.status(400).render('webs/addReviewToGym', {outRangeNumber: true, name: "Add Your comment"})
+        res.status(400).render('webs/addReviewToGym', {outRangeNumber: true, message: "Add Your comment",loggedin,name:fname})
         return;
     }
     let newRating = parseInt(rating)
-    console.log(typeof(newRating))
+    
     
 
     try{
         const addInfo = await reviewDataInfo.addReviewToGym(gymId,userId,review,newRating,reviewer)
-        console.log(addInfo.addReviewtoTheGym)
+        
         
         if(addInfo.addReviewtoTheGym === true){
-            console.log(1)
-            res.render('webs/reviewAddSuccess', {name: "Successful" })
+            
+            res.render('webs/reviewAddSuccess', {name1: "Successful" ,loggedin,name:fname})
 
         }else{
-            res.status(400).render('webs/addReviewToGym', {addFail: true, name: "Add Your comment"})
+            res.status(400).render('webs/addReviewToGym', {addFail: true, message: "Add Your comment",loggedin,name:fname})
         }
     }catch(e){
         res.status(400).json({ error: e });
@@ -108,7 +119,9 @@ router.post('/addReviewToGym/:id', async (req, res) => {
 router.get('/deleteReview/:id', async(req,res) =>{
     if(req.session.user){
         loggedin = true
-        fname = req.session.user.firstName
+        let userid = req.session.user.id
+        userDetails = await userData.getUserById(userid)
+        fname = userDetails.firstName
         let id = req.params;
         req.params.id = xss(req.params.id);
         let reviewId = req.params.id;
@@ -119,13 +132,14 @@ router.get('/deleteReview/:id', async(req,res) =>{
             const deleteInfo = await reviewDataInfo.remove(reviewId,userId);
             if(deleteInfo.deleted === true){
                 let message = "Your review is successful deleted"
-                res.render('webs/deleteReview', {name: "Delete Successful", message: message})
+                res.render('webs/deleteReview', {name1: "Delete Successful", message: message,loggedin,name:fname})
             }else{
                 let message = "Delete fail, try again"
-                res.status(400).render('webs/deleteReview', {name: "Error", message:message})
+                res.status(400).render('webs/deleteReview', {name1: "Error", message:message,loggedin,name:fname})
             }
         }catch(e){
             res.status(400).json({ error: e });
+            // what should be rendered here/ when no review with that id to delete
         }
         // res.render('webs/deleteReview',{name: "Delete" , gymId:id})  
     }
@@ -143,33 +157,33 @@ router.get('/deleteReview/:id', async(req,res) =>{
 //     let userId
 
 //     if (!reviewId){
-//         res.status(400).render('webs/deleteReview', {CanNotFindReviewId: true, name: "edite your review"})
+//         res.status(400).render('webs/deleteReview', {CanNotFindReviewId: true, message: "edite your review"})
 //         return;
 //     }
 
 //     if (!userId){
-//         res.status(400).render('webs/deleteReview', {CanNotFindUserId: true, name: "edite your review"})
+//         res.status(400).render('webs/deleteReview', {CanNotFindUserId: true, message: "edite your review"})
 //         return;
 //     }
 
 //     if ((typeof reviewId !== 'string')){
-//         res.status(400).render('webs/deleteReview', {WrongreviewIdType: true, name: "edite your review"})
+//         res.status(400).render('webs/deleteReview', {WrongreviewIdType: true, message: "edite your review"})
 //         return;
 //     }
 
 //     if ((typeof userId !== 'string')){
-//         res.status(400).render('webs/deleteReview', {WrongUserIdType: true, name: "edite your review"})
+//         res.status(400).render('webs/deleteReview', {WrongUserIdType: true, message: "edite your review"})
 //         return;
 //     }
 
 //     if (!ObjectId.isValid(reviewId)){
-//         res.status(400).render('webs/deleteReview', {notVaildReviewId: true, name: "edite your review"})
+//         res.status(400).render('webs/deleteReview', {notVaildReviewId: true, message: "edite your review"})
 //         return;
 //     }
 
 
 //     if (!ObjectId.isValid(userId)){
-//         res.status(400).render('webs/deleteReview', {notVaildUserId: true, name: "edite your review"})
+//         res.status(400).render('webs/deleteReview', {notVaildUserId: true, message: "edite your review"})
 //         return;
 //     }
 
@@ -178,7 +192,7 @@ router.get('/deleteReview/:id', async(req,res) =>{
 //         if(deleteInfo.deleted === true){
 //             res.render('webs/RemoveSucess', {name: "Successful" })
 //         }else{
-//             res.status(400).render('webs/deleteReviewSuccess', {deleteFail: true, name: "edite your review"})
+//             res.status(400).render('webs/deleteReviewSuccess', {deleteFail: true, message: "edite your review"})
 //         }
 //     }catch(e){
 //         res.status(400).json({ error: e });
@@ -191,9 +205,17 @@ router.get('/editeReview/:id', async(req,res) =>{
 
     if(req.session.user){
         loggedin = true
-        fname = req.session.user.firstName
+        let userid = req.session.user.id
+        userDetails = await userData.getUserById(userid)
+        fname = userDetails.firstName
         let id = req.params;
-        res.render('webs/editeReview',{name: "edite your review", reviewId: id})
+        
+        const review = await reviewDataInfo.getReviewByID(id.id);
+        
+        let reviewText = review.reviewText
+        let rating = review.rating
+        
+        res.render('webs/editeReview',{message: "edite your review",rating,reviewText, reviewId: id,loggedin,name:fname})
       }
       else{
         loggedin = false
@@ -205,6 +227,20 @@ router.get('/editeReview/:id', async(req,res) =>{
 
 
 router.post('/editeReview/:id', async(req,res) =>{
+
+    let loggedin
+    let fname
+    if(!req.session.user){
+        
+        res.redirect('/login')
+        return
+    }
+    else if(req.session.user){
+        loggedin = true
+        let userid = req.session.user.id
+        userDetails = await userData.getUserById(userid)
+        fname = userDetails.firstName
+    }
     req.params.id = xss(req.params.id);
     reviewId = req.params.id;
 
@@ -219,76 +255,76 @@ router.post('/editeReview/:id', async(req,res) =>{
 
 
     if (!reviewId){
-        res.status(400).render('webs/editeReview', {CanNotFindReviewId: true, name: "edite your review"})
+        res.status(400).render('webs/editeReview', {CanNotFindReviewId: true, message: "edite your review",loggedin,name:fname})
         return;
     }
 
     if (!gymId){
-        res.status(400).render('webs/editeReview', {CanNotFindGymId: true, name: "edite your review"})
+        res.status(400).render('webs/editeReview', {CanNotFindGymId: true, message: "edite your review",loggedin,name:fname})
         return;
     }
 
     if (!userId){
-        res.status(400).render('webs/editeReview', {CanNotFindUserId: true, name: "edite your review"})
+        res.status(400).render('webs/editeReview', {CanNotFindUserId: true, message: "edite your review",loggedin,name:fname})
         return;
     }
 
 
     if ((typeof reviewId !== 'string')){
-        res.status(400).render('webs/editeReview', {WrongreviewIdType: true, name: "edite your review"})
+        res.status(400).render('webs/editeReview', {WrongreviewIdType: true, message: "edite your review",loggedin,name:fname})
         return;
     }
 
     if ((typeof userId !== 'string')){
-        res.status(400).render('webs/editeReview', {WrongUserIdType: true, name: "edite your review"})
+        res.status(400).render('webs/editeReview', {WrongUserIdType: true, message: "edite your review",loggedin,name:fname})
         return;
     }
 
     if(!review){
-        res.status(400).render('webs/editeReview', {ReviewNotProvide: true, name: "edite your review"})
+        res.status(400).render('webs/editeReview', {ReviewNotProvide: true, message: "edite your review",loggedin,name:fname})
         return;
     }
     if(typeof(review)!== 'string'){
-        res.status(400).render('webs/editeReview', {reviewTypeWrong: true, name: "edite your review"})
+        res.status(400).render('webs/editeReview', {reviewTypeWrong: true, message: "edite your review",loggedin,name:fname})
         return;
 
     }
     if(review.trim().length === 0){
-        res.status(400).render('webs/editeReview', {reviewSapce: true, name: "edite your review"})
+        res.status(400).render('webs/editeReview', {reviewSapce: true, message: "edite your review",loggedin,name:fname})
         return;
     }
     if(!rating){
-        res.status(400).render('webs/editeReview', {ratingNotProvide: true, name: "edite your review"})
+        res.status(400).render('webs/editeReview', {ratingNotProvide: true, message: "edite your review",loggedin,name:fname})
         return;
     }
     if(typeof(rating)!== 'string' ){
-        res.status(400).render('webs/editeReview', {ratingTypeWrong: true, name: "edite your review"})
+        res.status(400).render('webs/editeReview', {ratingTypeWrong: true, message: "edite your review",loggedin,name:fname})
         return;
     }
 
 
     if (!ObjectId.isValid(reviewId)){
-        res.status(400).render('webs/editeReview', {notVaildReviewId: true, name: "edite your review"})
+        res.status(400).render('webs/editeReview', {notVaildReviewId: true, message: "edite your review",loggedin,name:fname})
         return;
     }
 
 
     if (!ObjectId.isValid(userId)){
-        res.status(400).render('webs/editeReview', {notVaildUserId: true, name: "edite your review"})
+        res.status(400).render('webs/editeReview', {notVaildUserId: true, message: "edite your review",loggedin,name:fname})
         return;
     }
     if(review.trim().length === 0){
-        res.status(400).render('webs/editeReview', {reviewSapce: true, name: "edite your review"})
+        res.status(400).render('webs/editeReview', {reviewSapce: true, message: "edite your review",loggedin,name:fname})
         return;
     }
 
     if(typeof(rating) === 'string' && isNaN(+rating)){
-        res.status(400).render('webs/editeReview', {ratingWrong: true, name: "edite your review"})
+        res.status(400).render('webs/editeReview', {ratingWrong: true, message: "edite your review",loggedin,name:fname})
         return;
     }
     
     if(parseInt(rating) < 0 || parseInt(rating) > 5){
-        res.status(400).render('webs/editeReview', {outRangeNumber: true, name: "edite your review"})
+        res.status(400).render('webs/editeReview', {outRangeNumber: true, message: "edite your review",loggedin,name:fname})
         return;
     }
 
@@ -298,9 +334,9 @@ router.post('/editeReview/:id', async(req,res) =>{
     try{
         const editeInfo = await reviewDataInfo.update(reviewId,userId,review,newRating);
         if(editeInfo.updateSuccess === true){
-            res.render('webs/editeSuccess', {name: "Successful" })
+            res.render('webs/editeSuccess', {name1: "Successful" ,loggedin,name:fname})
         }else{
-            res.status(400).render('webs/editeReview', {editeFail: true, name: "edite your review"})
+            res.status(400).render('webs/editeReview', {editeFail: true, message: "edite your review",loggedin,name:fname})
         }
     }catch(e){
         res.status(400).json({ error: e });

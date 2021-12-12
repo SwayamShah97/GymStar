@@ -161,6 +161,25 @@ async function getAllReviewByUserID(userId){
 
 }
 
+async function getReviewByID(reviewId){
+    if (!reviewId) throw '[Review findByGymId Error]: Id parameter must be supplied';
+
+    if (typeof reviewId !== 'string') throw "[Review findByGymId Error]: Id must be a string";
+
+    if (reviewId.trim().length === 0) throw "[Review findByGymId Error]: the Gym id include all space"
+
+    if (!ObjectId.isValid(reviewId)) throw "[Review findByGymId Error]: the invalid ObjectId"
+
+    const ReviewList = await createReview();
+
+    const search = await ReviewList.findOne({ _id: ObjectId(reviewId) });
+
+    if (search === null) throw "[Review findByGymId Error]: no restaurant fit with this id";
+
+
+    return search;
+
+}
 
 
 
@@ -169,6 +188,8 @@ module.exports = {
     addReviewToGym,
     remove,
     update,
-    getAllReviewByUserID
+    getAllReviewByUserID,
+    getAllReviewByGymID,
+    getReviewByID
 }
 

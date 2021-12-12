@@ -20,7 +20,7 @@
                         <div class="form-group col-md-6 mb-3">
                           
                           <select class="form-control" id="city" name="city" placeholder="Select Location">
-                              <option value="" class="gray">City</option>
+                              <option value="" class="gray" hidden >Select City</option>
                               <option value="Jersey City">Jersey City</option>
                               <option value="Hoboken">Hoboken</option>
                             </select>
@@ -51,13 +51,20 @@
 
                 <div class="form-group hidden" id="error-container" hidden>
                 <div class="alert alert-danger text-goes-here">
-        </div>
-        {{#if error}}
-            <h3>{{error}}</h3>
-        {{/if}}
-        </form>
-                   
                 </div>
+                </div>
+        
+        </div>
+        </form>
+               {{#if error}}
+                    <div class="form-group hidden" id="error-container" >
+                            <div class="alert alert-danger text-goes-here">
+                                 {{error}}
+                            </div>
+                        </div>
+                   
+                    {{/if}}    
+                
             </div>
         </section>
 

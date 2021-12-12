@@ -1,7 +1,13 @@
-.scrolled {
+/* .scrolled {
   background: rgba(25,25,25,0.8);
   margin:0;
   color:#fff;
+  transition: background-color 200ms linear;
+} */
+.scrolled {
+  background: rgba(0, 0, 0, 0.8);
+  margin:0;
+  color:#6aa96a;
   transition: background-color 200ms linear;
 }
 
@@ -16,9 +22,9 @@
 body{
   margin: 0;
   padding: 0;
-  background: #fff;
+  /* background: #fff; */
   font-family: 'Montserrat';
-  color: #fff;
+  /* color: #fff; */
 }
 
 .front{
@@ -97,7 +103,7 @@ body{
 
 
  .navbar-brand{
-  color: #fff  ;
+  color: #949494  ;
   font-size: 2.5em;
   font-weight: 700;
   margin-left: 1%;
@@ -111,6 +117,13 @@ body{
  .nav li a{
   color: #fff;
   font-size: 1.2em;
+  background-color: black;
+}
+
+.fixed-top{
+  
+  color: #058a05;
+
 }
 
  .info{
@@ -122,14 +135,14 @@ body{
 .front .info h1{
   font-weight: 700;
   font-size: 2.2em;
-  color: #fff;
+  color: #7b7b00;
   letter-spacing: 2px;
 }
 
 .front .info p{
   font-weight: 700;
   font-size: 1.5em;
-  color: #fff;
+  color: #7b7b00;
   letter-spacing: 2px;
 }
 
@@ -314,18 +327,12 @@ p{
 #testimonials{
 
   text-align: center;
-  background-color: #beebe9;
+  background-color: #008481;
   color: #fff;
 }
 
 
-h2{
-  font-family: "Montserrat";
-  font-weight: bold;
-  font-size: 3rem;
-  line-height: 1.5;
-  padding-top: 3%;
-}
+
 
 .carousel-item{
   padding: 1% 15%;
@@ -390,6 +397,14 @@ h2 {
   text-align: center;
   margin-bottom: 40px; }
 
+
+  /* h2{
+    font-family: "Montserrat";
+    font-weight: bold;
+    font-size: 3rem;
+    line-height: 1.5;
+    padding-top: 3%;
+  } */
 .clear {
   clear: both; }
 
@@ -414,9 +429,9 @@ background-attachment: fixed;
 .landingPage{
   margin: 0;
   padding: 0;
-  background: #fff;
+  
   font-family: 'Montserrat';
-  color: #fff;
+  
 }
 
 .container {

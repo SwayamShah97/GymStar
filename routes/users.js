@@ -12,6 +12,10 @@ const reviewDataInfo = require('../data').addReview;
 
 const gymData = require('../data').gymData;
 
+const xss = require('xss');
+
+
+
 let loggedin = false
 
 router.get('/', async (req, res) => {
@@ -36,7 +40,7 @@ router.get('/', async (req, res) => {
     } else {
         res.render('landing', {title: "GymStar",loggedin:false,landing:true})
     }
-    console.log("2"+user)
+    
 });
 
 router.get('/login', async (req, res) => {
@@ -44,7 +48,8 @@ router.get('/login', async (req, res) => {
     if (req.session.user) {
         res.redirect('/gyms')
     } else {
-        res.render('login', {title: "Login"})
+        let message = req.session.success
+        res.render('login', {title: "Login", success:message})
     }
 
 });
@@ -231,7 +236,7 @@ router.post('/signup', async (req,res) => {
         return
     } 
 
-    if(gender != "male" && gender != "female") 
+    if(gender != "male" && gender != "female" && gender != "other") 
     {
         res.status(400).render('signup', {title: "Error", error: "Select valid Gender"})
         return
@@ -251,6 +256,7 @@ router.post('/signup', async (req,res) => {
     const info = await userData.createUser(role,firstName,lastName,email,city,state,mobile,gender,dob, password)
 
     if(info.userInserted == true){
+        req.session.success = "Successfully signed up, now please log in."
         res.status(200).redirect('/login')
         }
     else {
@@ -270,6 +276,8 @@ router.get('/userprofile', async (req, res) => {
     if (!req.session.user) {
         res.redirect('/login')
     } else {
+        let updateSuccess = req.session.updateSuccess
+        
         let id = req.session.user.id
         //Get booking details if user
         
@@ -308,10 +316,10 @@ router.get('/userprofile', async (req, res) => {
 
 
         if(bookDetails !== null){
-            res.render('userProfile', {reviews:reviews,title: "Profile", userProfile, user:true ,owner:false, bookDetails, loggedin, name})
+            res.render('userProfile', {reviews:reviews,title: "Profile", userProfile, user:true ,owner:false, bookDetails, loggedin, name,updateSuccess:updateSuccess})
         }
         else{
-            res.render('userProfile', {reviews:reviews,title: "Profile", userProfile, user:true ,owner:false, loggedin, name})
+            res.render('userProfile', {reviews:reviews,title: "Profile", userProfile, user:true ,owner:false, loggedin, name,updateSuccess:updateSuccess})
         }
 
         
@@ -340,10 +348,10 @@ router.get('/userprofile', async (req, res) => {
             // const reviews = await reviewDataInfo.getAllReviewByUserID(id)
             let name = userProfile.firstName
             if(gymDetails !== null){
-                res.render('userProfile', {title: "Profile", userProfile, user:false ,owner:true, gymDetails, loggedin, name})
+                res.render('userProfile', {title: "Profile", userProfile, user:false ,owner:true, gymDetails, loggedin, name,updateSuccess:updateSuccess})
             }
             else{
-                res.render('userProfile', {title: "Profile", userProfile, user:false ,owner:true, loggedin, name})
+                res.render('userProfile', {title: "Profile", userProfile, user:false ,owner:true, loggedin, name,updateSuccess:updateSuccess})
             }
 
         }
@@ -364,9 +372,10 @@ router.post('/updateProfile', async (req,res) => {
     if (req.session.user) {
         loggedin = true
     }
-    else {
+    else if(!req.session.user){
         res.redirect('/login')
         loggedin = false
+        return
     }
     let id = req.session.user.id
     userDetails = await userData.getUserById(id)
@@ -469,21 +478,21 @@ router.post('/updateProfile', async (req,res) => {
     || !city.replace(/\s/g, '').length
     || !state.replace(/\s/g, '').length || !mobile.replace(/\s/g, '').length
     || !gender.replace(/\s/g, '').length || !dob.replace(/\s/g, '').length) {
-        res.status(400).render('userProfile', {title: "Error", error: 'Input cannot be empty spaces',userProfile,loggedin,name})
+        res.status(400).render('userProfile', {title: "Error", error: 'Input cannot be empty spaces',userProfile,loggedin,name,reviews:reviews,bookDetails,owner,user})
         return
     } 
 
     let regMob = mobile.search(/^\d{10}$/);
 
     if(regMob=== -1){
-        res.status(400).render('userProfile', {title: "Error", error:  'PhoneNumber not valid',userProfile,loggedin,name})
+        res.status(400).render('userProfile', {title: "Error", error:  'PhoneNumber not valid',userProfile,loggedin,name,reviews:reviews,bookDetails,owner,user})
         return 
     } 
 
     let regEmail = email.search(/^([a-zA-Z0-9_.+-]{1,})(@{1})([a-zA-Z]{1})([a-zA-Z0-9-]{1,})([.]{1})([a-zA-Z]{1,})$/gi);
 
     if (regEmail === -1) {
-        res.status(400).render('userProfile', {title: "Error", error:  'Email format not valid',userProfile,loggedin,name})
+        res.status(400).render('userProfile', {title: "Error", error:  'Email format not valid',userProfile,loggedin,name,reviews:reviews,bookDetails,owner,user})
         return
     }
     
@@ -496,31 +505,31 @@ router.post('/updateProfile', async (req,res) => {
     
     if(password.length <6) 
     {
-        res.status(400).render('userProfile', {title: "Error", error: 'Password should atleast 6 character long',userProfile,loggedin,name})
+        res.status(400).render('userProfile', {title: "Error", error: 'Password should atleast 6 character long',userProfile,loggedin,name,reviews:reviews,bookDetails,owner,user})
         return
     }
 
     if(role != 'user' && role != "owner") 
     {
-        res.status(400).render('userProfile', {title: "Error", error: "Select valid role",userProfile,loggedin,name})
+        res.status(400).render('userProfile', {title: "Error", error: "Select valid role",userProfile,loggedin,name,reviews:reviews,bookDetails,owner,user})
         return
     } 
 
     if(city != "Jersey City" && city != "Hoboken") 
     {
-        res.status(400).render('userProfile', {title: "Error", error: "Select valid city",userProfile,loggedin,name})
+        res.status(400).render('userProfile', {title: "Error", error: "Select valid city",userProfile,loggedin,name,reviews:reviews,bookDetails,owner,user})
         return
     } 
     
     if(state != "New Jersey" ) 
     {
-        res.status(400).render('userProfile', {title: "Error", error: "Select valid state",userProfile,loggedin,name})
+        res.status(400).render('userProfile', {title: "Error", error: "Select valid state",userProfile,loggedin,name,reviews:reviews,bookDetails,owner,user})
         return
     } 
 
-    if(gender != "male" && gender != "female") 
+    if(gender != "male" && gender != "female" && gender != "other") 
     {
-        res.status(400).render('userProfile', {title: "Error", error: "Select valid Gender",userProfile,loggedin,name})
+        res.status(400).render('userProfile', {title: "Error", error: "Select valid Gender",userProfile,loggedin,name,reviews:reviews,bookDetails,owner,user})
         return
     } 
     
@@ -542,6 +551,7 @@ router.post('/updateProfile', async (req,res) => {
     if(info.authenticated == true){
     const updateInfo = await userData.updateUser(id,role,firstName,lastName,city,state,mobile,gender,dob, password)
     if(updateInfo.userUpdated == true){
+        req.session.updateSuccess = "Update Successful"
         res.status(200).redirect('/userprofile')
         }
     else {
@@ -570,7 +580,7 @@ router.post('/updateProfile', async (req,res) => {
             gender:userDetails.gender,
             dob:userDetails.dob
         }
-        res.status(400).render('userProfile', {title: "Error", error: e, userProfile,loggedin,name})
+        res.status(400).render('userProfile', {title: "Error", error: e, userProfile,loggedin,name,reviews:reviews,bookDetails,owner,user})
         // res.status(200).redirect('/userprofile')
     }
     
