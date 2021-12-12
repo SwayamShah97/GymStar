@@ -199,9 +199,9 @@ async create(userName,gymName, location, phoneNumber, priceRange) {
         arr.push(ret[i].rating)
       }
       let sum = arr.reduce((a,b)=>a+b)
-      overallRating = sum/arr.length;
-      Math.round(overallRating * 10)/10; 
-      return overallRating
+      overallRating = sum/arr.length; 
+      let overall = Math.round(overallRating * 10)/10; 
+      return overall;
     }
   },
 
