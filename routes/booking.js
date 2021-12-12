@@ -12,7 +12,7 @@ router.get('/booking/:id', async(req,res) =>{
         loggedin = true
         fname = req.session.user.firstName
         let id = req.params;
-    res.render('webs/booking',{message: "Make an appointment" , gymId:id,loggedin,name:fname})
+    res.render('webs/booking',{title: "Make an appointment" , gymId:id,loggedin,name:fname})
       }
       else{
         loggedin = false
@@ -51,97 +51,97 @@ router.post('/booking/:id', async (req, res) => {
     
 
     if(!data){
-        res.status(400).render('webs/booking', {dateNotProvide: true, message: "Make an appointment",loggedin,name:fname})
+        res.status(400).render('webs/booking', {dateNotProvide: true, title: "Error",loggedin,name:fname})
         return;
     }
     if(!time){
-        res.status(400).render('webs/booking', {timeNotProvide: true, message: "Make an appointment",loggedin,name:fname})
+        res.status(400).render('webs/booking', {timeNotProvide: true, title: "Error",loggedin,name:fname})
         return;
     }
 
     if(typeof(date) !== "string"){
-        res.status(400).render('webs/booking', {dateTypeWrong: true, message: "Make an appointment",loggedin,name:fname})
+        res.status(400).render('webs/booking', {dateTypeWrong: true, title: "Error",loggedin,name:fname})
         return;
     }
 
     if(typeof(time) !== 'string'){
-        res.status(400).render('webs/booking', {timeTypeWrong: true, message: "Make an appointment",loggedin,name:fname})
+        res.status(400).render('webs/booking', {timeTypeWrong: true, title: "Error",loggedin,name:fname})
         return;
     }
 
     if(date.trim().length === 0){
-        res.status(400).render('webs/booking', {dateAllWhiteSpace: true, message: "Make an appointment",loggedin,name:fname})
+        res.status(400).render('webs/booking', {dateAllWhiteSpace: true, title: "Error",loggedin,name:fname})
         return;
 
     }
 
     if(time.trim().length === 0){
-        res.status(400).render('webs/booking', {timeAllWhiteSpace: true, message: "Make an appointment",loggedin,name:fname})
+        res.status(400).render('webs/booking', {timeAllWhiteSpace: true, title: "Error",loggedin,name:fname})
         return;
     }
 
     if(isNaN(+date.substring(0,2)) || isNaN(+date.substring(3,5))|| isNaN(+date.substring(6,10))){
-        res.status(400).render('webs/booking', {notValidDate: true, message: "Make an appointment",loggedin,name:fname})
+        res.status(400).render('webs/booking', {notValidDate: true, title: "Error",loggedin,name:fname})
         return;
     }
 
     if(date.substring(0,2).trim().length === 0 ||date.substring(3,5).trim().length === 0|| date.substring(6,10).trim().length === 0 ){
-        res.status(400).render('webs/booking', {dateIncudeWhiteSpace: true, message: "Make an appointment",loggedin,name:fname})
+        res.status(400).render('webs/booking', {dateIncudeWhiteSpace: true, title: "Error",loggedin,name:fname})
         return;
     }
 
     if(parseInt(date.substring(0,2)) > 12 || parseInt(date.substring(0,2)) < 0){
-        res.status(400).render('webs/booking', {notValidDate: true, message: "Make an appointment",loggedin,name:fname})
+        res.status(400).render('webs/booking', {notValidDate: true, title: "Error",loggedin,name:fname})
         return;
     }
 
     if(parseInt(date.substring(3,5)) > 31 || parseInt(date.substring(0,2)) < 0){
-        res.status(400).render('webs/booking', {notValidDate: true, message: "Make an appointment",loggedin,name:fname})
+        res.status(400).render('webs/booking', {notValidDate: true, title: "Error",loggedin,name:fname})
         return;
     }
 
     if(parseInt(date.substring(0,2)) === 2 && parseInt(date.substring(3,5)) > 28 ){
-        res.status(400).render('webs/booking', {notValidDate: true, message: "Make an appointment",loggedin,name:fname})
+        res.status(400).render('webs/booking', {notValidDate: true, title: "Error",loggedin,name:fname})
         return;
     }
 
     if(parseInt(date.substring(0,2)) === 4 && parseInt(date.substring(3,5)) > 30 ){
-        res.status(400).render('webs/booking', {notValidDate: true, message: "Make an appointment",loggedin,name:fname})
+        res.status(400).render('webs/booking', {notValidDate: true, title: "Error",loggedin,name:fname})
         return; 
     }
 
     if(parseInt(date.substring(0,2)) === 6 && parseInt(date.substring(3,5)) > 30 ){
-        res.status(400).render('webs/booking', {notValidDate: true, message: "Make an appointment",loggedin,name:fname})
+        res.status(400).render('webs/booking', {notValidDate: true, title: "Error",loggedin,name:fname})
         return; 
     }
 
     if(parseInt(date.substring(0,2)) === 9 && parseInt(date.substring(3,5)) > 30 ){
-        res.status(400).render('webs/booking', {notValidDate: true, message: "Make an appointment",loggedin,name:fname})
+        res.status(400).render('webs/booking', {notValidDate: true, title: "Error",loggedin,name:fname})
         return; 
     }
 
     if(parseInt(date.substring(0,2)) === 11 && parseInt(date.substring(3,5)) > 30 ){
-        res.status(400).render('webs/booking', {notValidDate: true, message: "Make an appointment",loggedin,name:fname})
+        res.status(400).render('webs/booking', {notValidDate: true, title: "Error",loggedin,name:fname})
         return;   
     }
 
     if(time.length !== 5){
-        res.status(400).render('webs/booking', {notValidTime: true, message: "Make an appointment",loggedin,name:fname})
+        res.status(400).render('webs/booking', {notValidTime: true, title: "Error",loggedin,name:fname})
         return;   
     }
 
     if(isNaN(+time.substring(0,2)) || isNaN(+time.substring(3,5))){
-        res.status(400).render('webs/booking', {notValidTime: true, message: "Make an appointment",loggedin,name:fname})
+        res.status(400).render('webs/booking', {notValidTime: true, title: "Error",loggedin,name:fname})
         return;  
     }
 
     if(parseInt(time.substring(0,2)) > 24 || parseInt(time.substring(0,2)) < 0 ){
-        res.status(400).render('webs/booking', {notValidTime: true, message: "Make an appointment",loggedin,name:fname})
+        res.status(400).render('webs/booking', {notValidTime: true, title: "Error",loggedin,name:fname})
         return;  
     }
 
     if(parseInt(time.substring(3,5)) > 60 || parseInt(time.substring(3,5)) < 0){
-        res.status(400).render('webs/booking', {notValidTime: true, message: "Make an appointment",loggedin,name:fname})
+        res.status(400).render('webs/booking', {notValidTime: true, title: "Error",loggedin,name:fname})
         return;  
     }
 
@@ -151,15 +151,15 @@ router.post('/booking/:id', async (req, res) => {
     let yyyy = today.getFullYear();
     today = mm + '/' + dd + '/' + yyyy; 
     if(Date.parse(date) < Date.parse(today)){
-        res.status(400).render('webs/booking', {canNotBookingToday: true, message: "Make an appointment",loggedin,name:fname})
+        res.status(400).render('webs/booking', {canNotBookingToday: true, title: "Error",loggedin,name:fname})
         return; 
     }
 
     const makeBooking = await bookDataInfo.createBookingOrder(gymId,userId,date,time);
         if(makeBooking.addNewOrder === true){
-            res.render('webs/successBooked', {message: "Successful" ,loggedin,name:fname})
+            res.render('webs/successBooked', {title: "Successful" ,loggedin,name:fname})
         }else{
-            res.status(400).render('webs/booking', {bookFailed: true, message: "Make an appointment",loggedin,name:fname})
+            res.status(400).render('webs/booking', {bookFailed: true, title:"Error",loggedin,name:fname})
         }
             
           }
