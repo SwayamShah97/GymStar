@@ -1,5 +1,7 @@
 const mongoCollections = require("../config/mongoCollections");
+const gymsfunc = require("../data/gyms")
 const createReview = mongoCollections.reviews;
+const gyms = mongoCollections.gyms;
 let { ObjectId } = require('mongodb');
 
 
@@ -25,6 +27,7 @@ async function addReviewToGym(gymId, reviewerId, review, rating, reviewer){
     if(reviewer.trim().length === 0 ) throw "[Gym review data Error]:The reviewer can not be all space"
     
     if(rating >5 || rating < 1 ) throw "[Gym review data Error]:The rating is not vaild number"
+    
     const timeNow  = new Date()
     const postDate = timeNow.toDateString()
 
@@ -38,7 +41,13 @@ async function addReviewToGym(gymId, reviewerId, review, rating, reviewer){
     }
 
     const reviewData = await createReview();
+    const gymData = await gyms()
     const output = await reviewData.insertOne(newReview);
+    const calcrating = await gymsfunc.calcRating(gymId)
+    const lol = await gymData.updateOne(
+        { _id : ObjectId(gymId) },
+        { $set: { overallRating : calcrating } }
+     );
     return {addReviewtoTheGym: true};
 
 }

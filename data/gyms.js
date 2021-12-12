@@ -179,9 +179,10 @@ async create(userName,gymName, location, phoneNumber, priceRange) {
 
   async calcRating(id){
     if (!id) throw 'You must provide an id to search for';
+    id = ObjectId(id);
     var checkForHexRegExp = new RegExp("^[0-9a-fA-F]{24}$");
     if(checkForHexRegExp.test(id)===false) throw 'Not a valid objectid';
-    id = ObjectId(id);
+    
     const reviewCollection = await reviews();
     const ret = await reviewCollection.find({gymId:id}).toArray();
     if(ret.length < 1 || ret == undefined) return 'No reviews for this gym yet'
