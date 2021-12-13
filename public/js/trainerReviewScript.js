@@ -100,12 +100,12 @@
 
     //Filter
     $("#filterBtn").click(function(){
-        console.log('Client side Filter Validation')
-        console.log($("#rating").val() )
-        console.log($("#priceRange").val())
+        // console.log('Client side Filter Validation')
+        // console.log($("#rating").val() )
+        // console.log($("#priceRange").val())
     
-        console.log(typeof($("#rating").val()))
-        console.log(typeof($("#priceRange").val()))
+        // console.log(typeof($("#rating").val()))
+        // console.log(typeof($("#priceRange").val()))
         if($("#rating").val() == null && $("#priceRange").val() == null){
             $("#errorFilter").text('Kindly select atleast one filter option').show()
             $(".gymlist-content").hide()
@@ -137,54 +137,60 @@
 
       //Search AJAX form
       $("#searchBTN").click(function(){
-          console.log("Search button clicked")
-          console.log($("#search-bar").val())
-          var requestConfig = {
-            method: 'POST',
-            url: '/gyms/search' ,
-            contentType: 'application/json',
-					data: JSON.stringify({
-						searchTerm: $("#search-bar").val()
-					})
-        };
-        var searchRes = undefined
-        $.ajax(requestConfig).then(function(responseMessage) {
-            
-            
-            console.log(responseMessage)
-            let htmlText = ''
-
-            if (responseMessage.error){
-                htmlText = `
+          var searchTerm1 = $("#search-bar").val().trim()
+          if($("#search-bar").val().trim().length === 0){
+            $("#errorFilter").text('Kindly provide valid search term').show()
+            $(".gymlist-content").hide()
+          }else{
+            var requestConfig = {
+                method: 'POST',
+                url: '/gyms/search' ,
+                contentType: 'application/json',
+                        data: JSON.stringify({
+                            searchTerm: $("#search-bar").val()
+                        })
+            };
+            var searchRes = undefined
+            $.ajax(requestConfig).then(function(responseMessage) {
                 
-                    <div class="alert alert-danger text-goes-here">
-                    ${responseMessage.error}
-                    </div>
+                $("#search-bar").text(searchTerm1) 
+                console.log(responseMessage)
+                let htmlText = ''
+    
+                if (responseMessage.error){
+                    htmlText = `
+                    
+                        <div class="alert alert-danger text-goes-here">
+                        ${responseMessage.error}
+                        </div>
+                    
+                    `
+                }else{
+                    htmlText = ''
+                    htmlText = '<h1 class="gym-title">Gyms</h1>'
+                for(let d of responseMessage.searchResult){
+                    htmlText += `
+                    <br>
+                    <div onclick="location.href='/gyms/${d._id}';" class="card" style="width:600px">
+                    
+                        <div class="card-body text-white bg-dark"> 
+                            <h4 class="card-title">${d.gymName}</h4>
+                            <h5 class="card-text">${d.location}</h5>
+                            <h5 class="card-text">${d.priceRange}</h5>
+                            <h5 class="card-text">${d.overallRating}</h5>
+                            <h5 class="card-text">${d.phoneNumber}</h5>
+                        </div>
+                    </div> `
+                }
+                }
                 
-                `
-            }else{
-                htmlText = ''
-                htmlText = '<h1 class="gym-title">Gyms</h1>'
-            for(let d of responseMessage.searchResult){
-                htmlText += `
-                <br>
-                <div onclick="location.href='/gyms/${d._id}';" class="card" style="width:600px">
+                // console.log(htmlText)
+                $('.gymlist-content').html(htmlText).show()
+                $("#errorFilter").hide()
                 
-                    <div class="card-body text-white bg-dark"> 
-                        <h4 class="card-title">${d.gymName}</h4>
-                        <h5 class="card-text">${d.location}</h5>
-                        <h5 class="card-text">${d.priceRange}</h5>
-                        <h5 class="card-text">${d.overallRating}</h5>
-                        <h5 class="card-text">${d.phoneNumber}</h5>
-                    </div>
-                </div> `
-            }
-            }
-            
-            console.log(htmlText)
-            $('.gymlist-content').html(htmlText)
-            
-        });
+            });
+          }
+          
         
       })
       //to block enter key on search form
@@ -195,6 +201,64 @@
           return false;
         }
       });
+
+      //Search using keyup
+      $("#search-bar").keyup(function(){
+          console.log($("#search-bar").val())
+          var searchTerm1 = $("#search-bar").val().trim()
+          if($("#search-bar").val().trim().length === 0){
+            $("#errorFilter").text('Kindly provide valid search term').show()
+            $(".gymlist-content").hide()
+          }else{
+            var requestConfig = {
+                method: 'POST',
+                url: '/gyms/search' ,
+                contentType: 'application/json',
+                        data: JSON.stringify({
+                            searchTerm: $("#search-bar").val()
+                        })
+            };
+            var searchRes = undefined
+            $.ajax(requestConfig).then(function(responseMessage) {
+                
+                $("#search-bar").text(searchTerm1) 
+                console.log(responseMessage)
+                let htmlText = ''
+    
+                if (responseMessage.error){
+                    htmlText = `
+                    
+                        <div class="alert alert-danger text-goes-here">
+                        ${responseMessage.error}
+                        </div>
+                    
+                    `
+                }else{
+                    htmlText = ''
+                    htmlText = '<h1 class="gym-title">Gyms</h1>'
+                for(let d of responseMessage.searchResult){
+                    htmlText += `
+                    <br>
+                    <div onclick="location.href='/gyms/${d._id}';" class="card" style="width:600px">
+                    
+                        <div class="card-body text-white bg-dark"> 
+                            <h4 class="card-title">${d.gymName}</h4>
+                            <h5 class="card-text">${d.location}</h5>
+                            <h5 class="card-text">${d.priceRange}</h5>
+                            <h5 class="card-text">${d.overallRating}</h5>
+                            <h5 class="card-text">${d.phoneNumber}</h5>
+                        </div>
+                    </div> `
+                }
+                }
+                
+                // console.log(htmlText)
+                $('.gymlist-content').html(htmlText).show()
+                $("#errorFilter").hide()
+                
+            });
+          }
+      })
     
 
 })(window.jQuery)
