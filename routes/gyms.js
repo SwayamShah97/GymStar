@@ -161,7 +161,7 @@ router.get('/', async (req, res) => {
       let location = req.body.city;
       let phoneNumber = req.body.mobile;
       let priceRange = req.body.price;
-      let id = req.params.id;
+      let gymid = req.params.id;
     if(!req.session.user){
         
         res.redirect('/login')
@@ -199,12 +199,12 @@ router.get('/', async (req, res) => {
         let id = req.session.user.id
         userDetails = await userData.getUserById(id)
         fname = userDetails.firstName
-        const values = await gymData.getGym(id);
+        const values = await gymData.getGym(gymid);
       res.status(400).render('gymbars/updategym', {id:id,values:values,title: "Error", error: e,loggedin,name:fname})
       }
       else{
         loggedin = false
-        const values = await gymData.getGym(id);
+        const values = await gymData.getGym(gymid);
       res.status(400).render('gymbars/updategym', {id:id,values:values,title: "Error", error: e,loggedin})
       }
       
