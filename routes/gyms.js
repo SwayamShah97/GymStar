@@ -162,6 +162,7 @@ router.get('/', async (req, res) => {
       let phoneNumber = req.body.mobile;
       let priceRange = req.body.price;
       let gymid = req.params.id;
+      
     if(!req.session.user){
         
         res.redirect('/login')
@@ -169,6 +170,7 @@ router.get('/', async (req, res) => {
     }
       
      try{
+      let gymid = req.params.id;
       check2(gymName,location,phoneNumber,priceRange);
       if(!id) throw 'Pleaase provide an id';
       var checkForHexRegExp = new RegExp("^[0-9a-fA-F]{24}$");
@@ -194,6 +196,7 @@ router.get('/', async (req, res) => {
       }
     }
     catch(e){
+      let gymid = req.params.id;
       if(req.session.user){
         loggedin = true
         let id = req.session.user.id
