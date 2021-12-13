@@ -24,6 +24,8 @@
 
     $("#submitTCreate").click(function(){  //Trainer creation form's submit button
         // e.preventDefault()
+        $("#errorTCreate").text('')
+        $("#errorTCreate").hide()
         console.log('Inside form submit')
         var gymId = $("#gymId").val(),
         trainerFirstName = $("#trainerFirstName").val(),
@@ -91,6 +93,7 @@
         if(error){
             errorTCreate.removeAttribute('hidden');
             $("#errorTCreate").show()
+            
         }else{
             $("#trainer-form").submit()
         }
