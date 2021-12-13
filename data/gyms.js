@@ -257,10 +257,11 @@ async create(userName,gymName, location, phoneNumber, priceRange) {
   async update (id,gymName, location, phoneNumber, priceRange)  {
     
     check2(gymName, location, phoneNumber,priceRange)
+    id = ObjectId(id); 
     if(!id) throw 'There is no record with that id';
     var checkForHexRegExp = new RegExp("^[0-9a-fA-F]{24}$");
     if(checkForHexRegExp.test(id)===false) throw 'Not a valid objectid';
-    id = ObjectId(id); 
+    
   
     
     const gymsCollection = await gyms();
@@ -279,9 +280,6 @@ async create(userName,gymName, location, phoneNumber, priceRange) {
     }
   },
 
-  async verified(id){
-
-  }
-  
+ 
 };
 
