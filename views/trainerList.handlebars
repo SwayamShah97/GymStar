@@ -9,9 +9,11 @@
 <div onclick="location.href='/trainers/trainer/{{this._id}}';" class="card" style="width:600px"></div>
     <div class="card-body bg-dark text-white">
         <a href='/trainers/trainer/{{this._id}}'>
-            <h4 class="card-title">{{trainerFirstName}}</h4>
+            <h1 class="card-title-trainerList">{{trainerFirstName}}</h1>
         </a>
-      
+      <h2 hidden></h2>
+      <h3 hidden></h3>
+      <h4 hidden></h4>
       <h5 class="card-title">{{trainerLastName}}</h5>
       <h5 class="card-title">{{overallRating}}</h5>
       <h5 class="card-title">"Working in this industory since past {{experience}} years"</h5>
@@ -26,7 +28,7 @@
 
   {{/each}} 
   {{else}}
-  <h4>Currently, no Trainer information is available </h4>
+  <h4 id="notrainer">Currently, no Trainer information is available </h4>
   {{/if}}
 
   

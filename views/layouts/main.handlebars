@@ -46,9 +46,9 @@
 
               <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
                  
-                
+                <ul class="navbar-nav nav ml-auto flt">
                   {{#if landing}}
-                  <ul class="navbar-nav nav ml-auto flt">
+                  
                   <li class="nav-item">
                     <a class="nav-link" href="/">HOME</a>
                   </li>
@@ -64,19 +64,19 @@
                   <li class="nav-item">
                     <a class="nav-link" href="#footer">CONTACTUS</a>
                   </li>
-                  </ul>
+                  
                   {{else}}
                   
 
-                  <form method="POST" action="/gyms/search" class="form-inline my-2 my-lg-0 search-container">
+                  {{!-- <form method="POST" action="/gyms/search" id="searchForm" class="form-inline my-2 my-lg-0 search-container">
                   <input class="form-control mr-sm-2 search-input" type="search" id="search-bar" name="searchTerm" placeholder="Search Gyms Here" aria-label="Search">
                   <button class="btn btn-dark my-2 my-sm-0" type="button" id="searchBTN" name="submit">Search</button>
-                  </form>
+                  </form> --}}
 
 
 
                   {{/if}}
-                  <ul>
+                  
                   {{#if loggedin}}
                   <li>
                     <div class="dropdown show">

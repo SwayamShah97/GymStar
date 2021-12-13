@@ -200,7 +200,8 @@ async create(userName,gymName, location, phoneNumber, priceRange) {
       }
       let sum = arr.reduce((a,b)=>a+b)
       overallRating = sum/arr.length; 
-      return overallRating
+      let overall = Math.round(overallRating * 10)/10; 
+      return overall;
     }
   },
 

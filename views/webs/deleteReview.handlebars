@@ -1,9 +1,49 @@
 {{!-- <h1>{{name}}</h1> --}}
 
-<main>
+{{!-- <main>
     <h2>{{message}}</h2>
 
 
 </main>
 
-<a href="/userprofile"> Back to your profile page </a>
+<a href="/userprofile"> Back to your profile page </a> --}}
+
+<main>
+   
+
+<div class="main">
+
+        <section class="signup">
+            <!-- <img src="images/signup-bg.jpg" alt=""> -->
+            <div class="container">
+                <div class="signup-content">
+                    {{#if message}}
+                            <div class="form-group hidden" id="error-container" >
+                            <div class="alert alert-success text-goes-here">
+                                 {{message}}
+                            </div>
+                            </div>
+                    {{/if}}
+                    {{#if error}}
+                            <div class="form-group hidden" id="error-container" >
+                            <div class="alert alert-danger text-goes-here">
+                                 {{error}}
+                            </div>
+                            </div>
+                    {{/if}}
+                    
+                    
+                    <a href="/userprofile"> Back to your profile page </a>
+                </div>
+            </div>
+
+        </section>
+<br>
+<br>
+<br>
+    </div>
+
+
+
+
+</main>

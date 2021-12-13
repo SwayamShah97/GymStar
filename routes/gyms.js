@@ -89,7 +89,7 @@ router.get('/', async (req, res) => {
         let id = req.session.user.id
         userDetails = await userData.getUserById(id)
         fname = userDetails.firstName
-        res.render('gymbars/creategym',{loggedin,name:fname})
+        res.render('gymbars/creategym',{title: "Create Gym",loggedin,name:fname})
       }
       else{
         loggedin = false
@@ -114,7 +114,7 @@ router.get('/', async (req, res) => {
         let id = req.session.user.id
         userDetails = await userData.getUserById(id)
         fname = userDetails.firstName
-        res.render('gymbars/updategym',{id:id,values:values,loggedin,name:fname})
+        res.render('gymbars/updategym',{id:id,values:values,loggedin,name:fname,title: "Update Gym"})
       }
       else if(req.session.user && req.session.user!=='owner')
         res.redirect('/gyms')
@@ -138,13 +138,13 @@ router.get('/', async (req, res) => {
         fname = userDetails.firstName
         let gymList = await gymData.getAllGyms();
       // res.render('gymbars/allgyms',{gyms:gymList}); // No need of new handlebar
-      res.render('gymbars/gymlist',{gyms:gymList,loggedin,name:fname}); 
+      res.render('gymbars/gymlist',{gyms:gymList,loggedin,name:fname,title: "Gym List"}); 
       }
       else{
         loggedin = false
         let gymList = await gymData.getAllGyms();
       // res.render('gymbars/allgyms',{gyms:gymList}); // No need of new handlebar
-      res.render('gymbars/gymlist',{gyms:gymList,loggedin}); 
+      res.render('gymbars/gymlist',{gyms:gymList,loggedin,title: "Gym List"}); 
       }
       
     }
@@ -162,7 +162,11 @@ router.get('/', async (req, res) => {
       let phoneNumber = req.body.mobile;
       let priceRange = req.body.price;
       let id = req.params.id;
-
+    if(!req.session.user){
+        
+        res.redirect('/login')
+        return
+    }
       
      try{
       check2(gymName,location,phoneNumber,priceRange);
@@ -209,11 +213,17 @@ router.get('/', async (req, res) => {
 
 router.post('/gymcreate',async(req,res) => {
   
+  if(!req.session.user){
+        
+    res.redirect('/login')
+    return
+}
    let userName = req.session.user.email;
    let gymName = req.body.firstname;
    let location = req.body.city;
    let phoneNumber = req.body.mobile;
    let priceRange = req.body.price;
+   
    try{
      check(userName,gymName,location,phoneNumber,priceRange);
    
@@ -260,7 +270,8 @@ router.post('/gymcreate',async(req,res) => {
   });
 
   router.post('/search', async (req, res) => {
-  
+    
+    
     try{
 
       if(req.session.user){
@@ -395,10 +406,10 @@ router.post('/gymcreate',async(req,res) => {
         fname = userDetails.firstName
         if(gymList){
         
-          res.render('gymbars/gymlist',{gyms:gymList,loggedin,name:fname})
+          res.render('gymbars/gymlist',{title: "Gym List",gyms:gymList,loggedin,name:fname})
         }else{
           
-          res.render('gymbars/gymlist',{error:`No Gyms found`,loggedin,name:fname})
+          res.render('gymbars/gymlist',{title: "Gym List",error:`No Gyms found`,loggedin,name:fname})
         }
         
       }
@@ -406,10 +417,10 @@ router.post('/gymcreate',async(req,res) => {
         loggedin = false
         if(gymList){
         
-          res.render('gymbars/gymlist',{gyms:gymList,loggedin})
+          res.render('gymbars/gymlist',{gyms:gymList,loggedin,title: "Gym List"})
         }else{
           
-          res.render('gymbars/gymlist',{error:`No Gyms found`,loggedin})
+          res.render('gymbars/gymlist',{error:`No Gyms found`,loggedin,title: "Error"})
         }
         
       }
@@ -419,12 +430,12 @@ router.post('/gymcreate',async(req,res) => {
         let id = req.session.user.id
         userDetails = await userData.getUserById(id)
         fname = userDetails.firstName
-        res.status(e.status || 500).render('gymbars/gymlist',{error:e.message,loggedin,name:fname})
+        res.status(e.status || 500).render('gymbars/gymlist',{error:e.message,loggedin,name:fname,title: "Error"})
       }
       else{
         loggedin = false
         // const values = await gymData.getGym(id); Malay: id field is not defined and its not used here
-        res.status(e.status || 500).render('gymbars/gymlist',{error:e.message,loggedin})
+        res.status(e.status || 500).render('gymbars/gymlist',{error:e.message,loggedin,title: "Error"})
       }
       
     }
@@ -459,7 +470,7 @@ router.post('/gymcreate',async(req,res) => {
       owner = gym[1];
       const reviews = await gymData.getReviews(req.params.id);
       const rating = await gymData.calcRating(req.params.id)
-      res.render('gymbars/gymprofile',{gym:gym[0],reviews:reviews,rate:rating,owner:owner,loggedin,name:fname})
+      res.render('gymbars/gymprofile',{gym:gym[0],reviews:reviews,rate:rating,owner:owner,loggedin,name:fname,title: "Gym Profile"})
       }
       else if(req.session.user){
         loggedin = true
@@ -470,7 +481,7 @@ router.post('/gymcreate',async(req,res) => {
         let owner = false;
         const reviews = await gymData.getReviews(req.params.id);
         const rating = await gymData.calcRating(req.params.id)
-        res.render('gymbars/gymprofile',{gym:gym,reviews:reviews,rate:rating,owner:owner,loggedin,name:fname})
+        res.render('gymbars/gymprofile',{gym:gym,reviews:reviews,rate:rating,owner:owner,loggedin,name:fname,title: "Gym profile"})
       }
       else{
         loggedin = false
@@ -478,11 +489,12 @@ router.post('/gymcreate',async(req,res) => {
         let owner = false;
         const reviews = await gymData.getReviews(req.params.id);
         const rating = await gymData.calcRating(req.params.id)
-        res.render('gymbars/gymprofile',{gym:gym,reviews:reviews,rate:rating,owner:owner,loggedin})
+        res.render('gymbars/gymprofile',{gym:gym,reviews:reviews,rate:rating,owner:owner,loggedin,title: "Gym Profile"})
       }
     }
     catch(e){
-      res.status(400).render('gymbars/gymprofile', {title: "Error", error: e})
+      res.status(404).render('notFd',{title:'404- page not found'});
+      // res.status(400).render('gymbars/gymprofile', {title: "Error", error: e})
     }
   
   });
