@@ -161,7 +161,8 @@ router.get('/', async (req, res) => {
       let location = req.body.city;
       let phoneNumber = req.body.mobile;
       let priceRange = req.body.price;
-      let id = req.params.id;
+      let gymid = req.params.id;
+      
     if(!req.session.user){
         
         res.redirect('/login')
@@ -169,6 +170,7 @@ router.get('/', async (req, res) => {
     }
       
      try{
+      let gymid = req.params.id;
       check2(gymName,location,phoneNumber,priceRange);
       if(!id) throw 'Pleaase provide an id';
       var checkForHexRegExp = new RegExp("^[0-9a-fA-F]{24}$");
@@ -194,17 +196,18 @@ router.get('/', async (req, res) => {
       }
     }
     catch(e){
+      let gymid = req.params.id;
       if(req.session.user){
         loggedin = true
         let id = req.session.user.id
         userDetails = await userData.getUserById(id)
         fname = userDetails.firstName
-        const values = await gymData.getGym(id);
+        const values = await gymData.getGym(gymid);
       res.status(400).render('gymbars/updategym', {id:id,values:values,title: "Error", error: e,loggedin,name:fname})
       }
       else{
         loggedin = false
-        const values = await gymData.getGym(id);
+        const values = await gymData.getGym(gymid);
       res.status(400).render('gymbars/updategym', {id:id,values:values,title: "Error", error: e,loggedin})
       }
       
