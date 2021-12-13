@@ -1,4 +1,4 @@
-<h1>Thanks for your order</h1>
+{{!-- <h1>Thanks for your order</h1>
 
 <main>
     <h2>Your Order is successful added</h2>
@@ -6,4 +6,42 @@
 
 </main>
 
-<a href="/gyms"> Book another one? </a>
+<a href="/gyms"> Book another one? </a> --}}
+
+
+<div class="main">
+
+        <section class="signup">
+            <!-- <img src="images/signup-bg.jpg" alt=""> -->
+            <div class="container">
+                <div class="signup-content">
+                    {{#if success}}
+                            <div class="form-group hidden" id="error-container" >
+                            <div class="alert alert-success text-goes-here">
+                                 Your order is successfully add
+                            </div>
+                            </div>
+                    {{/if}}
+                    {{#if error}}
+                    <div class="form-group hidden" id="error-container" >
+                            <div class="alert alert-danger text-goes-here">
+                                Book failed, try later
+                            </div>
+                        </div>
+                   
+                    {{/if}}
+                    
+                    <a href="/userprofile"> Back to home page </a>
+                </div>
+            </div>
+
+        </section>
+<br>
+<br>
+<br>
+    </div>
+
+
+
+
+</main>

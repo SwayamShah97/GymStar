@@ -1,4 +1,4 @@
-<h1>Thanks for your comment</h1>
+{{!-- <h1>Thanks for your comment</h1>
 
 <main>
     <h2>Your comment is successful added</h2>
@@ -6,4 +6,44 @@
 
 </main>
 
-<a href="/gyms"> addAnotherreview? </a>
+<a href="/gyms"> addAnotherreview? </a> --}}
+
+<main>
+   
+
+<div class="main">
+
+        <section class="signup">
+            <!-- <img src="images/signup-bg.jpg" alt=""> -->
+            <div class="container">
+                <div class="signup-content">
+                    {{#if success}}
+                            <div class="form-group hidden" id="error-container" >
+                            <div class="alert alert-success text-goes-here">
+                                 Your review is successfully added.
+                            </div>
+                            </div>
+                    {{/if}}
+                    {{#if error}}
+                    <div class="form-group hidden" id="error-container" >
+                            <div class="alert alert-danger text-goes-here">
+                                create review failed
+                            </div>
+                        </div>
+                   
+                    {{/if}}
+                    
+                    <a href="/userprofile"> Back to home page </a>
+                </div>
+            </div>
+
+        </section>
+<br>
+<br>
+<br>
+    </div>
+
+
+
+
+</main>

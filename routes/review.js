@@ -105,10 +105,11 @@ router.post('/addReviewToGym/:id', async (req, res) => {
         
         if(addInfo.addReviewtoTheGym === true){
             
-            res.render('webs/reviewAddSuccess', {name1: "Successful" ,loggedin,name:fname})
+            res.render('webs/reviewAddSuccess', {title: "Successful",success:true ,loggedin,name:fname})
 
         }else{
-            res.status(400).render('webs/addReviewToGym', {addFail: true, message: "Error",loggedin,name:fname})
+            res.status(400).render('webs/addReviewToGym', {editeFail: true,error:true, title: "Error",loggedin,name:fname})
+
         }
     }catch(e){
         res.status(400).json({ error: e });

@@ -157,9 +157,9 @@ router.post('/booking/:id', async (req, res) => {
 
     const makeBooking = await bookDataInfo.createBookingOrder(gymId,userId,date,time);
         if(makeBooking.addNewOrder === true){
-            res.render('webs/successBooked', {title: "Successful" ,loggedin,name:fname})
+            res.render('webs/successBooked', {title: "Successful",success:true ,loggedin,name:fname})
         }else{
-            res.status(400).render('webs/booking', {bookFailed: true, title:"Error",loggedin,name:fname})
+            res.status(400).render('webs/booking', {editeFail: true,error:true, title: "Error",loggedin,name:fname})
         }
             
           }
