@@ -1,8 +1,10 @@
 const mongoCollections = require("../config/mongoCollections");
 const gymsfunc = require("../data/gyms")
 const createReview = mongoCollections.reviews;
+const Booking = mongoCollections.Booking;
 const gyms = mongoCollections.gyms;
 let { ObjectId } = require('mongodb');
+
 
 
 async function addReviewToGym(gymId, reviewerId, review, rating, reviewer){
@@ -30,14 +32,24 @@ async function addReviewToGym(gymId, reviewerId, review, rating, reviewer){
     
     const timeNow  = new Date()
     const postDate = timeNow.toDateString()
-
+    const bookingData = await Booking();
+    let verified = false;
+    gymId = ObjectId(gymId);
+    reviewerId = ObjectId(reviewerId); 
+    const verify = await bookingData.findOne({gymId:gymId,userId:reviewerId})
+    console.log(verify)
+    if (verify) {
+        verified = true;
+    }
+    
     let newReview = {
         gymId: ObjectId(gymId),
         userId: ObjectId(reviewerId),
         date: postDate,
         reviewText: review,
         rating: rating,
-        reviewer: reviewer
+        reviewer: reviewer,
+        verified:verified
     }
 
     const reviewData = await createReview();

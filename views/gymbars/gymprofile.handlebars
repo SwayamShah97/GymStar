@@ -37,7 +37,11 @@
       <!-- Card-->
       <div class="card rounded shadow-sm border-0">
         <div class="card-body p-4">
-          <h4 class="text-dark">{{reviewer}}</h4>
+          <h4 class="text-dark">{{reviewer}}
+          {{#if verified}}
+            <img src="/public/images/icons8-verified-account-24.png" alt="symbol">
+          {{/if}}
+          </h4>
           <p class="small text-muted font-italic">{{date}}</p>
           <ul class="list-inline small">
             {{#times rating}}

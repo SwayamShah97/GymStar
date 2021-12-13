@@ -279,6 +279,10 @@ async create(userName,gymName, location, phoneNumber, priceRange) {
       return 'Updated Successfully'
     }
   },
+
+  async verified(id){
+
+  }
   
 };
 

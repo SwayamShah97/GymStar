@@ -469,7 +469,8 @@ router.post('/gymcreate',async(req,res) => {
       const gym = await gymData.getGymByOwner(req.params.id,userEmail);
       owner = gym[1];
       const reviews = await gymData.getReviews(req.params.id);
-      const rating = await gymData.calcRating(req.params.id)
+      const rating = await gymData.calcRating(req.params.id);
+    
       res.render('gymbars/gymprofile',{gym:gym[0],reviews:reviews,rate:rating,owner:owner,loggedin,name:fname,title: "Gym Profile"})
       }
       else if(req.session.user){
