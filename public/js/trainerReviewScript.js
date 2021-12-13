@@ -85,8 +85,8 @@
         else if (!objectIdRegex.test(gymId) )
             {$("#errorTCreate").text('Invalid gym Id').show()}
         
-        var error = $("#errorTCreate").text()
-        console.log($("#errorTCreate").text())
+        var error = $("#errorTCreate").text().trim()
+        // console.log($("#errorTCreate").text())
         console.log('error' + error)
         if(error){
             errorTCreate.removeAttribute('hidden');
