@@ -163,7 +163,7 @@ module.exports = {
             "gymId":trainerDetails.gymId
 
         }) //This will allow to create trainers with same name in one gym
-        if(trainer) throw {status:400, message:`${trainerDetails.firstname} ${trainerDetails.lastname} already exist in this gym`}
+        if(trainer) throw {status:400, message:`${trainerDetails.emailId}  already exist in this gym`}
         let insertedId = await trainerCollection.insertOne(trainerDetails)
         if(insertedId.insertCount === 0) throw {status:500, message:`Unable to create trainer ${trainerDetails.trainerFirstName} ${trainerDetails.trainerLastName}`}
         return true
