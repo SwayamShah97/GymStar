@@ -1,4 +1,5 @@
-<div>
+<main>
+
 
 <div class="main">
 <div class="container">
@@ -6,12 +7,14 @@
   {{#if trainers}}
   {{#each trainers}} 
   
-<div onclick="location.href='/trainers/trainer/{{this._id}}';" class="card" style="width:600px"></div>
+<div onclick="location.href='/trainers/trainer/{{this._id}}';" class="card" style="width:600px">
     <div class="card-body bg-dark text-white">
         <a href='/trainers/trainer/{{this._id}}'>
-            <h4 class="card-title">{{trainerFirstName}}</h4>
+            <h1 class="card-title-trainerList">{{trainerFirstName}}</h1>
         </a>
-      
+      <h2 hidden>a</h2>
+      <h3 hidden>b</h3>
+      <h4 hidden>c</h4>
       <h5 class="card-title">{{trainerLastName}}</h5>
       <h5 class="card-title">{{overallRating}}</h5>
       <h5 class="card-title">"Working in this industory since past {{experience}} years"</h5>
@@ -26,14 +29,34 @@
 
   {{/each}} 
   {{else}}
-  <h4>Currently, no Trainer information is available </h4>
+  
+
+        <section class="signup">
+            
+            <div class="container">
+                <div class="signup-content center">
+                    <h4 id="notrainer">Currently, no Trainer information is available </h4>
+                    <a class="btn btn-primary center" href="/gyms">Go to gyms</a>
+                    
+                    
+                </div>
+            </div>
+
+        </section>
+<br>
+<br>
+<br>
+    
+  
   {{/if}}
 
-  
+  <br>
+  <br>
+  <br>
 </div>
 </div> 
 
-
+</main>
 
 {{!-- </div> --}}
 

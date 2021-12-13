@@ -7,11 +7,13 @@
             <div class="container">
                 <div class="signup-content">
                     <form method="POST" action="/gyms/gymupdate/{{id}}" id="signup-form" class="signup-form">
+                    <h1 hidden>gym</h1>
                         <h2 class="form-title">Update Gym</h2>
 
 
                         <div class="form-row">
                         <div class="form-group col-md-12 mb-4">
+                            <label for="firstname" hidden>Gym Name</label>
                             <input type="text" class="form-input" name="firstname" id="firstname" value="{{values.gymName}}" />
                         </div>
                         </div>
@@ -19,7 +21,7 @@
                         <div class="form-row">
                         <div class="form-group col-md-6 mb-3">
                           
-                          <select class="form-control" id="city" name="city" placeholder="Select Location">
+                          <select class="form-control" id="city" name="city">
                               <option value="{{values.location}}" class="gray" hidden>{{values.location}}</option>
                               <option value="Jersey City">Jersey City</option>
                               <option value="Hoboken">Hoboken</option>
@@ -28,7 +30,7 @@
                        
 
                         <div class="form-group col-md-6 mb-3">
-                            <select class="form-control" id="price" name="price" placeholder="Select Price Range">
+                            <select class="form-control" id="price" name="price">
                               <option value="{{values.priceRange}}" class="gray" hidden>{{values.priceRange}}</option>
                               <option value="$" class="">$</option>
                               <option value="$$">$$</option>
@@ -42,8 +44,8 @@
                        <div class="form-row">
                         <div class="form-group col-md-12 mb-3">
                           {{!-- <label for="mobile">Enter Mobile number</label> --}}
-                          <input type="text" class="form-input" id="mobile" name="mobile" value="{{values.phoneNumber}}" required>
-                          
+                          <label for="mobile" hidden>Gym Contact Number</label>
+                          <input type="number" class="form-input" id="mobile" name="mobile" value="{{values.phoneNumber}}" placeholder="{{values.phoneNumber}}" pattern="[0-9].{10}" maxlength="10" minlength="10" required>
                         </div>
                         </div>
                         
@@ -70,7 +72,7 @@
                     <div class="form-group">
                 <input type="submit" name="submitform" id="submitform" class="form-submit" value="Submit"/> <br><br>
                 <div class="form-group hidden" id="error-container" hidden>
-                <div class="alert alert-danger text-goes-here">
+                <div class="alert alert-danger text-goes-here"></div></div>
         </div>
         {{#if error}}
                     <div class="form-group hidden" id="error-container" >

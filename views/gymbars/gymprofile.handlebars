@@ -4,9 +4,14 @@
 <div class="container">
   
   <div class="card" style="width:600px">
-    
+    <h1 hidden>gym</h1>
+    <h2 hidden>gym</h2>
+    <h3 hidden>gym</h3>
+    <h4 hidden>gym</h4>
+    <h5 hidden>gym</h5>
     <div class="card-body">
       <h4 class="card-title">{{gym.gymName}}</h4>
+      <h5 hidden>gym</h5>
       <h6 class="card-title">{{gym.location}}</h6>
       <h6 class="card-title">{{gym.priceRange}}</h6>
       <h6 class="card-title">{{gym.overallRating}}</h6>
@@ -32,7 +37,11 @@
       <!-- Card-->
       <div class="card rounded shadow-sm border-0">
         <div class="card-body p-4">
-          <h4 class="text-dark">{{reviewer}}</h4>
+          <h4 class="text-dark">{{reviewer}}
+          {{#if verified}}
+            <img src="/public/images/icons8-verified-account-24.png" alt="symbol">
+          {{/if}}
+          </h4>
           <p class="small text-muted font-italic">{{date}}</p>
           <ul class="list-inline small">
             {{#times rating}}
@@ -40,7 +49,8 @@
             {{/times}}
             
           </ul>
-          <h6> <a href="#" class="text-dark">{{reviewText}}</a></h5>
+          <h5 hidden>gym</h5>
+          <h6> <a href="#" class="text-dark">{{reviewText}}</a></h6>
           
         </div>
       </div>

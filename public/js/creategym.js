@@ -1,20 +1,29 @@
 (function($) {
 
 
+  function checkString(string){
+    if(typeof(string) !== 'string') throw 'Input provided is not a string';
+    if(string.trim().length === 0) throw 'Empty string on input';
+  }
 
-    function checkInput(gymname,location,number,pricerange){
-  
-        if(!gymname) throw "Gym name cannot be empty"
-        if(!location) throw "Location cannot be empty"
-        if(!number) throw "Please provide a Phone number"
-        if(!pricerange) throw "Please provide a price range"
-        if(typeof(gymname) !== 'string') throw "Not a string"
-        if(typeof(location) !== 'string') throw "Not a string"
-        if(typeof(pricerange) !== 'string') throw "Not a string"
-        if(gymname.trim().length === 0) throw "Gym name cannot be empty"
-        if(location.trim().length === 0) throw "Location cannot be empty"
-        if(pricerange.trim().length === 0) throw "Price range cannot be empty"
-    }
+  function check(gymname,location,number,pricerange){
+    
+    if(!gymname) throw 'You must provide a gym name to add gym';
+    if(!location) throw 'You must provide a location to add gym';
+    if(!number) throw 'You must provide a phone number to add gym';
+    if(!pricerange) throw 'You must provide a price range to add gym';
+    checkString(gymname)
+    checkString(location);
+    checkString(number);
+    checkString(pricerange);
+    
+    let regMob = number.search(/^\d{10}$/);
+    if(regMob=== -1) throw 'PhoneNumber not valid';
+    if(!(pricerange=== '$' || pricerange=== '$$' || pricerange=== '$$$' || pricerange=== '$$$$')) throw 'Price Range is not between $ to $$$$';
+    location = location.toLowerCase();
+    if(location!= "jersey city" && location != "hoboken") throw "Select valid city"
+  }
+   
   
     const subForm = document.getElementById("signup-form");
   
@@ -35,7 +44,7 @@
         
   
         try{ 
-          checkInput(gymname.value, location.value, number.value, pricerange.value)
+          check(gymname.value, location.value, number.value, pricerange.value)
           subForm.submit();
         }catch(e){
           errorTextElement.textContent = e;
@@ -47,4 +56,4 @@
   
   
   })();
-    
+     

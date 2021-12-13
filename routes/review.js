@@ -16,11 +16,11 @@ router.get('/addReviewToGym/:id', async(req,res) =>{
         userDetails = await userData.getUserById(userid)
         fname = userDetails.firstName
         let id = req.params;
-        res.render('webs/addReviewToGym',{message: "Add review to Gym" , gymId:id,loggedin,name:fname})
+        res.render('webs/addReviewToGym',{gymId:id,loggedin,name:fname, title: "Review Page"})
       }
       else{
         loggedin = false
-        res.redirect('/login',loggedin)
+        res.redirect('/login')
       }
     //     let id = req.params;
     // res.render('webs/booking',{message: "Make an appointment" , gymId:id,loggedin})
@@ -66,33 +66,33 @@ router.post('/addReviewToGym/:id', async (req, res) => {
     
 
     if(!review){
-        res.status(400).render('webs/addReviewToGym', {ReviewNotProvide: true, message: "Add Your comment",loggedin,name:fname})
+        res.status(400).render('webs/addReviewToGym', {ReviewNotProvide: true, title: "Error",loggedin,name:fname})
         return;
     }
     if(typeof(review)!== 'string'){
-        res.status(400).render('webs/addReviewToGym', {reviewTypeWrong: true, message: "Add Your comment",loggedin,name:fname})
+        res.status(400).render('webs/addReviewToGym', {reviewTypeWrong: true, title: "Error",loggedin,name:fname})
         return;
 
     }
     if(review.trim().length === 0){
-        res.status(400).render('webs/addReviewToGym', {reviewSapce: true, message: "Add Your comment",loggedin,name:fname})
+        res.status(400).render('webs/addReviewToGym', {reviewSapce: true, title: "Error",loggedin,name:fname})
         return;
     }
     if(!rating){
-        res.status(400).render('webs/addReviewToGym', {ratingNotProvide: true, message: "Add Your comment",loggedin,name:fname})
+        res.status(400).render('webs/addReviewToGym', {ratingNotProvide: true, title: "Error",loggedin,name:fname})
         return;
     }
     if(typeof(rating)!== 'string' ){
-        res.status(400).render('webs/addReviewToGym', {ratingTypeWrong: true, message: "Add Your comment",loggedin,name:fname})
+        res.status(400).render('webs/addReviewToGym', {ratingTypeWrong: true, title: "Error",loggedin,name:fname})
         return;
     }
     if(typeof(rating) === 'string' && isNaN(+rating)){
-        res.status(400).render('webs/addReviewToGym', {ratingWrong: true, message: "Add Your comment",loggedin,name:fname})
+        res.status(400).render('webs/addReviewToGym', {ratingWrong: true, title: "Error",loggedin,name:fname})
         return;
     }
     
     if(parseInt(rating) < 0 || parseInt(rating) > 5){
-        res.status(400).render('webs/addReviewToGym', {outRangeNumber: true, message: "Add Your comment",loggedin,name:fname})
+        res.status(400).render('webs/addReviewToGym', {outRangeNumber: true, title: "Error",loggedin,name:fname})
         return;
     }
     let newRating = parseInt(rating)
@@ -105,10 +105,11 @@ router.post('/addReviewToGym/:id', async (req, res) => {
         
         if(addInfo.addReviewtoTheGym === true){
             
-            res.render('webs/reviewAddSuccess', {name1: "Successful" ,loggedin,name:fname})
+            res.render('webs/reviewAddSuccess', {title: "Successful",success:true ,loggedin,name:fname})
 
         }else{
-            res.status(400).render('webs/addReviewToGym', {addFail: true, message: "Add Your comment",loggedin,name:fname})
+            res.status(400).render('webs/addReviewToGym', {editeFail: true,error:true, title: "Error",loggedin,name:fname})
+
         }
     }catch(e){
         res.status(400).json({ error: e });
@@ -132,13 +133,14 @@ router.get('/deleteReview/:id', async(req,res) =>{
             const deleteInfo = await reviewDataInfo.remove(reviewId,userId);
             if(deleteInfo.deleted === true){
                 let message = "Your review is successful deleted"
-                res.render('webs/deleteReview', {name1: "Delete Successful", message: message,loggedin,name:fname})
+                res.render('webs/deleteReview', {title: "Delete Successful", message: message,loggedin,name:fname});
             }else{
                 let message = "Delete fail, try again"
-                res.status(400).render('webs/deleteReview', {name1: "Error", message:message,loggedin,name:fname})
+                res.status(400).render('webs/deleteReview', {title: "Error", message:message,loggedin,name:fname});
             }
         }catch(e){
-            res.status(400).json({ error: e });
+            error = "The review is already deleted."
+            res.status(400).render('webs/deleteReview', { title: "Error",error: error,loggedin,name:fname});
             // what should be rendered here/ when no review with that id to delete
         }
         // res.render('webs/deleteReview',{name: "Delete" , gymId:id})  
@@ -215,7 +217,7 @@ router.get('/editeReview/:id', async(req,res) =>{
         let reviewText = review.reviewText
         let rating = review.rating
         
-        res.render('webs/editeReview',{message: "edite your review",rating,reviewText, reviewId: id,loggedin,name:fname})
+        res.render('webs/editeReview',{title: "edite your review",rating,reviewText, reviewId: id,loggedin,name:fname})
       }
       else{
         loggedin = false
@@ -255,76 +257,76 @@ router.post('/editeReview/:id', async(req,res) =>{
 
 
     if (!reviewId){
-        res.status(400).render('webs/editeReview', {CanNotFindReviewId: true, message: "edite your review",loggedin,name:fname})
+        res.status(400).render('webs/editeReview', {CanNotFindReviewId: true, title: "Error",loggedin,name:fname})
         return;
     }
 
     if (!gymId){
-        res.status(400).render('webs/editeReview', {CanNotFindGymId: true, message: "edite your review",loggedin,name:fname})
+        res.status(400).render('webs/editeReview', {CanNotFindGymId: true, title: "Error",loggedin,name:fname})
         return;
     }
 
     if (!userId){
-        res.status(400).render('webs/editeReview', {CanNotFindUserId: true, message: "edite your review",loggedin,name:fname})
+        res.status(400).render('webs/editeReview', {CanNotFindUserId: true, title: "Error",loggedin,name:fname})
         return;
     }
 
 
     if ((typeof reviewId !== 'string')){
-        res.status(400).render('webs/editeReview', {WrongreviewIdType: true, message: "edite your review",loggedin,name:fname})
+        res.status(400).render('webs/editeReview', {WrongreviewIdType: true, title: "Error",loggedin,name:fname})
         return;
     }
 
     if ((typeof userId !== 'string')){
-        res.status(400).render('webs/editeReview', {WrongUserIdType: true, message: "edite your review",loggedin,name:fname})
+        res.status(400).render('webs/editeReview', {WrongUserIdType: true, title: "Error",loggedin,name:fname})
         return;
     }
 
     if(!review){
-        res.status(400).render('webs/editeReview', {ReviewNotProvide: true, message: "edite your review",loggedin,name:fname})
+        res.status(400).render('webs/editeReview', {ReviewNotProvide: true, title: "Error",loggedin,name:fname})
         return;
     }
     if(typeof(review)!== 'string'){
-        res.status(400).render('webs/editeReview', {reviewTypeWrong: true, message: "edite your review",loggedin,name:fname})
+        res.status(400).render('webs/editeReview', {reviewTypeWrong: true, title: "Error",loggedin,name:fname})
         return;
 
     }
     if(review.trim().length === 0){
-        res.status(400).render('webs/editeReview', {reviewSapce: true, message: "edite your review",loggedin,name:fname})
+        res.status(400).render('webs/editeReview', {reviewSapce: true, title: "Error",loggedin,name:fname})
         return;
     }
     if(!rating){
-        res.status(400).render('webs/editeReview', {ratingNotProvide: true, message: "edite your review",loggedin,name:fname})
+        res.status(400).render('webs/editeReview', {ratingNotProvide: true, title: "Error",loggedin,name:fname})
         return;
     }
     if(typeof(rating)!== 'string' ){
-        res.status(400).render('webs/editeReview', {ratingTypeWrong: true, message: "edite your review",loggedin,name:fname})
+        res.status(400).render('webs/editeReview', {ratingTypeWrong: true, title: "Error",loggedin,name:fname})
         return;
     }
 
 
     if (!ObjectId.isValid(reviewId)){
-        res.status(400).render('webs/editeReview', {notVaildReviewId: true, message: "edite your review",loggedin,name:fname})
+        res.status(400).render('webs/editeReview', {notVaildReviewId: true, title: "Error",loggedin,name:fname})
         return;
     }
 
 
     if (!ObjectId.isValid(userId)){
-        res.status(400).render('webs/editeReview', {notVaildUserId: true, message: "edite your review",loggedin,name:fname})
+        res.status(400).render('webs/editeReview', {notVaildUserId: true, title: "Error",loggedin,name:fname})
         return;
     }
     if(review.trim().length === 0){
-        res.status(400).render('webs/editeReview', {reviewSapce: true, message: "edite your review",loggedin,name:fname})
+        res.status(400).render('webs/editeReview', {reviewSapce: true, title: "Error",loggedin,name:fname})
         return;
     }
 
     if(typeof(rating) === 'string' && isNaN(+rating)){
-        res.status(400).render('webs/editeReview', {ratingWrong: true, message: "edite your review",loggedin,name:fname})
+        res.status(400).render('webs/editeReview', {ratingWrong: true, title: "Error",loggedin,name:fname})
         return;
     }
     
     if(parseInt(rating) < 0 || parseInt(rating) > 5){
-        res.status(400).render('webs/editeReview', {outRangeNumber: true, message: "edite your review",loggedin,name:fname})
+        res.status(400).render('webs/editeReview', {outRangeNumber: true, title: "Error",loggedin,name:fname})
         return;
     }
 
@@ -334,9 +336,9 @@ router.post('/editeReview/:id', async(req,res) =>{
     try{
         const editeInfo = await reviewDataInfo.update(reviewId,userId,review,newRating);
         if(editeInfo.updateSuccess === true){
-            res.render('webs/editeSuccess', {name1: "Successful" ,loggedin,name:fname})
+            res.render('webs/editeSuccess', {title: "Successful",success:true ,loggedin,name:fname})
         }else{
-            res.status(400).render('webs/editeReview', {editeFail: true, message: "edite your review",loggedin,name:fname})
+            res.status(400).render('webs/editeReview', {editeFail: true,error:true, message: "edite your review",loggedin,name:fname})
         }
     }catch(e){
         res.status(400).json({ error: e });

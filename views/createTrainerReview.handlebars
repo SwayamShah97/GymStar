@@ -7,12 +7,13 @@
             <div class="container">
                 <div class="signup-content">
                     <form method="POST" action="/trainers/createReviewTrainer" id="trainer-review-form" class="signup-form">
-                        <h2 class="form-title">Create Review</h2>
+                        <h1 class="form-title">Create Review</h1>
 
 
                         <div class="form-row">
                         <div class="form-group col-md-12 mb-4">
                             {{!-- Show trainer's name here --}}
+                            <h2 hidden>a</h2>
                             <h3 id="trainer">{{trainerFirstname}}</h3>
                             <input name="trainerFirstname" value={{trainerFirstname}} hidden>
                             <input name="trainerLastname" value={{trainerLastname}} hidden>
@@ -32,28 +33,33 @@
                             <input id="starTR" name="starTR" hidden> --}}
 
                             <select class="form-control" id="starTR" name="starTR" >
-                                <option value="" class="gray" selected disabled hidden>Select Rating</option>
-                                <option value="0">Please Select Rating</option>
+                                
+                                <option value="0" hidden>Please Select Rating</option>
                                 <option value="1">1.0 </option>
                                 <option value="2">2.0 </option>
                                 <option value="3">3.0 </option>
                                 <option value="4">4.0 </option>
-                                <option value="4">5.0 </option>
+                                <option value="5">5.0 </option>
                             </select>
 
                         </div>
                         </div>
-                        <div id="error-star" hidden></div>
+                        
 
                         
                         <div class="form-group">
+                            <label for="reviewTextTR" hidden></label>
                           <textarea id="reviewTextTR" name="reviewTextTR" rows="4" cols="50" required></textarea>
                         </div>
  
                 <div class="form-group">
-                    <button type="button"  id="submitTRB" class="form-submit" >Submit</button>
+                    <button type="button"  id="submitTRB" class="btn btn-primary" >Submit</button>
                 
                 </div>
+                <div id="error-star" ></div>
+
+                
+
                 {{#if success}}
                 <h3>{{success}}</h3>
                 {{/if}}

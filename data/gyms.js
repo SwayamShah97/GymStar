@@ -23,9 +23,9 @@ function check(userName,gymName,location,phoneNumber,priceRange){
   checkString(phoneNumber);
   checkString(priceRange);
   let regEmail = userName.search(/^([a-zA-Z0-9_.+-]{1,})(@{1})([a-zA-Z]{1})([a-zA-Z0-9-]{1,})([.]{1})([a-zA-Z]{1,})$/gi);
-  if (regEmail === -1) throw 'Username is not valid'
-  isphone = /[0-9]{3}-[0-9]{3}-[0-9]{4}$/.test(phoneNumber);
-  if (!isphone) throw 'Phone number does not follow format xxx-xxx-xxxx';
+  if (regEmail === -1) throw 'Username is not valid';
+  let regMob = phoneNumber.search(/^\d{10}$/);
+  if(regMob=== -1) throw 'PhoneNumber not valid';
   if(!(priceRange=== '$' || priceRange=== '$$' || priceRange=== '$$$' || priceRange=== '$$$$')) throw 'priceRange is not between $ to $$$$';
   location = location.toLowerCase();
   if(location!= "jersey city" && location != "hoboken") throw "Select valid city"
@@ -41,9 +41,8 @@ function check2(gymName,location,phoneNumber,priceRange){
   checkString(location);
   checkString(phoneNumber);
   checkString(priceRange);
-  
-  isphone = /[0-9]{3}-[0-9]{3}-[0-9]{4}$/.test(phoneNumber);
-  if (!isphone) throw 'Phone number does not follow format xxx-xxx-xxxx';
+  let regMob = phoneNumber.search(/^\d{10}$/);
+  if(regMob=== -1) throw 'PhoneNumber not valid';
   if(!(priceRange=== '$' || priceRange=== '$$' || priceRange=== '$$$' || priceRange=== '$$$$')) throw 'priceRange is not between $ to $$$$';
   location = location.toLowerCase();
   if(location!= "jersey city" && location != "hoboken") throw "Select valid city"
@@ -200,7 +199,8 @@ async create(userName,gymName, location, phoneNumber, priceRange) {
       }
       let sum = arr.reduce((a,b)=>a+b)
       overallRating = sum/arr.length; 
-      return overallRating
+      let overall = Math.round(overallRating * 10)/10; 
+      return overall;
     }
   },
 
@@ -278,6 +278,10 @@ async create(userName,gymName, location, phoneNumber, priceRange) {
       return 'Updated Successfully'
     }
   },
+
+  async verified(id){
+
+  }
   
 };
 

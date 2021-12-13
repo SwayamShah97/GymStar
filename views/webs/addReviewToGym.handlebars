@@ -10,6 +10,7 @@
             <div class="container">
                 <div class="signup-content">
                     <form action = "/review/addReviewToGym/{{gymId.id}}" class="signup-form" method="POST" id="add_reivew">
+                        <h1 hidden></h1>
                         <h2 class="form-title">Want other people know what you think?
                         Leave a comment here!</h2>
                         
@@ -23,8 +24,8 @@
 
                         <div class="form-row">
                         <div class="form-group col-md-6 mb-3">
-                          <select class="form-control" id="your_rating" name="rating" placeholder="Giva a Score (1-5)">
-                            <label for="your_rating" id="ratingnfo">Select a score (1 is lowest, 5 is highest</label><br>
+                            <label for="your_rating" id="ratingnfo">Select a score (1 is lowest, 5 is highest</label>
+                            <select class="form-control" id="your_rating" name="rating">
 
                                 <option value="1">1</option>
                                 <option value="2">2</option>
@@ -40,7 +41,7 @@
                              
                         
                     <div class="form-group">
-                <input class="form-submit" type="submit" name="submitForm" value="submitForm">
+                <input class="form-submit" type="submit" name="submitForm" value="submitForm"> <br><br>
 
                 <div class="form-group hidden" id="error-container" hidden>
                 <div class="alert alert-danger text-goes-here">
@@ -58,7 +59,7 @@
     </div>
     
     {{#if ReviewNotProvide}}
-    <p class = "error">You can not leave your review empty</p>
+    <p class = "error">You can not leave your review empty1</p>
     {{/if}}
 
     {{#if reviewTypeWrong}}

@@ -61,8 +61,8 @@ router.post('/login', async (req, res) => {
         return
     }
 
-    let email = req.body.email
-    let password = req.body.password
+    let email = xss(req.body.email)
+    let password = xss(req.body.password)
 
     if(!email || !password) {
         res.status(400).render('login', {title: "Error", error: 'You must provide all details'})
@@ -149,16 +149,16 @@ router.post('/signup', async (req,res) => {
         return
     }
 
-    let role = req.body.role
-    let firstName = req.body.firstname
-    let lastName = req.body.lastname
-    let email = req.body.email
-    let city = req.body.city
-    let state = req.body.state
-    let mobile = req.body.mobile
-    let gender = req.body.gender
-    let dob = req.body.dob
-    let password = req.body.password
+    let role = xss(req.body.role)
+    let firstName = xss(req.body.firstname)
+    let lastName = xss(req.body.lastname)
+    let email = xss(req.body.email)
+    let city = xss(req.body.city)
+    let state = xss(req.body.state)
+    let mobile = xss(req.body.mobile)
+    let gender = xss(req.body.gender)
+    let dob = xss(req.body.dob)
+    let password = xss(req.body.password)
     // console.log(typeof role)
     // console.log(typeof firstName)
     // console.log(typeof lastName)
@@ -304,7 +304,7 @@ router.get('/userprofile', async (req, res) => {
         let name = userProfile.firstName
         bookDetails = await bookDataInfo.getAllOrderByUserID(req.session.user.id)
         const reviews = await reviewDataInfo.getAllReviewByUserID(id)
-        
+        console.log(bookDetails)
         for(i of bookDetails){
             i['gymId'] = i['gymId'].toString()
             gymId = i.gymId
@@ -382,15 +382,15 @@ router.post('/updateProfile', async (req,res) => {
         
     let name = userDetails.firstName
     let role = req.session.user.role
-    let firstName = req.body.firstname
-    let lastName = req.body.lastname
+    let firstName = xss(req.body.firstname)
+    let lastName = xss(req.body.lastname)
     let email = req.session.user.email
-    let city = req.body.city
-    let state = req.body.state
-    let mobile = req.body.mobile
-    let gender = req.body.gender
-    let dob = req.body.dob
-    let password = req.body.password
+    let city = xss(req.body.city)
+    let state = xss(req.body.state)
+    let mobile = xss(req.body.mobile)
+    let gender = xss(req.body.gender)
+    let dob = xss(req.body.dob)
+    let password = xss(req.body.password)
     
 
     userProfile = {

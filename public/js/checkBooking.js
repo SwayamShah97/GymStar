@@ -11,6 +11,7 @@
         if(date.trim().length === 0) throw "Your date can not be all space"
         if(time.trim().length === 0) throw "Your time can not be all space"
         if(date.length !== 10) throw "The date is not a vaild date"
+        if(date.substring(2,3) !== "/" && date.substring(5,6) !== "/" ) throw "The date is not a vaild date"
 
         if(isNaN(+date.substring(0,2)) || isNaN(+date.substring(3,5))|| isNaN(+date.substring(6,10))) throw "The date is not a vaild date"
 
@@ -68,7 +69,7 @@
           subForm.submit();
         }catch(e){
           errorTextElement.textContent = e;
-          errorContainer.classList.remove('hidden');
+          errorContainer.removeAttribute('hidden');
       }
       });
     }

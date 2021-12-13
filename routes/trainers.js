@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const trainerData = require('../data/trainers')
 const gymData = require('../data').gymData;
+const userData = require("../data").userData;
 const xss = require('xss');
 // const { validateTrainerReview } = require('../data/trainers');
 function validateTrainerReview(review){
@@ -113,9 +114,13 @@ router.get('/', async (req,res) => {
   //Validate user. User Should be a gym owner
   if (req.session.user && req.session.user.role === 'owner'){
       try{
+        loggedin = true
+        let userid = req.session.user.id
+        userDetails = await userData.getUserById(userid)
+        fname = userDetails.firstName
         //pullout this owners gyms
       let gymList = await trainerData.getGymByUsername(req.session.user.email)
-      res.render('createTrainer',{gymList:gymList,title:'Create Trainer'}) //This will show trainer creation form and from that it will redirect it to create trainer post route
+      res.render('createTrainer',{gymList:gymList,title:'Create Trainer',loggedin,name:fname}) //This will show trainer creation form and from that it will redirect it to create trainer post route
   
       }catch(e){
           res.status(e.status || 500 ).json(e.message)
@@ -130,76 +135,108 @@ router.get('/', async (req,res) => {
 
 //To create a trainer
 router.post('/createTrainer', async (req,res) => { 
-    let gymList = undefined
-    try{
-          //pullout this owners gyms
-      gymList = await trainerData.getGymByUsername(req.session.user.email)
-  
-    //Validate user. User Should be a gym owner
-    if (req.session.user && req.session.user.role === 'owner'){
-        //Prepare trainer data 
-        let trainer = validateTrainerDetails(req.body)
-        console.log(req.body)
-        let newTrainer = {
-        
-        "trainerFirstName": trainer.trainerFirstName,
-        "trainerLastName":trainer.trainerLastName,
-        "gymId": trainer.gymId, //ObjectId(trainer.gymId),
-        "phoneNo": trainer.phoneNo ,
-        "overallRating":0,
-        "emailId":trainer.emailId,
-        "gender":trainer.gender,
-        "experience":trainer.experience
 
-    }
+    let loggedin
+    //Check user logged in or not
+    if(req.session.user && req.session.user.role === 'owner'){
+        loggedin = true
+        let userid = req.session.user.id
+        userDetails = await userData.getUserById(userid)
+        fname = userDetails.firstName
+        let gymList = undefined
+        try{
+            //pullout this owners gyms
+        gymList = await trainerData.getGymByUsername(req.session.user.email)
     
-        let resp = await trainerData.createTrainer(newTrainer)
-        if(resp){
-            console.log('trainer created')
-            res.redirect('/userprofile') 
+        //Validate user. User Should be a gym owner
+        if (req.session.user && req.session.user.role === 'owner'){
+            //Prepare trainer data 
+            let trainer = validateTrainerDetails(req.body)
+            console.log(req.body)
+            let newTrainer = {
+            
+            "trainerFirstName": trainer.trainerFirstName,
+            "trainerLastName":trainer.trainerLastName,
+            "gymId": trainer.gymId, //ObjectId(trainer.gymId),
+            "phoneNo": trainer.phoneNo ,
+            "overallRating":0,
+            "emailId":trainer.emailId,
+            "gender":trainer.gender,
+            "experience":trainer.experience
+
         }
-    
-    
-    }else{
-        res.redirect("/login")
-    }
-    }catch(e){
-        console.log(e.message)
-        res.render('createTrainer',{error:e.message,gymList:gymList,title:'Create Trainer'})
         
+            let resp = await trainerData.createTrainer(newTrainer)
+            if(resp){
+                console.log('trainer created')
+                res.redirect('/userprofile') 
+            }
+        
+        
+        }else{
+            res.redirect("/login")
         }
+        }catch(e){
+            loggedin = true
+        let userid = req.session.user.id
+        userDetails = await userData.getUserById(userid)
+        fname = userDetails.firstName
+            console.log(e.message)
+            res.render('createTrainer',{error:e.message,gymList:gymList,title:'Create Trainer',loggedin,name:fname})
+            
+            }
+    }else{
+        res.redirect('/login')
+        return
+    }
+    
   
 })
 
-router.get('/reviewTrainer/:id', async (req,res) => { //this is just for demo. Actually it will be a post route
+router.get('/reviewTrainer/:id', async (req,res) => { 
   
    try{
         //Validate user. User Should be logged in.
-        console.log(req.params.id) //Trainer's ID
-        if(!req.params.id) throw {status:400,message:'Trainer ID is missing. Please provide it.'}
-        let objectIdRegex = /^[a-f\d]{24}$/i;
-        if(! objectIdRegex.test(req.params.id) ) throw{status:400,message:'Invalid Trainer Object ID'}
-        if(req.session.user) {
-            //Get selected trainer's details from DB
-            const trainerDetails = await trainerData.getTrainersByTrainerId(req.params.id)
-            if(! trainerDetails) throw{status:404,message:'Trainer Not found'}
-            trainerDetails._id = trainerDetails._id.toString()
-            res.render('createTrainerReview',{gymId:trainerDetails.gymId,
-                                              trainerFirstname:trainerDetails.trainerFirstName,
-                                              trainerLastname:trainerDetails.trainerLastName,
-                                              trainerId:trainerDetails._id,
-                                              title:'Trainer Review'})
+        let loggedin
+        if(req.session.user){
+            loggedin = true
+        let userid = req.session.user.id
+        userDetails = await userData.getUserById(userid)
+        fname = userDetails.firstName
+            // console.log(req.params.id) //Trainer's ID
+            if(!req.params.id) throw {status:400,message:'Trainer ID is missing. Please provide it.'}
+            let objectIdRegex = /^[a-f\d]{24}$/i;
+            if(! objectIdRegex.test(req.params.id) ) throw{status:400,message:'Invalid Trainer Object ID'}
+            if(req.session.user) {
+                //Get selected trainer's details from DB
+                const trainerDetails = await trainerData.getTrainersByTrainerId(req.params.id)
+                if(! trainerDetails) throw{status:404,message:'Trainer Not found'}
+                trainerDetails._id = trainerDetails._id.toString()
+                res.render('createTrainerReview',{gymId:trainerDetails.gymId,
+                                                trainerFirstname:trainerDetails.trainerFirstName,
+                                                trainerLastname:trainerDetails.trainerLastName,
+                                                trainerId:trainerDetails._id,
+                                                title:'Trainer Review',loggedin,name:fname})
+            }else{
+                req.session.gotoroute = 'trainers/createTrainerReview'
+                res.redirect('/login')
+            }
         }else{
-            req.session.gotoroute = 'trainers/createTrainerReview'
             res.redirect('/login')
         }
+        
    }catch(e){
     res.status(e.status).render('somethingWentWrong', {message:e.message,title:"Something's wrong"})
    }
     
 })
 router.post('/createReviewTrainer', async(req,res) => {
+    let loggedin
     if(req.session.user){
+        loggedin = true
+        let userid = req.session.user.id
+        userDetails = await userData.getUserById(userid)
+        fname = userDetails.firstName
         let trainerReview = ''
         try{
             console.log(req.body)
@@ -218,15 +255,15 @@ router.post('/createReviewTrainer', async(req,res) => {
         
             let resp = await trainerData.createTrainerReview(newTrainerReview)
             if(resp){
-                // window.alert("Review submitted successfully")
-
-                res.render('createTrainerReview',{success:'Review submitted successfully',
-                                                  trainerFirstname:trainerReview.trainerFirstname,
-                                                trainerLastname:trainerReview.trainerLastname,
-                                                starTR:trainerReview.starTR,
-                                                reviewTextTR:trainerReview.reviewTextTR,
-                                                trainerId: trainerReview.trainerId,
-                                                title:"Trainer Review"})
+                
+                res.redirect('/gyms')
+                // res.render('createTrainerReview',{success:'Review submitted successfully',
+                //                                   trainerFirstname:trainerReview.trainerFirstname,
+                //                                 trainerLastname:trainerReview.trainerLastname,
+                //                                 starTR:trainerReview.starTR,
+                //                                 reviewTextTR:trainerReview.reviewTextTR,
+                //                                 trainerId: trainerReview.trainerId,
+                //                                 title:"Trainer Review",loggedin,name:fname})
             }
           }catch(e){
             console.log(e.message)
@@ -238,6 +275,18 @@ router.post('/createReviewTrainer', async(req,res) => {
 })
 
 router.get('/gym/:id',async(req,res) => { //View trainers pertaining to given gym id
+    let loggedin
+    let fname
+    if(req.session.user){
+        loggedin = true
+        let userid = req.session.user.id
+        userDetails = await userData.getUserById(userid)
+        fname = userDetails.firstName
+    }
+    else{
+        loggedin = false
+    }
+
     try {
         console.log('Trainer List for gym ID: '+ req.params.id)
         const trainerList = await trainerData.getTrainersByGymId(req.params.id)
@@ -250,6 +299,7 @@ router.get('/gym/:id',async(req,res) => { //View trainers pertaining to given gy
             res.render('trainerList',{
                 trainers:trainerList,
                 title:"Trainers"
+                ,loggedin,name:fname
             })  
         }
       
@@ -261,16 +311,27 @@ router.get('/gym/:id',async(req,res) => { //View trainers pertaining to given gy
   
   }); 
 
-  router.get('/trainer/:id',async(req,res) => {
+  router.get('/trainer/:id',async(req,res) => { //trainer profile
+    let loggedin
+    let fname
+    if(req.session.user){
+        loggedin = true
+        let userid = req.session.user.id
+        userDetails = await userData.getUserById(userid)
+        fname = userDetails.firstName
+    }
+    else{
+        loggedin = false
+    }
       try{
           const trainer = await trainerData.getTrainersByTrainerId(req.params.id)
           const trainerReview = await trainerData.getTrainerReviewsByTrainerId(req.params.id)
           if(trainer){
               if(trainerReview){
                 res.render('trainerProfile',{trainer:trainer,reviews:trainerReview,
-                                                title:"Trainer Profile"})    
+                                                title:"Trainer Profile",loggedin,name:fname})    
               }else{
-                res.render('trainerProfile',{trainer:trainer,title:"Trainer Profile"})
+                res.render('trainerProfile',{trainer:trainer,title:"Trainer Profile",loggedin,name:fname})
               }
               
           }
