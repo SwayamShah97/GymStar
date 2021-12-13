@@ -4,7 +4,7 @@
   "description": "Gymstar",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "node app.js"
   },
   "author": "Group 6",
   "license": "ISC",
