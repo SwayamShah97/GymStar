@@ -4,11 +4,7 @@ Final project for CS546
 CS 546-C: Web Programming 
 Group 06 - Final Project
 
-## Group Members:
-Nirav Patel
-Qingyuan Liu
-Malay Shah
-Swayam Shah
+
 
 ## GymStar 
 
