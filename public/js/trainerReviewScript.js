@@ -14,9 +14,17 @@
         // e.preventDefault()
         console.log('Clicked on submit trainer review')
         console.log('review' + $("#reviewTextTR").val())
-        if(! $("#starTR").val() || !$("#reviewTextTR").val()){
-            $("#error-star").html(`<p>Please provide rating and Review</p>`).show()
-        }else{
+        console.log('star' + $("#starTR").val())
+        $("#error-star").text('').hide()
+        if(! $("#starTR").val() || $("#starTR").val() == 0 ){
+            $("#error-star").html(`<p>Please provide rating.</p>`).show()
+            $("#error-star").removeAttribute('hidden');
+        }
+        else if(!$("#reviewTextTR").val().trim()){
+            $("#error-star").html(`<p>Please provide review.</p>`).show()
+            $("#error-star").removeAttribute('hidden');
+        }
+        else{
             $('#trainer-review-form').submit()
         }
         

@@ -255,15 +255,15 @@ router.post('/createReviewTrainer', async(req,res) => {
         
             let resp = await trainerData.createTrainerReview(newTrainerReview)
             if(resp){
-                // window.alert("Review submitted successfully")
-
-                res.render('createTrainerReview',{success:'Review submitted successfully',
-                                                  trainerFirstname:trainerReview.trainerFirstname,
-                                                trainerLastname:trainerReview.trainerLastname,
-                                                starTR:trainerReview.starTR,
-                                                reviewTextTR:trainerReview.reviewTextTR,
-                                                trainerId: trainerReview.trainerId,
-                                                title:"Trainer Review",loggedin,name:fname})
+                
+                res.redirect('/gyms')
+                // res.render('createTrainerReview',{success:'Review submitted successfully',
+                //                                   trainerFirstname:trainerReview.trainerFirstname,
+                //                                 trainerLastname:trainerReview.trainerLastname,
+                //                                 starTR:trainerReview.starTR,
+                //                                 reviewTextTR:trainerReview.reviewTextTR,
+                //                                 trainerId: trainerReview.trainerId,
+                //                                 title:"Trainer Review",loggedin,name:fname})
             }
           }catch(e){
             console.log(e.message)
