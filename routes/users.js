@@ -304,7 +304,7 @@ router.get('/userprofile', async (req, res) => {
         let name = userProfile.firstName
         bookDetails = await bookDataInfo.getAllOrderByUserID(req.session.user.id)
         const reviews = await reviewDataInfo.getAllReviewByUserID(id)
-        
+        console.log(bookDetails)
         for(i of bookDetails){
             i['gymId'] = i['gymId'].toString()
             gymId = i.gymId

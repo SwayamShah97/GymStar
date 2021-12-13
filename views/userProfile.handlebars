@@ -6,11 +6,11 @@
             
             <div class="container">
                 <div class="signup-content">
-                    <form method="POST" action="/updateProfile" id="update-form" class="signup-form">
+                    <form method="POST" action="/updateProfile" id="signup-form" class="signup-form">
                         <h1 hidden>Create Account</h1>
                         <h2 class="form-title">Profile Page</h2>
                         {{#if updateSuccess}}
-                    <div class="form-group hidden" id="error-container" >
+                            <div class="form-group hidden" id="error-container" >
                             <div class="alert alert-success text-goes-here">
                                  {{updateSuccess}}
                             </div>
@@ -85,7 +85,7 @@
                             <label for="agree-term" class="label-agree-term"><span><span></span></span>I agree all statements in  <a href="#" class="term-service">Terms of service</a></label>
                         </div>
                         <div class="form-group">
-                            <input type="submit" name="submitform" id="submitform" class="form-submit" value="Update"/>
+                            <input type="submit" name="submitform" id="submitform" class="form-submit" value="Update">
                         
                         <br>
                         <br>
@@ -114,7 +114,7 @@
     
             {{#if user}}
             <div class="user-container">
-            <div class="signup-content">
+            <div class="signup-content center">
             <h2>Your Bookings:</h2>
 
             {{#if bookDetails}}
@@ -197,7 +197,7 @@
                                 {{/times}}
                                 
                             </ul>
-                            <h6> <a href="#" class="text-dark">{{reviewText}}</a></h5>
+                            <h6> <a  class="text-dark">{{reviewText}}</a></h5>
                             <a href="/review/editeReview/{{_id}}" class="btn btn-primary">Edit Review</a>
                             <a href="/review/deleteReview/{{_id}}" class="btn btn-primary">Delete Review</a>
                             </div>

@@ -42,7 +42,7 @@ body{
 .front1{
   height: 320px;
   width: 100%;
-  background-image: url("../images/front1.jpg");
+  background-image: url("../images/review.jpg");
   background-position: center;
   background-attachment: fixed;
   background-size: cover;
@@ -54,7 +54,7 @@ body{
 .front2{
   height: 320px;
   width: 100%;
-  background-image: url("../images/front2.jpg");
+  background-image: url("../images/nopain.png");
   background-position: center;
   background-attachment: fixed;
   background-size: cover;
@@ -78,7 +78,7 @@ body{
 .why1{
   height: 320px;
   width: 100%;
-  background-image: url("../images/think.png");
+  background-image: url("../images/onemore.png");
   background-position: center;
   background-attachment: fixed;
   /* background-size: cover; */
@@ -272,13 +272,13 @@ p{
 }
 
 
-/* glass */
+/* user */
 
 .glass1{
   position: absolute;
   width: 50%;
   height: 70vh;
-  background-image: url("../images/glass.jpg");
+  background-image: url("../images/user.jpg");
   background-position: center;
   /* background-attachment: fixed; */
   /* background-size:cover; */
@@ -302,10 +302,10 @@ p{
   position: absolute;
   width: 50%;
   height: 70vh;
-  background-image: url("../images/cardboard.png");
+  background-image: url("../images/owner.jpg");
   background-position: center;
   /* background-attachment: fixed; */
-  background-size:cover;
+  /* background-size:cover; */
   background-repeat: no-repeat;
   float: left;
 
@@ -736,7 +736,7 @@ textarea {
 }
 
 #notrainer {
-  color: white;
+  /* color: white; */
   font-weight: bold;
   font-family: 'Arial Black';
 }

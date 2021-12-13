@@ -65,7 +65,7 @@
         email = email.toLowerCase()
     }
   
-    const subForm = document.getElementById("signup-form");
+    const subForm = document.getElementById("update-form");
   
     if(subForm){
         if (document.getElementById('r1').checked) {
