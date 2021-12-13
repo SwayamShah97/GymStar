@@ -10,6 +10,7 @@
             <div class="container">
                 <div class="signup-content">
                     <form action = "/order/booking/{{gymId.id}}" method="POST" id="make_an_order">
+                    <h1 hidden></h1>
                         <h2 class="form-title">Want other people know what you think?
     Leave a comment here!</h2>
                         
@@ -39,7 +40,7 @@
                 <input class="form-submit" type="submit" name="submitForm" value="submitForm">
         </div>
 
-        <div class="form-group hidden" id="error-container">
+        <div class="form-group" id="error-container" hidden>
         <div class="alert alert-danger text-goes-here">
         </div>
         </div>

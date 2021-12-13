@@ -38,7 +38,7 @@
           subForm.submit();
         }catch(e){
           errorTextElement.textContent = e;
-          errorContainer.classList.remove('hidden');
+          errorContainer.removeAttribute('hidden');
       }
       });
     }

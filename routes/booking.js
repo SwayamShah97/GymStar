@@ -85,6 +85,12 @@ router.post('/booking/:id', async (req, res) => {
         return;
     }
 
+    if(date.substring(2,3) !== "/" && date.substring(5,6) !== "/" ){
+        res.status(400).render('webs/booking', {dateIncudeWhiteSpace: true, title: "Error",loggedin,name:fname})
+        return;
+    
+    }
+
     if(date.substring(0,2).trim().length === 0 ||date.substring(3,5).trim().length === 0|| date.substring(6,10).trim().length === 0 ){
         res.status(400).render('webs/booking', {dateIncudeWhiteSpace: true, title: "Error",loggedin,name:fname})
         return;

@@ -26,6 +26,8 @@ async function createBookingOrder(gymId, userId, date, time){
 
     if(date.length !== 10) throw "[Booking data Error]: The date is not a vaild date"
 
+    if(date.substring(2,3) !== "/" && date.substring(5,6) !== "/" ) throw "[Booking data Error]:The date is not a vaild date"
+
     if(isNaN(+date.substring(0,2)) || isNaN(+date.substring(3,5))|| isNaN(+date.substring(6,10))) throw "[Booking data Error]: The date is not a vaild date"
 
     if(date.substring(0,2).trim().length === 0 ||date.substring(3,5).trim().length === 0|| date.substring(6,10).trim().length === 0 ) throw "[Booking data Error]:The date include space"
