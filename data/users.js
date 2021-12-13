@@ -151,7 +151,7 @@ async function createUser(role,firstName,lastName,email,city,state,mobile,gender
     }
 
     let findUser = await user.findOne({email:email})
-    if(findUser != null) throw 'Email already exists'
+    if(findUser) throw 'Email already exists'
     
     let insertInfo = await user.insertOne(newUser)
     if (insertInfo.insertedCount === 0) throw 'Could not add user'
