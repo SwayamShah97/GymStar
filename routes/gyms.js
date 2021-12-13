@@ -111,8 +111,8 @@ router.get('/', async (req, res) => {
     try{
       if (req.session.user && req.session.user.role === 'owner'){
         loggedin = true
-        let id = req.session.user.id
-        userDetails = await userData.getUserById(id)
+        let userId = req.session.user.id
+        userDetails = await userData.getUserById(userId)
         fname = userDetails.firstName
         res.render('gymbars/updategym',{id:id,values:values,loggedin,name:fname,title: "Update Gym"})
       }
@@ -161,7 +161,7 @@ router.get('/', async (req, res) => {
       let location = req.body.city;
       let phoneNumber = req.body.mobile;
       let priceRange = req.body.price;
-      let gymid = req.params.id;
+      let id = req.params.id;
       
     if(!req.session.user){
         
@@ -170,23 +170,25 @@ router.get('/', async (req, res) => {
     }
       
      try{
-      let gymid = req.params.id;
+      
       check2(gymName,location,phoneNumber,priceRange);
       if(!id) throw 'Pleaase provide an id';
-      var checkForHexRegExp = new RegExp("^[0-9a-fA-F]{24}$");
-      if(checkForHexRegExp.test(id)===false) throw 'Not a valid objectid';
       
-    
+    /*   var checkForHexRegExp = new RegExp("^[0-9a-fA-F]{24}$");
+      if(checkForHexRegExp.test(id)===false) throw 'Not a valid objectid'; */
+      
+     
       const updategym = await gymData.update(id,gymName,location,phoneNumber,priceRange)
+    
       if(updategym)
         res.status(200).redirect('/gyms')
       else {
         if(req.session.user){
           loggedin = true
-          let id = req.session.user.id
-        userDetails = await userData.getUserById(id)
-        fname = userDetails.firstName
-          res.status(500).render('gymbars/updategym', {title: "Error", error: 'Internal Server Error',loggedin,name:fname})
+          let userId = req.session.user.id
+        userDetails = await userData.getUserById(userId)
+        fname = userDetails.firstName 
+          res.status(500).render('gymbars/updategym', {title: "Error", error: 'Internal Server Error',loggedin})
         }
         else{
           loggedin = false
@@ -194,25 +196,24 @@ router.get('/', async (req, res) => {
         }
           
       }
-    }
-    catch(e){
-      let gymid = req.params.id;
-      if(req.session.user){
+     }
+     catch(e){
+       if(req.session.user){
         loggedin = true
-        let id = req.session.user.id
-        userDetails = await userData.getUserById(id)
-        fname = userDetails.firstName
-        const values = await gymData.getGym(gymid);
-      res.status(400).render('gymbars/updategym', {id:id,values:values,title: "Error", error: e,loggedin,name:fname})
+        let userId = req.session.user.id
+        userDetails = await userData.getUserById(userId)
+        fname = userDetails.firstName 
+        
+      res.status(400).render('gymbars/updategym', {id:id,title: "Error", error: e,loggedin,name:fname})
       }
-      else{
+       else{
         loggedin = false
-        const values = await gymData.getGym(gymid);
-      res.status(400).render('gymbars/updategym', {id:id,values:values,title: "Error", error: e,loggedin})
-      }
       
-    }
-  });
+      res.status(400).render('gymbars/updategym', {id:id,title: "Error", error: e,loggedin})
+      } 
+      
+    } 
+  }); 
 
 router.post('/gymcreate',async(req,res) => {
   
