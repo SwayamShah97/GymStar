@@ -24,8 +24,8 @@ function check(userName,gymName,location,phoneNumber,priceRange){
   checkString(priceRange);
   let regEmail = userName.search(/^([a-zA-Z0-9_.+-]{1,})(@{1})([a-zA-Z]{1})([a-zA-Z0-9-]{1,})([.]{1})([a-zA-Z]{1,})$/gi);
   if (regEmail === -1) throw 'Email not valid'
-  isphone = /[0-9]{3}-[0-9]{3}-[0-9]{4}$/.test(phoneNumber);
-  if (!isphone) throw 'Phone number does not follow format xxx-xxx-xxxx';
+  let regMob = phoneNumber.search(/^\d{10}$/);
+  if(regMob=== -1) throw 'PhoneNumber not valid';
   if(!(priceRange=== '$' || priceRange=== '$$' || priceRange=== '$$$' || priceRange=== '$$$$')) throw 'priceRange is not between $ to $$$$';
   location = location.toLowerCase();
   if(location!= "jersey city" && location != "hoboken") throw "Select valid city"
@@ -42,8 +42,8 @@ function check2(gymName,location,phoneNumber,priceRange){
   checkString(phoneNumber);
   checkString(priceRange);
   
-  isphone = /[0-9]{3}-[0-9]{3}-[0-9]{4}$/.test(phoneNumber);
-  if (!isphone) throw 'Phone number does not follow format xxx-xxx-xxxx';
+  let regMob = phoneNumber.search(/^\d{10}$/);
+  if(regMob=== -1) throw 'PhoneNumber not valid';
   if(!(priceRange=== '$' || priceRange=== '$$' || priceRange=== '$$$' || priceRange=== '$$$$')) throw 'priceRange is not between $ to $$$$';
   location = location.toLowerCase();
   if(location!= "jersey city" && location != "hoboken") throw "Select valid city"

@@ -45,7 +45,7 @@
                         <div class="form-group col-md-12 mb-3">
                           {{!-- <label for="mobile">Enter Mobile number</label> --}}
                           <label for="mobile" hidden>Gym Contact Number</label>
-                          <input type="text" class="form-input" id="mobile" name="mobile" value="{{values.phoneNumber}}" required>
+                          <input type="number" class="form-input" id="mobile" name="mobile" value="{{values.phoneNumber}}" placeholder="Enter 10-digit phone number" pattern="[0-9].{10}" maxlength="10" minlength="10" required>
                           
                         </div>
                         </div>
