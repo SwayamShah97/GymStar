@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-
+const port = process.env.PORT || 3000;
 const static = express.static(__dirname + '/public');
 const configRoutes = require('./routes');
 const exphbs = require('express-handlebars');
@@ -74,7 +74,9 @@ app.use(logger);
 
 configRoutes(app);
 
-app.listen(3000, () => {
+app.listen(port, () => {
   console.log("We've now got a server!");
   console.log('Your routes will be running on http://localhost:3000');
+
+  
 });
