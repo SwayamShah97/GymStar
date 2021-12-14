@@ -505,3 +505,5 @@ router.post('/gymcreate',async(req,res) => {
   });
 
 module.exports = router;
+
+//test
