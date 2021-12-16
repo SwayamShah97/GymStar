@@ -30,12 +30,13 @@ body{
 .front{
   height: 100vh;
   width: 100%;
-  background-image: url("../images/landing.jpg");
+  background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url("../images/landing.jpg");
   background-position: center;
   background-attachment: fixed;
   background-size: cover;
   background-repeat: no-repeat;
   /* margin-bottom: 100px; */
+  
 
 }
 
@@ -134,15 +135,16 @@ body{
 
 .front .info h1{
   font-weight: 700;
-  font-size: 2.2em;
-  color: #7b7b00;
+  font-size: 3.2em;
+  color: whitesmoke;
   letter-spacing: 2px;
+ 
 }
 
 .front .info p{
   font-weight: 700;
-  font-size: 1.5em;
-  color: #7b7b00;
+  font-size: 1.7em;
+  color: whitesmoke;
   letter-spacing: 2px;
 }
 
@@ -791,3 +793,5 @@ textarea {
     margin-left: 210px;
     margin-top: 50px;
   }
+
+  
